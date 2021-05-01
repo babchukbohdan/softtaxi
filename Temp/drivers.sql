@@ -6,6 +6,7 @@ create table drivers (
 	car_number VARCHAR(50) NOT NULL,
 	is_avaliable VARCHAR(50) NOT NULL,
 	request_id INT,
+	FOREIGN KEY (request_id) REFERENCES requests (id),
 	rating DECIMAL(3,2)
 );
 insert into drivers (user_id, car_color, car_model, car_number, is_avaliable, request_id, rating) values (19, 'Goldenrod', '7 Series', 'CE0453WD', true, 58, 4.08);

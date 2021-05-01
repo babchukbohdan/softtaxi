@@ -1,7 +1,9 @@
 create table requests (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	customer_id INT NOT NULL,
+	FOREIGN KEY (customer_id) REFERENCES users (id),
 	driver_id INT NOT NULL,
+	FOREIGN KEY (driver_id) REFERENCES drivers (id),
 	created_date DATE NOT NULL,
 	last_update DATE,
 	destination_location VARCHAR(150) NOT NULL,
