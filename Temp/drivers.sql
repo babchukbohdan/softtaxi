@@ -1,6 +1,7 @@
 create table drivers (
 	id BIGSERIAL NOT NULL PRIMARY KEY,
 	user_id INT NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users (id),
 	car_color VARCHAR(50) NOT NULL,
 	car_model VARCHAR(50) NOT NULL,
 	car_number VARCHAR(50) NOT NULL,

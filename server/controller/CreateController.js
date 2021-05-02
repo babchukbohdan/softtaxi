@@ -13,15 +13,21 @@ class CreateController {
     this.tableName = tableName
   }
 
-  async create(req, res) {
+  create = async (req, res) => {
     const newValue = await db.query(getQueryForCreate(req.body, this.tableName))
     res.json(newValue.rows[0])
   }
-  async get(req, res) {
-    const values = await db.query(`SELECT * FROM ${this.tableName}`)
+  get = async (req, res) => {
+    let values
+    const { filter } = req.query
+    if (filter) {
+      values = await db.query(getQueryWithFilter(filter, this.tableName))
+    } else {
+      values = await db.query(`SELECT * FROM ${this.tableName}`)
+    }
     res.json(values.rows)
   }
-  async getOne(req, res) {
+  getOne = async (req, res) => {
     const id = req.params.id
     const value = await db.query(`SELECT * FROM ${this.tableName} where id = $1`, [id])
     res.json(value.rows[0])
@@ -32,7 +38,7 @@ class CreateController {
 
     res.json(value.rows[0])
   }
-  async delete(req, res) {
+  delete = async (req, res) => {
     const id = req.params.id
     const value = await db.query(`DELETE FROM ${this.name} where id = $1`, [id])
     res.json(value)
