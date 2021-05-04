@@ -9,6 +9,7 @@ enum StatusType {
   Postponed,
   Active,
   Accepted,
+  WaitingForCustomer,
   InProgress,
   Done,
   Canceled,
@@ -26,12 +27,6 @@ interface Location {
   flat: number
 }
 
-// interface Date {
-//   day: number
-//   month: number
-//   year: number
-// }
-
 interface Request {
   customerId: string
   driverId: string
@@ -47,12 +42,12 @@ interface Request {
 }
 
 class User {
-  private id: number
-  private name: string
-  private phoneNumber: string
-  private email: string
+  public id: number
+  public name: string
   private password: string
-  private rating: number
+  private email: string
+  public phoneNumber: string
+  public rating: number
 }
 
 class Driver extends User {

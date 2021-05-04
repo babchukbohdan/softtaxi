@@ -1,5 +1,5 @@
 const db = require('../db')
-const utils = require('./Utils')
+const utils = require('./utils')
 
 const {
   getQueryWithLimitAndOffset,
