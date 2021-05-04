@@ -15,8 +15,13 @@ class CreateController {
   }
 
   create = async (req, res) => {
-    const newValue = await db.query(getQueryForCreate(req.body, this.tableName))
-    res.json(newValue.rows[0])
+    try {
+      const newValue = await db.query(getQueryForCreate(req.body, this.tableName))
+      console.log(getQueryForCreate(req.body, this.tableName))
+      res.json(newValue.rows[0])
+    } catch (error) {
+      res.json(error)
+    }
   }
   get = async (req, res) => {
     let values, queryString
@@ -37,19 +42,28 @@ class CreateController {
     res.json(values.rows)
   }
   getOne = async (req, res) => {
-    const id = req.params.id
-    const value = await db.query(`SELECT * FROM ${this.tableName} where id = $1`, [id])
-    res.json(value.rows[0])
+    try {
+      const id = req.params.id
+      const value = await db.query(`SELECT * FROM ${this.tableName} where id = $1`, [id])
+      res.json(value.rows)
+
+    } catch (error) {
+      res.json(error)
+    }
+    console.log(`SELECT * FROM ${this.tableName} where id = ${id}`)
+    console.log(value)
   }
   update = async (req, res) => {
-    console.log(this)
     const value = await db.query(getQueryForUpdate(req.body, this.tableName))
+    console.log(getQueryForUpdate(req.body, this.tableName),)
 
     res.json(value.rows[0])
   }
   delete = async (req, res) => {
     const id = req.params.id
-    const value = await db.query(`DELETE FROM ${this.name} where id = $1`, [id])
+
+    console.log(`DELETE FROM ${this.tableName} where id = ${id}`)
+    const value = await db.query(`DELETE FROM ${this.tableName} where id = $1`, [id])
     res.json(value)
   }
 }
