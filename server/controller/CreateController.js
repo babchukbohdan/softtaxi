@@ -8,6 +8,8 @@ const {
   getQueryForUpdate
 } = utils
 
+
+
 class CreateController {
 
   constructor(tableName) {
@@ -26,6 +28,7 @@ class CreateController {
   get = async (req, res) => {
     let values, queryString
     const { filter, offset, limit } = req.query
+    // console.log(req.user);
 
     if (filter) {
       queryString = getQueryWithFilter(filter, this.tableName)
@@ -41,17 +44,21 @@ class CreateController {
     values = await db.query(queryString)
     res.json(values.rows)
   }
+
+
   getOne = async (req, res) => {
     try {
       const id = req.params.id
+      const query = req.query
+      console.log(query);
+      console.log(req.params, ' req.params');
       const value = await db.query(`SELECT * FROM ${this.tableName} where id = $1`, [id])
       res.json(value.rows)
+      console.log(`SELECT * FROM ${this.tableName} where id = ${id}`)
 
     } catch (error) {
       res.json(error)
     }
-    console.log(`SELECT * FROM ${this.tableName} where id = ${id}`)
-    console.log(value)
   }
   update = async (req, res) => {
     const value = await db.query(getQueryForUpdate(req.body, this.tableName))
