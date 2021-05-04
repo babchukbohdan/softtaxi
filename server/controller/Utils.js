@@ -1,13 +1,23 @@
+const getQueryWithLimitAndOffset = (query, offset = null, limit = null) => {
+  if (limit) {
+    query += ` LIMIT ${limit}`
+  }
+  if (offset) {
+    query += ` OFFSET ${offset}`
+  }
+  return query
+}
+
+
 const getQueryWithFilter = (filter, tableName) => {
   return Object.keys(filter).reduce((acc, key, i) => {
-
     let keyQuery
     if (!i) {
       keyQuery = ` ${key} IN ('${filter[key]}')`
     } else {
       keyQuery = ` AND ${key} IN ('${filter[key]}')`
     }
-    return acc + keyQuery;
+    return acc + keyQuery
   }, `SELECT * FROM ${tableName} WHERE`)
 }
 
@@ -29,3 +39,4 @@ const getQueryForUpdate = (body, tableName) => {
 module.exports.getQueryWithFilter = getQueryWithFilter
 module.exports.getQueryForCreate = getQueryForCreate
 module.exports.getQueryForUpdate = getQueryForUpdate
+module.exports.getQueryWithLimitAndOffset = getQueryWithLimitAndOffset

@@ -2,6 +2,7 @@ const db = require('../db')
 const utils = require('./Utils')
 
 const {
+  getQueryWithLimitAndOffset,
   getQueryWithFilter,
   getQueryForCreate,
   getQueryForUpdate
@@ -18,13 +19,21 @@ class CreateController {
     res.json(newValue.rows[0])
   }
   get = async (req, res) => {
-    let values
-    const { filter } = req.query
+    let values, queryString
+    const { filter, offset, limit } = req.query
+
     if (filter) {
-      values = await db.query(getQueryWithFilter(filter, this.tableName))
+      queryString = getQueryWithFilter(filter, this.tableName)
     } else {
-      values = await db.query(`SELECT * FROM ${this.tableName}`)
+      queryString = `SELECT * FROM ${this.tableName}`
     }
+
+    if (offset || limit) {
+      queryString = getQueryWithLimitAndOffset(queryString, offset, limit)
+    }
+
+    console.log(queryString)
+    values = await db.query(queryString)
     res.json(values.rows)
   }
   getOne = async (req, res) => {
