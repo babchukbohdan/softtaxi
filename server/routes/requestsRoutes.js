@@ -1,5 +1,12 @@
-const createRouter = require('./CreateRouter')
 const RequestsController = require('../controller/RequestsController')
-// const authMiddleware = require('../middleware/authMiddleware')
+const Router = require('express')
+const authMiddleware = require('../middleware/authMiddleware')
 
-module.exports = createRouter(RequestsController)
+const router = new Router()
+
+router.post('/', RequestsController.create)
+router.get('/', authMiddleware, RequestsController.get)
+router.get('/:id', RequestsController.getOne)
+router.put('/', RequestsController.update)
+
+module.exports = router

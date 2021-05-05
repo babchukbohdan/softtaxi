@@ -2,7 +2,7 @@ const db = require('../db')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const CreateController = require('./CreateController')
+const CrudController = require('./CrudController')
 const { getQueryWithFilter } = require('./utils')
 
 const generateJwt = (id, phone) => {
@@ -13,7 +13,7 @@ const generateJwt = (id, phone) => {
   )
 }
 
-class UserController extends CreateController {
+class UserController extends CrudController {
   constructor(tableName) {
     super(tableName)
   }
@@ -22,7 +22,6 @@ class UserController extends CreateController {
     const query = getQueryWithFilter({ phone_number: phone }, 'users')
     const candidate = await db.query(query)
 
-    console.log(`candidate`, candidate.rows)
     if (candidate.rows.length) {
       return res.json({ message: 'User with this phone number already exist' })
     }
@@ -43,17 +42,17 @@ class UserController extends CreateController {
     const user = response.rows[0]
 
     if (!user) {
-      return res.json({ message: 'User not found' })
+      return res.status(404).json({ message: 'User not found' })
     }
 
     let comparePassword = await bcrypt.compare(password, user.password)
 
     if (!comparePassword) {
-      return res.json({ message: 'Wrong password or phone' })
+      return res.status(400).json({ message: 'Wrong password or phone' })
     }
 
     const token = generateJwt(user.id, user.phone_number)
-    return res.json({ token })
+    return res.status(200).json({ token })
   }
 }
 module.exports = new UserController('users')

@@ -1,2 +1,2 @@
-const CreateController = require('./CreateController')
-module.exports = new CreateController('drivers')
+const CrudController = require('./CrudController')
+module.exports = new CrudController('drivers')

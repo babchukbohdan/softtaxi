@@ -4,7 +4,6 @@ module.exports = function (req, res, next) {
     next()
   }
 
-  console.log('auth Middleware');
 
   try {
     const token = req.headers.authorization.split(' ')[1]
@@ -14,7 +13,7 @@ module.exports = function (req, res, next) {
     }
 
     const decoded = jwt.verify(token, process.env.SECRET_KEY)
-    console.log(decoded, 'decoded'); //{ id: '63', phone: '7', iat: 1620160434, exp: 1620246834 }
+    // console.log(decoded, 'decoded'); //{ id: '63', phone: '7', iat: 1620160434, exp: 1620246834 }
     req.user = decoded
     next()
   } catch (error) {

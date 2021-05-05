@@ -1,4 +1,4 @@
-const getQueryWithLimitAndOffset = (query, offset = null, limit = null) => {
+module.exports.getQueryWithLimitAndOffset = (query, offset = null, limit = null) => {
   if (limit) {
     query += ` LIMIT ${limit}`
   }
@@ -8,8 +8,15 @@ const getQueryWithLimitAndOffset = (query, offset = null, limit = null) => {
   return query
 }
 
+module.exports.getQueryWithSort = (query, prop) => {
+  return query += ` ORDER BY ${prop}`
+}
 
-const getQueryWithFilter = (filter, tableName) => {
+// add sort func
+// add logger and linter
+
+
+module.exports.getQueryWithFilter = (filter, tableName) => {
   return Object.keys(filter).reduce((acc, key, i) => {
     let keyQuery
     if (!i) {
@@ -21,13 +28,13 @@ const getQueryWithFilter = (filter, tableName) => {
   }, `SELECT * FROM ${tableName} WHERE`)
 }
 
-const getQueryForCreate = (body, tableName) => {
+module.exports.getQueryForCreate = (body, tableName) => {
   const columns = Object.keys(body).join(', ')
   const values = Object.values(body).map(val => `'${val}'`).join(', ')
   return `INSERT INTO ${tableName} (${columns}) VALUES (${values}) RETURNING *`
 }
 
-const getQueryForUpdate = (body, tableName) => {
+module.exports.getQueryForUpdate = (body, tableName) => {
   const columns = { ...body }
   delete columns.id
   const { id } = body
@@ -35,8 +42,3 @@ const getQueryForUpdate = (body, tableName) => {
   const newValues = Object.entries(columns).map(data => `${data[0]} = '${data[1]}'`).join(', ')
   return `UPDATE ${tableName} set ${newValues} WHERE id = ${id} RETURNING *`
 }
-
-module.exports.getQueryWithFilter = getQueryWithFilter
-module.exports.getQueryForCreate = getQueryForCreate
-module.exports.getQueryForUpdate = getQueryForUpdate
-module.exports.getQueryWithLimitAndOffset = getQueryWithLimitAndOffset

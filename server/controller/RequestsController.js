@@ -1,2 +1,3 @@
-const CreateController = require('./CreateController')
-module.exports = new CreateController('requests')
+const CrudController = require('./CrudController')
+// change name OrderController
+module.exports = new CrudController('requests')
