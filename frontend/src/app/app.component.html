@@ -1,0 +1,7 @@
+<body class="dark">
+  <div class="wrap">
+    <app-order-form (onAdd)="updateRequests($event)"></app-order-form>
+    <app-order *ngFor="let r of requests" [request]="r"></app-order>
+    <app-nav></app-nav>
+  </div>
+</body>

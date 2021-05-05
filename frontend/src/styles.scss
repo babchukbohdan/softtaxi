@@ -1,0 +1,87 @@
+/* You can add global styles to this file, and also import other style files */
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--wrap-bg-color);
+}
+[hidden] {
+  display: none;
+}
+.wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+
+  background-color: var(--section-bg-color);
+}
+.list {
+  list-style-type: none;
+
+  padding: 0;
+  margin: 0;
+}
+
+input,
+select,
+textarea {
+  display: block;
+  width: 100%;
+  padding: 0.4rem;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  margin: 1.2rem 0;
+
+  border-radius: 5px;
+}
+
+.dark {
+  --wrap-bg-color: #111;
+  --section-bg-color: #181818;
+  --navbar-bg-color: #212121;
+
+  --hover-bg-color: #383838;
+  --border-color: #181818;
+  --overlay-bg-color: rgba(255, 255, 255, 0.1);
+
+  --text-color: rgb(242, 242, 242);
+  --text-link-color: #909090;
+  --text-link-active-color: rgb(255, 255, 255);
+
+  --svg-color: #909090;
+
+  // Progress chart
+  --cartesian-grid-line-color: rgba(255, 255, 255, 0.1);
+
+  background-color: var(--wrap-bg-color);
+  color: var(--text-color);
+}
+
+.light {
+  --wrap-bg-color: #fff;
+  --section-bg-color: #f9f9f9;
+  --navbar-bg-color: white;
+
+  --hover-bg-color: rgb(230, 230, 234);
+  --border-color: #181818;
+  --overlay-bg-color: rgba(0, 0, 0, 0.2);
+
+  --text-color: rgba(0, 0, 0, 0.87);
+  --text-link-color: rgb(83, 83, 95);
+  --text-link-active-color: rgb(0, 0, 0);
+
+  --svg-color: rgb(14, 14, 16);
+
+  // Progress chart
+  --cartesian-grid-line-color: #ccc;
+
+  background-color: var(--section-bg-color);
+  color: var(--text-color);
+}

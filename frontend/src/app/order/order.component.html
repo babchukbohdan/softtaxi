@@ -1,0 +1,24 @@
+<section>
+  <div>
+    <span>Phone</span>
+    <p>{{ request.customerId }}</p>
+  </div>
+  <div>
+    <span>From</span>
+    <p>
+      {{ request.passangerLocation }}
+    </p>
+  </div>
+  <div>
+    <span>To</span>
+    <p>
+      {{ request.destinationLocation }}
+    </p>
+  </div>
+  <div>
+    <span>Description</span>
+    <p>{{ request.description }}</p>
+  </div>
+  <app-button></app-button>
+  <app-button></app-button>
+</section>
