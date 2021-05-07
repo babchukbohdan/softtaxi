@@ -1,4 +1,6 @@
 const express = require('express')
+var cors = require('cors')
+
 require('dotenv').config()
 
 const userRouter = require('./routes/userRoutes')
@@ -8,6 +10,7 @@ const driverRouter = require('./routes/driverRoutes')
 const PORT = process.env.PORT || 8080
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 app.use('/user', userRouter)
 app.use('/requests', requestsRouter)
