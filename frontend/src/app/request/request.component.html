@@ -1,0 +1,34 @@
+<li class="request__item">
+  <div class="group">
+    <div class="request__adress">
+      <div class="request__street group">
+        <span>From:</span> <span>{{ request.destinationLocation }}</span>
+      </div>
+
+      <div class="request__street group">
+        <span>To:</span> <span>{{ request.passangerLocation }}</span>
+      </div>
+    </div>
+
+    <div class="request__data">
+      <ul class="request__info list group">
+        <li>
+          <app-icon name="{{ request.carType }}" size="30px"></app-icon>
+        </li>
+        <li>
+          <app-icon name="star" size="20px"></app-icon>
+          <span>4.3</span>
+        </li>
+        <li>
+          <span>$ {{ request.price }}</span>
+        </li>
+      </ul>
+      <div class="group">
+        <app-button text="Take order"></app-button>
+      </div>
+    </div>
+  </div>
+  <div class="request__status">
+    <span>Status: {{ request.status }}</span>
+  </div>
+</li>

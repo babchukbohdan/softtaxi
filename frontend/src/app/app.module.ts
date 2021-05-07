@@ -7,6 +7,10 @@ import { NavComponent } from './nav/nav.component';
 import { OrderComponent } from './order/order.component';
 import { ButtonComponent } from './button/button.component';
 import { OrderFormComponent } from './order-form/order-form.component';
+import { IconComponent } from './icon/icon.component';
+import { RequestComponent } from './request/request.component';
+import { RequestListComponent } from './request-list/request-list.component';
+import { LoginFormComponent } from './login-form/login-form.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +19,10 @@ import { OrderFormComponent } from './order-form/order-form.component';
     NavComponent,
     ButtonComponent,
     OrderFormComponent,
+    IconComponent,
+    RequestComponent,
+    RequestListComponent,
+    LoginFormComponent,
   ],
   imports: [BrowserModule, FormsModule],
   providers: [],

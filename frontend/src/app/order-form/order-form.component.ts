@@ -1,5 +1,6 @@
-import { Request, CarType, StatusType } from './../app.component';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Request, CarType, StatusType } from '../../assets/types/types';
+
 @Component({
   selector: 'app-order-form',
   templateUrl: './order-form.component.html',
@@ -13,6 +14,7 @@ export class OrderFormComponent implements OnInit {
   to = 'Комарова, 4';
   carType = 'basic';
   description = 'With air conditioning';
+
   constructor() {}
 
   ngOnInit(): void {}
@@ -28,7 +30,7 @@ export class OrderFormComponent implements OnInit {
         destinationLocation: this.to,
         passangerLocation: this.from,
         price: 33,
-        carType: CarType.Basic,
+        carType: CarType[CarType.xl],
         status: StatusType.Active,
         description: this.description,
       };

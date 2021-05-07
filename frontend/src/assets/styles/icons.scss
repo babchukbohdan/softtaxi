@@ -1,0 +1,63 @@
+@font-face {
+  font-family: "icomoon";
+  src: url("../fonts/fonts/icomoon.eot?c5q32h");
+  src: url("../fonts/fonts/icomoon.eot?c5q32h#iefix")
+      format("embedded-opentype"),
+    url("../fonts/fonts/icomoon.ttf?c5q32h") format("truetype"),
+    url("../fonts/fonts/icomoon.woff?c5q32h") format("woff"),
+    url("../fonts/fonts/icomoon.svg?c5q32h#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  // speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-sedan-car-model:before {
+  content: "\e900";
+}
+.icon-add:before {
+  content: "\e901";
+}
+.icon-basic:before {
+  content: "\e902";
+}
+.icon-comfort:before {
+  content: "\e903";
+}
+.icon-green:before {
+  content: "\e904";
+}
+.icon-flash:before {
+  content: "\e905";
+}
+.icon-list:before {
+  content: "\e906";
+}
+.icon-star:before {
+  content: "\e907";
+  color: #ffc107;
+}
+.icon-taxi-cab:before {
+  content: "\e908";
+}
+.icon-user:before {
+  content: "\e909";
+}
+.icon-xl:before {
+  content: "\e90a";
+}
