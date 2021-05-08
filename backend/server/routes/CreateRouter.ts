@@ -1,6 +1,6 @@
 const Router = require('express')
 
-function createRouter(controller) {
+export default function createRouter(controller: any) {
   const router = new Router()
 
   router.post('/', controller.create)
@@ -9,7 +9,5 @@ function createRouter(controller) {
   router.put('/', controller.update)
   router.delete('/:id', controller.delete)
 
-
   return router
 }
-module.exports = createRouter

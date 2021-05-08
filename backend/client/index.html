@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SoftTaxi</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <main class="request">
+        <section class="cars">
+          <ul class="cars__list list">
+            <li class="cars__item">
+              <label class="cars__label" for="basic">
+                <input class="cars__radio" type="radio" hidden name="car_type" id="basic" />
+                <img class="cars__img" src="img-min/basic.svg" />
+              </label>
+            </li>
+            <li class="cars__item">
+              <label class="cars__label" for="comfort">
+                <input class="cars__radio" type="radio" hidden name="car_type" id="comfort" />
+                <img class="cars__img" src="img-min/comfort.svg" />
+              </label>
+            </li>
+            <li class="cars__item">
+              <label class="cars__label" for="eco">
+                <input class="cars__radio" type="radio" hidden name="car_type" id="eco" />
+                <img class="cars__img" src="img-min/eco.svg" />
+              </label>
+            </li>
+            <li class="cars__item">
+              <label class="cars__label" for="xl">
+                <input class="cars__radio" type="radio" hidden name="car_type" id="xl" />
+                <img class="cars__img" src="img-min/xl.svg" />
+              </label>
+            </li>
+          </ul>
+        </section>
+        <section class="data">
+          <form action="" class="form">
+            <ul class="list">
+              <li>
+                <label for="">Phone number</label
+                ><input class="data__input" type="tel" />
+              </li>
+              <li>
+                <label for="">From</label
+                ><input class="data__input" type="text" />
+              </li>
+              <li>
+                <label for="">To</label
+                ><input class="data__input" type="text" />
+              </li>
+              <li>
+                <label for="">Car type</label>
+                <select class="data__input" name="" id="">
+                  <option value="Basic">Basic</option>
+                  <option value="Comfort">Comfort</option>
+                  <option value="Eco">Eco</option>
+                  <option value="Xl">Xl</option>
+                </select>
+              </li>
+              <li>
+                <label for=""
+                  >Description
+                  <textarea class="data__input" name="description"></textarea>
+                </label>
+              </li>
+            </ul>
+          </form>
+        </section>
+        <section class="info">
+          <span class="price">0$</span>
+          <button>Make order</button>
+        </section>
+      </main>
+      <footer>
+        <nav class="nav">
+          <ul class="nav__list list">
+            <li class="nav__item">
+              <object type="image/svg+xml" data="picture.svg">
+                <img class="nav__img" src="img-min/list.svg" />
+              </object>
+            </li>
+            <li class="nav__item">
+              <object type="image/svg+xml" data="picture.svg">
+                <img class="nav__img" src="img-min/add.svg" />
+              </object>
+            </li>
+            <li class="nav__item">
+              <object type="image/svg+xml" data="picture.svg">
+                <img class="nav__img" src="img-min/user.svg" />
+              </object>
+            </li>
+          </ul>
+        </nav>
+      </footer>
+    </div>
+  </body>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"
+    integrity="sha512-szJ5FSo9hEmXXe7b5AUVtn/WnL8a5VofnFeYC2i2z03uS2LhAch7ewNLbl5flsEmTTimMN0enBZg/3sQ+YOSzQ=="
+    crossorigin="anonymous"
+  ></script>
+</html>

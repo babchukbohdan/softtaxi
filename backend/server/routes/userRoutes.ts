@@ -1,7 +1,7 @@
-const createRouter = require('./CreateRouter')
-const UserController = require('../controller/UserController')
+import createRouter from './CreateRouter'
+import UserController from '../controller/UserController'
 
 const router = createRouter(UserController)
 router.post('/registration', UserController.registration)
 router.post('/login', UserController.login)
-module.exports = router
+export default router

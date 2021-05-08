@@ -1,24 +1,23 @@
-const db = require('../db')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+import { Request, Response } from 'express'
+import db from '../db'
+import bcrypt from 'bcrypt'
+import jwt, { Secret } from 'jsonwebtoken'
 
-const CrudController = require('./CrudController')
-const { getQueryWithFilter } = require('./utils')
+import CrudController from './CrudController'
+import { getQueryWithFilter, getQueryForCreate } from './utils'
 
-const generateJwt = (id, phone) => {
-  return jwt.sign(
-    { id, phone },
-    process.env.SECRET_KEY,
-    { expiresIn: '24h' }
-  )
+const secret: Secret = process.env.SECRET_KEY!
+
+const generateJwt = (id: string, phone: string) => {
+  return jwt.sign({ id, phone }, secret, { expiresIn: '24h' })
 }
 
 class UserController extends CrudController {
-  constructor(tableName) {
+  constructor(tableName: string) {
     super(tableName)
   }
-  registration = async (req, res, next) => {
-    const { phone, password } = req.body;
+  registration = async (req: Request, res: Response) => {
+    const { phone, password } = req.body
     const query = getQueryWithFilter({ phone_number: phone }, 'users')
     const candidate = await db.query(query)
 
@@ -27,15 +26,20 @@ class UserController extends CrudController {
     }
 
     const hashPassword = await bcrypt.hash(password, 2)
-    const response = await db.query(getQueryForCreate({ phone_number: phone, password: hashPassword }, 'users'))
+    const response = await db.query(
+      getQueryForCreate(
+        { phone_number: phone, password: hashPassword },
+        'users'
+      )
+    )
     const user = response.rows[0]
 
-    const token = generateJwt({ id: user.id, phone })
+    const token = generateJwt(user.id, phone)
     res.json({ token })
   }
 
-  login = async (req, res, next) => {
-    const { phone, password } = req.body;
+  login = async (req: Request, res: Response) => {
+    const { phone, password } = req.body
 
     const query = getQueryWithFilter({ phone_number: phone }, 'users')
     const response = await db.query(query)
@@ -55,4 +59,4 @@ class UserController extends CrudController {
     return res.status(200).json({ token })
   }
 }
-module.exports = new UserController('users')
+export default new UserController('users')

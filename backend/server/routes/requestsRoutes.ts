@@ -1,6 +1,6 @@
-const RequestsController = require('../controller/RequestsController')
 const Router = require('express')
-const authMiddleware = require('../middleware/authMiddleware')
+import RequestsController from '../controller/RequestsController'
+import authMiddleware from '../middleware/authMiddleware'
 
 const router = new Router()
 
@@ -10,4 +10,4 @@ router.get('/', RequestsController.get)
 router.get('/:id', RequestsController.getOne)
 router.put('/', RequestsController.update)
 
-module.exports = router
+export default router
