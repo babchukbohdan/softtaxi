@@ -1,3 +1,6 @@
 .cars__img:hover {
   color: var(--svg-color);
 }
+.cars__img.active {
+  color: var(--accent-color);
+}

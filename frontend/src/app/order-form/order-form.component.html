@@ -10,8 +10,15 @@
               hidden="true"
               name="car_type"
               id="basic"
+              value="basic"
+              [(ngModel)]="carType"
             />
-            <app-icon className="cars__img" name="basic" size="60px"></app-icon>
+            <app-icon
+              className="cars__img"
+              name="basic"
+              size="60px"
+              [isActive]="carType === 'basic'"
+            ></app-icon>
           </label>
         </li>
         <li class="cars__item">
@@ -22,11 +29,14 @@
               hidden
               name="car_type"
               id="comfort"
+              value="comfort"
+              [(ngModel)]="carType"
             />
             <app-icon
               className="cars__img"
               name="comfort"
               size="60px"
+              [isActive]="carType === 'comfort'"
             ></app-icon>
           </label>
         </li>
@@ -38,8 +48,15 @@
               hidden
               name="car_type"
               id="eco"
+              value="eco"
+              [(ngModel)]="carType"
             />
-            <app-icon className="cars__img" name="eco" size="60px"></app-icon>
+            <app-icon
+              className="cars__img"
+              name="eco"
+              size="60px"
+              [isActive]="carType === 'eco'"
+            ></app-icon>
           </label>
         </li>
         <li class="cars__item">
@@ -50,8 +67,15 @@
               hidden
               name="car_type"
               id="xl"
+              value="xl"
+              [(ngModel)]="carType"
             />
-            <app-icon className="cars__img" name="xl" size="60px"></app-icon>
+            <app-icon
+              className="cars__img"
+              name="xl"
+              size="60px"
+              [isActive]="carType === 'xl'"
+            ></app-icon>
           </label>
         </li>
       </ul>
@@ -95,10 +119,10 @@
             id=""
             [(ngModel)]="carType"
           >
-            <option value="Basic">Basic</option>
-            <option value="Comfort">Comfort</option>
-            <option value="Eco">Eco</option>
-            <option value="Xl">Xl</option>
+            <option value="basic">Basic</option>
+            <option value="comfort">Comfort</option>
+            <option value="eco">Eco</option>
+            <option value="xl">Xl</option>
           </select>
           <!-- <p>{{ carType }}</p> -->
         </li>
