@@ -1,4 +1,4 @@
-import { FormsModule } from '@angular/forms';
+import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,40 +7,42 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent implements OnInit {
-  phone: 11;
+  phone: '11';
   password: 'test';
-  constructor() {}
+  constructor(public authService: AuthService) {}
 
-  login() {
+  async login() {
     const data = {
       phone: this.phone,
       password: this.password,
     };
-    const res = fetch('http://localhost:8080/user/login', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *client
-      body: JSON.stringify(data), // body data type must match "Content-Type" header
-    });
+    console.log('data for login', data);
+    const response = await this.authService.login(data);
 
-    console.log(data, 'data for login');
+    if (response?.user) {
+      localStorage.setItem('token', response.token);
+    }
+  }
+  async register() {
+    const data = {
+      phone: this.phone,
+      password: this.password,
+    };
 
-    res
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        if (res.token) {
-          localStorage.setItem('token', res.token);
-        }
-      });
+    console.log('data for register', data);
+
+    try {
+      const { token } = await this.authService.register(data);
+      localStorage.setItem('token', token);
+    } catch (error) {}
+  }
+
+  logout() {
+    this.authService.setCurrentUser(undefined);
+  }
+
+  getUserString() {
+    return JSON.stringify(this.authService.getCurrentUser(), null, 2);
   }
 
   ngOnInit(): void {}

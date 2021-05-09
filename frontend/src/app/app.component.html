@@ -1,9 +1,18 @@
 <div class="theme dark">
-  <div class="wrap">
-    <!-- <app-order-form></app-order-form> -->
-    <!-- <app-order request=""></app-order> -->
-    <!-- <app-request-list></app-request-list> -->
-    <app-login-form></app-login-form>
-    <app-nav></app-nav>
+  <div class="wrap" [ngSwitch]="page">
+    <ng-template ngSwitchCase="make-order">
+      <app-order-form></app-order-form>
+    </ng-template>
+    <ng-template ngSwitchCase="order">
+      <app-order request=""></app-order>
+    </ng-template>
+    <ng-template ngSwitchCase="order-list">
+      <app-request-list></app-request-list>
+    </ng-template>
+    <ng-template ngSwitchCase="login">
+      <app-login-form></app-login-form>
+    </ng-template>
+
+    <app-nav [page]="page" (onPageChange)="changePage($event)"></app-nav>
   </div>
 </div>

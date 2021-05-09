@@ -35,7 +35,7 @@ class UserController extends CrudController {
     const user = response.rows[0]
 
     const token = generateJwt(user.id, phone)
-    res.json({ token })
+    res.json({ token, user })
   }
 
   login = async (req: Request, res: Response) => {
@@ -56,7 +56,7 @@ class UserController extends CrudController {
     }
 
     const token = generateJwt(user.id, user.phone_number)
-    return res.status(200).json({ token })
+    return res.status(200).json({ token, user })
   }
 }
 export default new UserController('users')

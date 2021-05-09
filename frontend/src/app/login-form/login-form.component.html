@@ -24,8 +24,16 @@
     </li>
 
     <li>
-      <app-button class="login__btn" text="Register"></app-button>
+      <app-button
+        (click)="register()"
+        class="login__btn"
+        text="Register"
+      ></app-button>
       <app-button (click)="login()" text="Login"></app-button>
+      <app-button (click)="logout()" text="Logout"></app-button>
     </li>
   </ul>
+  <pre>
+    {{ getUserString() }}
+  </pre>
 </main>

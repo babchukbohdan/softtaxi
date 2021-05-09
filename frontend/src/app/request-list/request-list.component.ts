@@ -1,5 +1,7 @@
+import { AuthService } from './../services/auth.service';
 import { Request, CarType, StatusType } from './../../assets/types/types';
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 const snakeToCamel = (str: string): string =>
   str.replace(/([-_][a-z])/g, (group) =>
@@ -7,6 +9,9 @@ const snakeToCamel = (str: string): string =>
   );
 
 const transformRequest = (requests) => {
+  if (!requests.length) {
+    return [];
+  }
   const keys = Object.keys(requests[0]);
   return requests.map((req) => {
     return keys.reduce((acc, val) => {
@@ -26,45 +31,29 @@ const transformRequest = (requests) => {
   styleUrls: ['./request-list.component.scss'],
 })
 export class RequestListComponent implements OnInit {
-  requests: Request[] = [
-    {
-      customerId: '1',
-      driverId: '',
-      createdDate: new Date(),
-      lastUpdate: new Date(),
-      destinationLocation: 'Головна, 246',
-      passangerLocation: 'Комарова 2-А',
-      price: 50,
-      carType: CarType[CarType.xl],
-      status: StatusType.Active,
-      description: 'Air conditioning',
-    },
-    {
-      customerId: '2',
-      driverId: '',
-      createdDate: new Date(),
-      lastUpdate: new Date(),
-      destinationLocation: 'Головна, 246',
-      passangerLocation: 'Комарова 2-А',
-      price: 50,
-      carType: CarType[CarType.basic],
-      status: StatusType.Active,
-      description: 'Air conditioning',
-    },
-  ];
-  constructor() {}
+  requests: Request[];
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    const res = fetch('http://localhost:8080/requests');
-    res
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        console.log(res);
-        console.log(snakeToCamel('asds_fdf'));
-        console.log();
-        this.requests = transformRequest(res);
-      });
+    const url = environment.apiUrl;
+    const user = this.authService.getCurrentUser();
+    console.log(user, 'current User');
+
+    if (user) {
+      const res = fetch(
+        `${url}requests?limit=5&filter[status]=active&filter[customer_id]=${user.id}`
+      );
+      res
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          console.log(res, 'request list response');
+          this.requests = transformRequest(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 }

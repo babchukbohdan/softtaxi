@@ -2,13 +2,34 @@
   <nav class="nav">
     <ul class="nav__list list">
       <li class="nav__item">
-        <app-icon className="nav__img" size="40px" name="list"></app-icon>
+        <button (click)="clickHandler('order-list')" class="nav__btn">
+          <app-icon
+            [isActive]="page === 'order-list'"
+            className="nav__img"
+            size="40px"
+            name="list"
+          ></app-icon>
+        </button>
       </li>
       <li class="nav__item">
-        <app-icon className="nav__img" size="40px" name="add"></app-icon>
+        <button (click)="clickHandler('make-order')" class="nav__btn">
+          <app-icon
+            [isActive]="page === 'make-order'"
+            className="nav__img"
+            size="40px"
+            name="add"
+          ></app-icon>
+        </button>
       </li>
       <li class="nav__item">
-        <app-icon className="nav__img" size="40px" name="user"></app-icon>
+        <button (click)="clickHandler('login')" class="nav__btn">
+          <app-icon
+            [isActive]="page === 'login'"
+            className="nav__img"
+            size="40px"
+            name="user"
+          ></app-icon>
+        </button>
       </li>
     </ul>
   </nav>

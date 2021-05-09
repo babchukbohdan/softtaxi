@@ -21,6 +21,7 @@ export default class CrudController {
       const newValue = await db.query(
         getQueryForCreate(req.body, this.tableName)
       )
+
       res.json(newValue.rows[0])
     } catch (error) {
       res.json(error)
