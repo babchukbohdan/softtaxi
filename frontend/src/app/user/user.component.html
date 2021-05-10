@@ -1,0 +1,6 @@
+<app-login-form *ngIf="!user" (onLogedIn)="onLogedIn($event)"></app-login-form>
+<app-user-info
+  *ngIf="user"
+  [user]="user"
+  (onLogedOut)="onLogedOut()"
+></app-user-info>

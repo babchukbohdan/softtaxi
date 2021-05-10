@@ -1,3 +1,26 @@
-<ul class="list">
-  <app-request *ngFor="let r of requests" [request]="r"></app-request>
+<div>
+  <app-button
+    [isActive]="currentTab === 'all'"
+    (click)="changeTab('all')"
+    text="All orders"
+  ></app-button>
+  <app-button
+    [isActive]="currentTab === 'active'"
+    (click)="changeTab('active')"
+    text="Active orders"
+  ></app-button>
+</div>
+<ul class="list" *ngIf="currentTab === 'all'">
+  <app-request *ngFor="let r of allRequests" [request]="r"></app-request>
+  <li *ngIf="allRequests.length === 0">You haven't finished orders</li>
+</ul>
+<ul class="list" *ngIf="currentTab === 'active'">
+  <app-request
+    (cancelOrder)="cancelOrder($event)"
+    *ngFor="let r of activeRequests"
+    [request]="r"
+  >
+    <!-- <app-button (click)="cancelRequest()" text="Cancel order"></app-button> -->
+  </app-request>
+  <li *ngIf="activeRequests.length === 0">You haven't active orders</li>
 </ul>

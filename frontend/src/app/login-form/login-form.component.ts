@@ -1,5 +1,5 @@
 import { AuthService } from './../services/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-login-form',
@@ -9,6 +9,12 @@ import { Component, OnInit } from '@angular/core';
 export class LoginFormComponent implements OnInit {
   phone: '11';
   password: 'test';
+  errorMessage: '';
+
+  @Output() onLogedIn = new EventEmitter();
+  logedIn(user) {
+    this.onLogedIn.emit(user);
+  }
   constructor(public authService: AuthService) {}
 
   async login() {
@@ -18,9 +24,11 @@ export class LoginFormComponent implements OnInit {
     };
     console.log('data for login', data);
     const response = await this.authService.login(data);
-
+    if (response?.message) {
+      this.errorMessage = response.message;
+    }
     if (response?.user) {
-      localStorage.setItem('token', response.token);
+      this.logedIn(response.user);
     }
   }
   async register() {
@@ -32,13 +40,11 @@ export class LoginFormComponent implements OnInit {
     console.log('data for register', data);
 
     try {
-      const { token } = await this.authService.register(data);
-      localStorage.setItem('token', token);
+      const res = await this.authService.register(data);
+      if (res.message) {
+        this.errorMessage = res.message;
+      }
     } catch (error) {}
-  }
-
-  logout() {
-    this.authService.setCurrentUser(undefined);
   }
 
   getUserString() {

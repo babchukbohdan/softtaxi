@@ -1,6 +1,6 @@
 <div class="theme dark">
   <div class="wrap" [ngSwitch]="page">
-    <ng-template ngSwitchCase="make-order">
+    <!-- <ng-template ngSwitchCase="make-order">
       <app-order-form></app-order-form>
     </ng-template>
     <ng-template ngSwitchCase="order">
@@ -11,7 +11,9 @@
     </ng-template>
     <ng-template ngSwitchCase="login">
       <app-login-form></app-login-form>
-    </ng-template>
+    </ng-template> -->
+
+    <router-outlet></router-outlet>
 
     <app-nav [page]="page" (onPageChange)="changePage($event)"></app-nav>
   </div>

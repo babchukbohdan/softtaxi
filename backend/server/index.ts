@@ -1,8 +1,9 @@
+/* eslint-disable */
 import express, { Application } from 'express'
 import cors from 'cors'
 import { logger } from './utils/logger'
-
-require('dotenv').config()
+import { config } from 'dotenv'
+config()
 
 import userRouter from './routes/userRoutes'
 import requestsRouter from './routes/requestsRoutes'

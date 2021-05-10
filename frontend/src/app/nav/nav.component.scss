@@ -2,11 +2,15 @@ footer {
   flex: 0 0 auto;
 }
 .nav {
-  &__btn {
-    background-color: transparent;
-    border: none;
+  &__link {
+    text-decoration: none;
+
+    &.active .nav__img {
+      color: red;
+    }
   }
 }
+
 .nav__list {
   display: flex;
   justify-content: space-between;

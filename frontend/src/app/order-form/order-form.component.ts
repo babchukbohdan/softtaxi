@@ -13,9 +13,9 @@ import { randomInteger } from 'src/assets/utils';
 export class OrderFormComponent implements OnInit {
   @Output() onAdd: EventEmitter<Request> = new EventEmitter<Request>();
   id = '';
-  phoneNumber = '11';
-  from = 'Головна, 212';
-  to = 'Комарова, 4';
+  phoneNumber = '';
+  from = `Головна, ${randomInteger(1, 260)}`;
+  to = `Комарова, ${randomInteger(1, 55)}`;
   carType = 'basic';
   description = 'With air conditioning';
 

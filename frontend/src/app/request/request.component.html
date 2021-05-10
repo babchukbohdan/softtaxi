@@ -24,7 +24,8 @@
         </li>
       </ul>
       <div class="group">
-        <app-button text="Take order"></app-button>
+        <!-- <ng-content></ng-content> -->
+        <app-button (click)="cancelRequest()" text="Cancel order"></app-button>
       </div>
     </div>
   </div>

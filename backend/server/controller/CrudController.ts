@@ -16,7 +16,7 @@ export default class CrudController {
     this.tableName = tableName
   }
 
-  create = async (req: Request, res: Response) => {
+  create = async (req: Request, res: Response): Promise<any> => {
     try {
       const newValue = await db.query(
         getQueryForCreate(req.body, this.tableName)
@@ -27,8 +27,8 @@ export default class CrudController {
       res.json(error)
     }
   }
-  get = async (req: Request, res: Response) => {
-    let values, queryString
+  get = async (req: Request, res: Response): Promise<any> => {
+    let queryString
     const { filter, offset, limit } = req.query
 
     if (filter) {
@@ -41,7 +41,7 @@ export default class CrudController {
       queryString = getQueryWithLimitAndOffset(queryString, offset, limit)
     }
 
-    values = await db.query(queryString)
+    const values = await db.query(queryString)
     res.json(values.rows)
   }
 

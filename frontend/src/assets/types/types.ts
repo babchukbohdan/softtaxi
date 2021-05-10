@@ -5,16 +5,17 @@ export enum CarType {
   xl = 'xl',
 }
 export enum StatusType {
-  Postponed,
-  Active,
-  Accepted,
-  WaitingForCustomer,
-  InProgress,
-  Done,
-  Canceled,
+  Postponed = 'postponed',
+  Active = 'active',
+  Accepted = 'accepted',
+  WaitingForCustomer = 'waiting_form_customer',
+  InProgress = 'in_progress',
+  Done = 'done',
+  Canceled = 'canceled',
 }
 
 export interface Request {
+  id?: string;
   customerId: string;
   driverId: string;
   createdDate: Date;

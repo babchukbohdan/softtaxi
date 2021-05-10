@@ -2,35 +2,28 @@
   <nav class="nav">
     <ul class="nav__list list">
       <li class="nav__item">
-        <button (click)="clickHandler('order-list')" class="nav__btn">
-          <app-icon
-            [isActive]="page === 'order-list'"
-            className="nav__img"
-            size="40px"
-            name="list"
-          ></app-icon>
-        </button>
+        <a routerLink="/requests" class="nav__link" routerLinkActive="active">
+          <app-icon className="nav__img" size="40px" name="list"></app-icon>
+        </a>
       </li>
       <li class="nav__item">
-        <button (click)="clickHandler('make-order')" class="nav__btn">
-          <app-icon
-            [isActive]="page === 'make-order'"
-            className="nav__img"
-            size="40px"
-            name="add"
-          ></app-icon>
-        </button>
+        <a
+          routerLink=""
+          class="nav__link"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <app-icon className="nav__img" size="40px" name="add"></app-icon>
+        </a>
       </li>
       <li class="nav__item">
-        <button (click)="clickHandler('login')" class="nav__btn">
-          <app-icon
-            [isActive]="page === 'login'"
-            className="nav__img"
-            size="40px"
-            name="user"
-          ></app-icon>
-        </button>
+        <a routerLink="/login" class="nav__link" routerLinkActive="active">
+          <app-icon className="nav__img" size="40px" name="user"></app-icon>
+        </a>
       </li>
+      <!-- <button (click)="clickHandler('order-list')" class="nav__link">< routerLinkActive="active"/button>
+      <button (click)="clickHandler('make-order')" class="nav__btn"></button>
+      <button (click)="clickHandler('login')" class="nav__btn"></button> -->
     </ul>
   </nav>
 </footer>

@@ -24,6 +24,14 @@ body {
   display: none;
 }
 
+main {
+  min-height: calc(100vh - 42px - 20px);
+}
+
+.nav__link.active .nav__img {
+  color: var(--accent-color) !important;
+}
+
 .list {
   list-style-type: none;
 
@@ -34,8 +42,8 @@ body {
 input,
 select,
 textarea {
-  display: block;
-  width: 100%;
+  // display: block;
+  // width: 100%;
   padding: 0.4rem;
   font-size: 1.2rem;
   border: 1px solid #ccc;

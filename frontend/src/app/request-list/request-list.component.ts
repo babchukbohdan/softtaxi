@@ -25,35 +25,74 @@ const transformRequest = (requests) => {
   });
 };
 
+const getQueryFromFilter = (filter) => {
+  return Object.keys(filter)
+    .map((key) => {
+      return filter[key]
+        .map((val) => {
+          return `filter[${key}]=${val}`;
+        })
+        .join('&');
+    })
+    .join('&');
+};
+
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.scss'],
 })
 export class RequestListComponent implements OnInit {
-  requests: Request[];
+  allRequests: Request[] = [];
+  activeRequests: Request[] = [];
+  currentTab = 'active';
   constructor(private authService: AuthService) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     const url = environment.apiUrl;
     const user = this.authService.getCurrentUser();
     console.log(user, 'current User');
 
     if (user) {
-      const res = fetch(
-        `${url}requests?limit=5&filter[status]=active&filter[customer_id]=${user.id}`
+      const filterForActiveTab = {
+        status: [
+          'active',
+          'Postponed',
+          'accepted',
+          'waiting_form_customer',
+          'in_progress',
+        ],
+        customer_id: [user.id],
+      };
+      const filterForAllTab = {
+        status: ['done', 'canceled'],
+        customer_id: [user.id],
+      };
+      const getActive = await fetch(
+        `${url}requests?${getQueryFromFilter(filterForActiveTab)}&limit=5`
       );
-      res
-        .then((res) => {
-          return res.json();
-        })
-        .then((res) => {
-          console.log(res, 'request list response');
-          this.requests = transformRequest(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const activeReq = await getActive.json();
+      this.activeRequests = transformRequest(activeReq);
+      console.log(activeReq, 'activeReq list response');
+
+      const getAll = await fetch(
+        `${url}requests?${getQueryFromFilter(filterForAllTab)}&limit=5`
+      );
+      const AllReq = await getAll.json();
+      this.allRequests = transformRequest(AllReq);
+      console.log(AllReq, 'AllReq list response');
     }
+  }
+
+  cancelOrder(id) {
+    const idx = this.activeRequests.findIndex((val) => {
+      return val.id === id;
+    });
+    this.activeRequests.splice(idx, 1);
+    console.log('cancel in list');
+  }
+
+  changeTab(tab) {
+    this.currentTab = tab;
   }
 }

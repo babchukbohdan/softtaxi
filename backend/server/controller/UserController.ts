@@ -49,7 +49,7 @@ class UserController extends CrudController {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    let comparePassword = await bcrypt.compare(password, user.password)
+    const comparePassword = await bcrypt.compare(password, user.password)
 
     if (!comparePassword) {
       return res.status(400).json({ message: 'Wrong password or phone' })

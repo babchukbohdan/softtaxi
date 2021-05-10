@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { RouterModule } from '@angular/router';
+import { appRoutes } from './routes/routes';
+
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { OrderComponent } from './order/order.component';
@@ -11,6 +14,8 @@ import { IconComponent } from './icon/icon.component';
 import { RequestComponent } from './request/request.component';
 import { RequestListComponent } from './request-list/request-list.component';
 import { LoginFormComponent } from './login-form/login-form.component';
+import { UserComponent } from './user/user.component';
+import { UserInfoComponent } from './user-info/user-info.component';
 
 @NgModule({
   declarations: [
@@ -23,8 +28,10 @@ import { LoginFormComponent } from './login-form/login-form.component';
     RequestComponent,
     RequestListComponent,
     LoginFormComponent,
+    UserComponent,
+    UserInfoComponent,
   ],
-  imports: [BrowserModule, FormsModule],
+  imports: [BrowserModule, FormsModule, RouterModule.forRoot(appRoutes)],
   providers: [],
   bootstrap: [AppComponent],
 })

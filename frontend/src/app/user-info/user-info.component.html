@@ -1,40 +1,41 @@
-<main class="login">
-  <ul class="login__list list">
-    <!-- <li>
+<main class="user">
+  <ul class="user__list list">
+    <li>
       <label class="login__label" for=""
-        >Name: <input class="login__input input" type="text"
+        >Name: <input [(ngModel)]="name" class="login__input input" type="text"
       /></label>
-    </li> -->
-    <!-- <li>
+    </li>
+    <li>
       <label class="login__label" for=""
-        >Email: <input class="login__input input" type="email"
+        >Email:
+        <input [(ngModel)]="email" class="login__input input" type="email"
       /></label>
-    </li> -->
+    </li>
     <li>
       <label class="login__label" for=""
         >Phone:
         <input [(ngModel)]="phone" class="login__input input" type="text" />
       </label>
     </li>
-    <li>
+    <!-- <li>
       <label class="login__label" for=""
         >Password:
         <input [(ngModel)]="password" class="login__input input" type="text" />
       </label>
-    </li>
+    </li> -->
 
     <li>
       <app-button
-        (click)="register()"
+        (click)="updateUser()"
         class="login__btn"
-        text="Register"
+        text="Save"
       ></app-button>
-      <app-button (click)="login()" text="Login"></app-button>
-    </li>
-    <li>
-      <label for="">Login as driver</label
-      ><input type="checkbox" name="asDriver" id="" />
+
+      <app-button
+        (click)="logout()"
+        class="login__btn"
+        text="Logout"
+      ></app-button>
     </li>
   </ul>
-  <div *ngIf="errorMessage">{{ errorMessage }}</div>
 </main>

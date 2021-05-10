@@ -12,6 +12,7 @@
 }
 .cars__label {
   display: block;
+  cursor: pointer;
 }
 .cars__radio:checked + .cars__img {
   border: 1px solid #000;

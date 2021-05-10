@@ -22,10 +22,15 @@ export const getQueryWithSort = (query: string, prop: string): string => {
 export const getQueryWithFilter = (filter: any, tableName: string): string => {
   return Object.keys(filter).reduce((acc, key, i) => {
     let keyQuery
+    let value = filter[key]
+    if (Array.isArray(value)) {
+      value = value.join("','")
+    }
+
     if (!i) {
-      keyQuery = ` ${key} IN ('${filter[key]}')`
+      keyQuery = ` ${key} IN ('${value}')`
     } else {
-      keyQuery = ` AND ${key} IN ('${filter[key]}')`
+      keyQuery = ` AND ${key} IN ('${value}')`
     }
     return acc + keyQuery
   }, `SELECT * FROM ${tableName} WHERE`)

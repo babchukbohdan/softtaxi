@@ -1,4 +1,7 @@
+/* eslint-disable */
 const Router = require('express')
+// import { Router } from 'express'
+
 import RequestsController from '../controller/RequestsController'
 import authMiddleware from '../middleware/authMiddleware'
 

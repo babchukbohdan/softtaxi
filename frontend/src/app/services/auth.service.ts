@@ -54,9 +54,9 @@ export class AuthService {
 
       if (response.user) {
         this.setCurrentUser(response.user);
-        return response.token;
+        localStorage.setItem('token', response.token);
       }
-
+      return response;
       console.log('%cresponse', 'color: #2ECC71', response);
     } catch (error) {}
   }
@@ -73,13 +73,36 @@ export class AuthService {
 
       const response = await res.json();
       const { user, token } = response;
-
+      console.log('sestUser', user);
       this.setCurrentUser(user);
+      localStorage.setItem('token', token);
       console.log('%cresponse', 'color: #2ECC71', response);
 
-      return token;
+      return response;
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async updateUser({ id, name, phone, email }) {
+    const body = {
+      id,
+      name,
+      phone_number: phone,
+      email,
+    };
+    const res = await fetch(`${environment.apiUrl}user`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    return await res.json();
+  }
+
+  logout() {
+    this.setCurrentUser(undefined);
+    localStorage.removeItem('token');
   }
 }

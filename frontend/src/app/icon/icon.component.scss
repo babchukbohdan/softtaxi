@@ -1,9 +1,13 @@
+.cars__img,
+.nav__img {
+  transition: color 0.1s ease-in;
+}
+
 .cars__img:hover,
 .nav__img:hover {
   color: var(--svg-color);
 }
-.cars__img.active,
-.nav__img.active {
+.cars__img.active {
   color: var(--accent-color);
 }
 .nav__img {
