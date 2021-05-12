@@ -7,9 +7,16 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent implements OnInit {
-  phone: '11';
-  password: 'test';
-  errorMessage: '';
+  public phone: string = '11';
+  public password: string = 'test';
+  public errorMessage: string = '';
+
+  public isDriver: boolean = false;
+
+  public carColor: string;
+  public carModel: string;
+  public carNumber: string;
+  public currentRequest: string;
 
   @Output() onLogedIn = new EventEmitter();
   logedIn(user) {
@@ -17,12 +24,27 @@ export class LoginFormComponent implements OnInit {
   }
   constructor(public authService: AuthService) {}
 
+  async loginAsDriver() {
+    const body = {
+      phone: this.phone,
+      password: this.password,
+    };
+    console.log(this.isDriver);
+    const driver = await this.authService.getFullDriver(body);
+    // console.log('driver', driver);
+    if (driver?.message) {
+      this.errorMessage = driver.message;
+    }
+    if (driver?.driverInfo) {
+      this.logedIn(driver);
+    }
+  }
+
   async login() {
     const data = {
       phone: this.phone,
       password: this.password,
     };
-    console.log('data for login', data);
     const response = await this.authService.login(data);
     if (response?.message) {
       this.errorMessage = response.message;
@@ -31,7 +53,9 @@ export class LoginFormComponent implements OnInit {
       this.logedIn(response.user);
     }
   }
+
   async register() {
+    this.errorMessage = '';
     const data = {
       phone: this.phone,
       password: this.password,
@@ -44,7 +68,20 @@ export class LoginFormComponent implements OnInit {
       if (res.message) {
         this.errorMessage = res.message;
       }
-    } catch (error) {}
+
+      // if (this.isDriver) {
+      //   const driverData = {
+      //     user_id: res.user.id,
+      //     car_model: this.carModel,
+      //     car_number: this.carNumber,
+      //     car_color: this.carColor,
+      //   };
+      //   const driver = await this.authService.createDriver(driverData);
+      // }
+      return res;
+    } catch (error) {
+      this.errorMessage = error;
+    }
   }
 
   getUserString() {

@@ -9,7 +9,38 @@ export class AuthService {
 
   setCurrentUser(user) {
     this.user = user;
-    console.log('%cuser', 'color: #2ECC71', user);
+    console.log('%cSet user in service', 'color: #2ECC71', user);
+  }
+
+  private async getDriver(id: string) {
+    const res = await fetch(
+      `${environment.apiUrl}driver?filter[user_id]=${id}`
+    );
+
+    const dr = await res.json();
+
+    if (!dr.length) {
+      return null;
+    }
+    return dr[0];
+  }
+
+  async getFullDriver(body) {
+    const user = await this.login(body);
+    console.log(user, 'user in getFullDriver');
+
+    if (user.message) {
+      return user;
+    }
+
+    const driverInfo = await this.getDriver(user.user.id);
+    if (!driverInfo) {
+      return { message: `Driver with phone number ${body.phone} not found.` };
+    }
+
+    const driver = { driverInfo, token: user.token, ...user.user };
+    this.setCurrentUser(driver);
+    return driver;
   }
 
   async getUserByPhoneNumber(phone: string) {
@@ -19,9 +50,22 @@ export class AuthService {
       );
       const user = await res.json();
 
-      this.setCurrentUser(user[0]);
+      // this.setCurrentUser(user[0]);
       return user[0];
     } catch (error) {}
+  }
+
+  async createDriver(body) {
+    const res = await fetch(`${environment.apiUrl}driver`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const driver = await res.json();
+    return driver;
   }
 
   async createUser(phone) {
@@ -56,8 +100,8 @@ export class AuthService {
         this.setCurrentUser(response.user);
         localStorage.setItem('token', response.token);
       }
+      // console.log('%cresponse', 'color: #2ECC71', response);
       return response;
-      console.log('%cresponse', 'color: #2ECC71', response);
     } catch (error) {}
   }
   async register(body) {
@@ -84,6 +128,15 @@ export class AuthService {
     }
   }
 
+  // TODO
+  // async resisterAsDriver(userBody, driverBody) {
+  //   const { user } = await this.register(userBody);
+  //   const driver = await this.createDriver(driverBody);
+  //   this.setCurrentUser(user);
+  //   console.log('user in resisterAsDriver', user);
+  //   console.log('driver in resisterAsDriver', driver);
+  // }
+
   async updateUser({ id, name, phone, email }) {
     const body = {
       id,
@@ -92,6 +145,24 @@ export class AuthService {
       email,
     };
     const res = await fetch(`${environment.apiUrl}user`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    return await res.json();
+  }
+
+  async updateDriver({ id, carColor, carModel, carNumber }) {
+    const body = {
+      id,
+      car_color: carColor,
+      car_model: carModel,
+      car_number: carNumber,
+    };
+    console.log('body in update', body);
+    const res = await fetch(`${environment.apiUrl}driver`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

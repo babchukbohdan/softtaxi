@@ -41,6 +41,12 @@ SELECT UNION
   SELECT car_type, COUNT(car_type) FROM requests GROUP BY(car_type);
 } => return 2 column - car_type and count of each value
 
+{
+  SELECT drivers.car_color, drivers.car_model, drivers.car_number, drivers.is_avaliable, drivers.request_id, drivers.user_id,users.id, users.name, users.email, users.password, users.phone_number  FROM drivers
+  INNER JOIN users
+  ON users.id = drivers.user_id
+  WHERE users.id = '19';
+}
 
 
 

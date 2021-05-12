@@ -23,6 +23,25 @@
       </label>
     </li>
 
+    <li *ngIf="isDriver">
+      <label class="login__label" for=""
+        >Car color:
+        <input [(ngModel)]="carColor" class="login__input input" type="text" />
+      </label>
+    </li>
+    <li *ngIf="isDriver">
+      <label class="login__label" for=""
+        >Car model:
+        <input [(ngModel)]="carModel" class="login__input input" type="text" />
+      </label>
+    </li>
+    <li *ngIf="isDriver">
+      <label class="login__label" for=""
+        >Car number:
+        <input [(ngModel)]="carNumber" class="login__input input" type="text" />
+      </label>
+    </li>
+
     <li>
       <app-button
         (click)="register()"
@@ -30,10 +49,16 @@
         text="Register"
       ></app-button>
       <app-button (click)="login()" text="Login"></app-button>
+      <app-button (click)="loginAsDriver()" text="login As Driver"></app-button>
     </li>
     <li>
-      <label for="">Login as driver</label
-      ><input type="checkbox" name="asDriver" id="" />
+      <label for="">Register(login) as driver</label
+      ><input
+        [(ngModel)]="isDriver"
+        type="checkbox"
+        name="loginAsDriver"
+        id=""
+      />
     </li>
   </ul>
   <div *ngIf="errorMessage">{{ errorMessage }}</div>
