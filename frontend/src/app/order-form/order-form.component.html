@@ -2,46 +2,12 @@
   <form action="" class="form" (ngSubmit)="makeOrder()" [formGroup]="form">
     <section class="cars">
       <ul class="cars__list list">
-        <li class="cars__item">
-          <label class="cars__label" (click)="onCarTypeChange('basic')">
-            <app-icon
-              className="cars__img"
-              name="basic"
-              size="60px"
-              [isActive]="form.get('carType').value === 'basic'"
-            ></app-icon>
-          </label>
-        </li>
-        <li class="cars__item">
-          <label (click)="onCarTypeChange('comfort')" class="cars__label">
-            <app-icon
-              className="cars__img"
-              name="comfort"
-              size="60px"
-              [isActive]="form.get('carType').value === 'comfort'"
-            ></app-icon>
-          </label>
-        </li>
-        <li class="cars__item">
-          <label class="cars__label" for="eco" (click)="onCarTypeChange('eco')">
-            <app-icon
-              className="cars__img"
-              name="eco"
-              size="60px"
-              [isActive]="form.get('carType').value === 'eco'"
-            ></app-icon>
-          </label>
-        </li>
-        <li class="cars__item">
-          <label class="cars__label" (click)="onCarTypeChange('xl')">
-            <app-icon
-              className="cars__img"
-              name="xl"
-              size="60px"
-              [isActive]="form.get('carType').value === 'xl'"
-            ></app-icon>
-          </label>
-        </li>
+        <app-car-type
+          *ngFor="let carType of carTypes"
+          [carType]="carType.value"
+          [onClickHandler]="onCarTypeChange"
+          [isActive]="form.get('carType').value === carType.value"
+        ></app-car-type>
       </ul>
     </section>
     <section class="data">
@@ -106,10 +72,9 @@
             formControlName="carType"
             (change)="calculatePrice()"
           >
-            <option value="basic">Basic</option>
-            <option value="comfort">Comfort</option>
-            <option value="eco">Eco</option>
-            <option value="xl">Xl</option>
+            <option *ngFor="let carType of carTypes" [value]="carType.value">
+              {{ carType.value | uppercase }}
+            </option>
           </select>
         </li>
         <li class="form__item">

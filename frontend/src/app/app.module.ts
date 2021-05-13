@@ -16,6 +16,7 @@ import { RequestListComponent } from './request-list/request-list.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { UserComponent } from './user/user.component';
 import { UserInfoComponent } from './user-info/user-info.component';
+import { CarTypeComponent } from './car-type/car-type.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { UserInfoComponent } from './user-info/user-info.component';
     LoginFormComponent,
     UserComponent,
     UserInfoComponent,
+    CarTypeComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,10 @@
+<li class="cars__item">
+  <label class="cars__label" (click)="onClickHandler(carType)">
+    <app-icon
+      className="cars__img"
+      [name]="carType"
+      size="60px"
+      [isActive]="isActive"
+    ></app-icon>
+  </label>
+</li>

@@ -18,6 +18,29 @@ export class OrderFormComponent implements OnInit {
   id = '';
   price = randomInteger(5, 33);
 
+  carTypes = [
+    {
+      value: 'basic',
+      className: 'basic',
+    },
+    {
+      value: 'comfort',
+      className: 'comfort',
+    },
+    {
+      value: 'eco',
+      className: 'eco',
+    },
+    {
+      value: 'xl',
+      className: 'xl',
+    },
+    // {
+    //   value: 'sedan-car-model',
+    //   className: 'sedan-car-model',
+    // },
+  ];
+
   form: FormGroup;
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -36,15 +59,15 @@ export class OrderFormComponent implements OnInit {
     });
   }
 
-  onCarTypeChange(value) {
+  onCarTypeChange = (value) => {
     this.form.patchValue({
       carType: value,
     });
     !this.form.get('carType').touched &&
       this.form.get('carType').markAsTouched();
 
-    this.calculatePrice();
-  }
+    // this.calculatePrice();
+  };
 
   calculatePrice() {
     this.price = randomInteger(5, 33);
