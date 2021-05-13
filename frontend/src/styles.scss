@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "./assets/styles/theme.scss";
 @import "./assets/styles/icons.scss";
+@import "./assets/styles/formValidation.scss";
 
 *,
 *::after,
@@ -74,4 +75,11 @@ textarea {
     box-shadow: 0 0 0 0.2em var(--hover-bg-color);
     border-color: var(--hover-bg-color);
   }
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 20px var(--section-bg-color) inset !important;
+  -webkit-text-fill-color: var(--text-color) !important;
 }

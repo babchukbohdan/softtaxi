@@ -9,11 +9,13 @@
   --overlay-bg-color: rgba(255, 255, 255, 0.1);
 
   --text-color: rgb(242, 242, 242);
+  --text-color-disabled: #444;
   --text-link-color: #909090;
   --text-link-active-color: rgb(255, 255, 255);
 
   --svg-color: #909090;
-
+  --invalid-color: red;
+  --valid-color: var(--accent-color);
   // Progress chart
   --cartesian-grid-line-color: rgba(255, 255, 255, 0.1);
 

@@ -1,0 +1,6 @@
+.ng-invalid.ng-touched {
+  border-color: var(--invalid-color);
+}
+.ng-valid.ng-touched {
+  border-color: var(--valid-color);
+}

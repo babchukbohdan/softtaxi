@@ -11,8 +11,12 @@
 
   transition: background 0.2s ease-out;
 
-  &:disabled {
+  &[disabled] {
     color: var(--text-color-disabled);
+    &:hover {
+      background-color: inherit;
+      cursor: not-allowed;
+    }
   }
 
   &.active {

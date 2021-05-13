@@ -1,21 +1,20 @@
 import { Component } from '@angular/core';
-import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [AuthService],
+  providers: [],
 })
 export class AppComponent {
   title: string = 'softtaxi';
-  page: string = 'make-order';
+  // page: string = 'make-order';
 
   constructor() {}
 
-  changePage(page: string) {
-    this.page = page;
-  }
+  // changePage(page: string) {
+  //   this.page = page;
+  // }
   // requests: Request[] = [
   //   {
   //     customerId: '1',
