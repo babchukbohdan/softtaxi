@@ -10,17 +10,35 @@
     text="Active orders"
   ></app-button>
 </div>
-<ul class="list" *ngIf="currentTab === 'all'">
-  <app-request *ngFor="let r of allRequests" [request]="r"></app-request>
-  <li *ngIf="allRequests.length === 0">You haven't finished orders</li>
-</ul>
-<ul class="list" *ngIf="currentTab === 'active'">
-  <app-request
-    (cancelOrder)="cancelOrder($event)"
-    *ngFor="let r of activeRequests"
-    [request]="r"
-  >
-    <!-- <app-button (click)="cancelRequest()" text="Cancel order"></app-button> -->
-  </app-request>
-  <li *ngIf="activeRequests.length === 0">You haven't active orders</li>
-</ul>
+
+<div *ngIf="currentTab === 'all'">
+  <ul class="list">
+    <app-request *ngFor="let r of allRequests" [request]="r"></app-request>
+    <li *ngIf="allRequests.length === 0">You haven't finished orders</li>
+  </ul>
+  <app-pagination
+    *ngIf="countOfAllRequests"
+    [count]="countOfAllRequests"
+    [clickHandler]="changePage"
+    [currentPage]="currentPage"
+  ></app-pagination>
+</div>
+
+<div *ngIf="currentTab === 'active'">
+  <ul class="list">
+    <app-request
+      (cancelOrder)="cancelOrder($event)"
+      *ngFor="let r of activeRequests"
+      [request]="r"
+    >
+      <!-- <app-button (click)="cancelRequest()" text="Cancel order"></app-button> -->
+    </app-request>
+    <li *ngIf="activeRequests.length === 0">You haven't active orders</li>
+  </ul>
+  <app-pagination
+    *ngIf="countOfActiveRequests.length > 1"
+    [count]="countOfActiveRequests"
+    [clickHandler]="changePage"
+    [currentPage]="currentPage"
+  ></app-pagination>
+</div>

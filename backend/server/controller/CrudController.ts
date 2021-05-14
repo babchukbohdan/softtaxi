@@ -28,11 +28,20 @@ export default class CrudController {
     }
   }
   get = async (req: Request, res: Response): Promise<any> => {
-    let queryString
-    const { filter, offset, limit } = req.query
+    const selectCount = `SELECT COUNT (*) FROM ${this.tableName}`
+    const selectAll = `SELECT * FROM ${this.tableName}`
+    let queryString, onlyCount
+    const { filter, offset, limit, count } = req.query
+    console.log(typeof count, 'count')
+    if (count) {
+      onlyCount = Boolean(+count)
+    }
+    console.log(onlyCount, 'onlyCount')
+
+    console.log(req.query)
 
     if (filter) {
-      queryString = getQueryWithFilter(filter, this.tableName)
+      queryString = getQueryWithFilter(filter, this.tableName, onlyCount)
     } else {
       queryString = `SELECT * FROM ${this.tableName}`
     }
@@ -40,6 +49,7 @@ export default class CrudController {
     if (offset || limit) {
       queryString = getQueryWithLimitAndOffset(queryString, offset, limit)
     }
+    console.log(queryString)
 
     const values = await db.query(queryString)
     res.json(values.rows)

@@ -1,0 +1,9 @@
+<div class="pagination">
+  <app-button
+    *ngFor="let i of count; index as idx"
+    text="{{ idx + 1 }}"
+    (click)="clickHandler(idx + 1)"
+    [isActive]="currentPage === idx + 1"
+  >
+  </app-button>
+</div>

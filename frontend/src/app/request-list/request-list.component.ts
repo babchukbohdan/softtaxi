@@ -37,6 +37,39 @@ const getQueryFromFilter = (filter) => {
     .join('&');
 };
 
+const getDriverFilterForActiveTab = (id) => ({
+  status: ['Accepted', 'accepted', 'waiting_form_customer', 'in_progress'],
+  driver_id: [id],
+});
+const getDriverFilterForAllTab = () => ({
+  status: ['active', 'Active'],
+});
+const getUserFilterForActiveTab = (id) => ({
+  status: [
+    'active',
+    'Postponed',
+    'accepted',
+    'waiting_form_customer',
+    'in_progress',
+  ],
+  customer_id: [id],
+});
+const getUserFilterForAllTab = (id) => ({
+  status: ['done', 'canceled'],
+  customer_id: [id],
+});
+
+const getRequestsWithFilter = async (filter, limit: number, offset: number) => {
+  const res = await fetch(
+    `${environment.apiUrl}requests?${getQueryFromFilter(
+      filter
+    )}&limit=${limit}&offset=${offset}`
+  );
+  const requests = await res.json();
+
+  return transformRequest(requests);
+};
+
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
@@ -45,7 +78,17 @@ const getQueryFromFilter = (filter) => {
 export class RequestListComponent implements OnInit {
   allRequests: Request[] = [];
   activeRequests: Request[] = [];
+
+  countOfAllRequests = [];
+  countOfActiveRequests = [];
+
+  // "active" | "all"
   currentTab = 'active';
+
+  limit = 5;
+  currentPage = 1;
+  offset = 0;
+
   constructor(private authService: AuthService) {}
 
   async ngOnInit() {
@@ -53,73 +96,124 @@ export class RequestListComponent implements OnInit {
     console.log(user, 'current User in Requests list');
 
     if (user?.driverInfo) {
-      this.getOrdersForDriver(user);
+      this.getOrdersForDriver(user, this.limit, this.offset);
+      this.getCountOfRequestsForDriver(user.id);
     } else if (user) {
-      this.getOrdersForUser(user);
+      this.getOrdersForUser(user, this.limit, this.offset);
+      this.getCountOfRequestsForCustomer(user.id);
     }
   }
 
-  async getOrdersForDriver(driver) {
-    console.log('get orders for driver');
-    const filterForActiveTab = {
-      status: ['Accepted', 'accepted', 'waiting_form_customer', 'in_progress'],
-      driver_id: [driver.id],
-    };
-    const filterForAllTab = {
-      status: ['active', 'Active'],
-    };
+  changePage = (page) => {
+    console.log(page, 'page');
+    this.setOffset(page);
+    this.currentPage = page;
 
-    const getActive = await fetch(
-      `${environment.apiUrl}requests?${getQueryFromFilter(
-        filterForActiveTab
-      )}&limit=5`
-    );
-    const activeReq = await getActive.json();
-    this.activeRequests = transformRequest(activeReq);
-    console.log(activeReq, 'activeReq list response');
+    if (this.currentTab === 'active') {
+      this.getRequestsForActiveTab(
+        this.authService.getCurrentUser(),
+        this.limit,
+        this.offset
+      );
+    } else if (this.currentTab === 'all') {
+      this.getRequestsForAllTab(
+        this.authService.getCurrentUser(),
+        this.limit,
+        this.offset
+      );
+    }
+  };
 
-    const getAll = await fetch(
-      `${environment.apiUrl}requests?${getQueryFromFilter(
-        filterForAllTab
-      )}&limit=5`
-    );
-    const AllReq = await getAll.json();
-    this.allRequests = transformRequest(AllReq);
-    console.log(AllReq, 'AllReq list response');
+  setOffset(currentPage) {
+    this.offset = currentPage * this.limit - this.limit;
   }
 
-  async getOrdersForUser(user) {
-    const filterForActiveTab = {
-      status: [
-        'active',
-        'Postponed',
-        'accepted',
-        'waiting_form_customer',
-        'in_progress',
-      ],
-      customer_id: [user.id],
-    };
-    const filterForAllTab = {
-      status: ['done', 'canceled'],
-      customer_id: [user.id],
-    };
-    const getActive = await fetch(
-      `${environment.apiUrl}requests?${getQueryFromFilter(
-        filterForActiveTab
-      )}&limit=5`
+  async getCountOfRequestsWithFilter(filter): Promise<number> {
+    const res = await fetch(
+      `${environment.apiUrl}requests?${getQueryFromFilter(filter)}&count=1`
     );
-    const activeReq = await getActive.json();
-    this.activeRequests = transformRequest(activeReq);
-    console.log(activeReq, 'activeReq list response');
 
-    const getAll = await fetch(
-      `${environment.apiUrl}requests?${getQueryFromFilter(
-        filterForAllTab
-      )}&limit=5`
+    const count: Promise<number> = await res.json();
+    return +count[0].count;
+  }
+
+  async getCountOfRequestsForDriver(id) {
+    const countOfAllReq = await this.getCountOfRequestsWithFilter(
+      getDriverFilterForAllTab()
     );
-    const AllReq = await getAll.json();
-    this.allRequests = transformRequest(AllReq);
-    console.log(AllReq, 'AllReq list response');
+    this.countOfAllRequests = new Array(
+      Math.ceil(countOfAllReq / this.limit)
+    ).map((val, i) => i + 1);
+
+    const countOfActiveReq = await this.getCountOfRequestsWithFilter(
+      getDriverFilterForActiveTab(id)
+    );
+    this.countOfActiveRequests = new Array(
+      Math.ceil(countOfActiveReq / this.limit)
+    ).map((val, i) => i + 1);
+  }
+
+  async getCountOfRequestsForCustomer(id) {
+    const countOfAllReq = await this.getCountOfRequestsWithFilter(
+      getUserFilterForAllTab(id)
+    );
+    this.countOfAllRequests = new Array(
+      Math.ceil(countOfAllReq / this.limit)
+    ).map((val, i) => i + 1);
+
+    const countOfActiveReq = await this.getCountOfRequestsWithFilter(
+      getUserFilterForActiveTab(id)
+    );
+    this.countOfActiveRequests = new Array(
+      Math.ceil(countOfActiveReq / this.limit)
+    ).map((val, i) => i + 1);
+  }
+
+  setAllRequests(requests) {
+    this.allRequests = requests;
+  }
+  setActiveRequests(requests) {
+    this.activeRequests = requests;
+  }
+
+  async getRequestsForAllTab(user, limit, offset) {
+    let filter;
+    if (user?.driverInfo) {
+      filter = getDriverFilterForAllTab();
+    } else {
+      filter = getUserFilterForAllTab(user.id);
+    }
+
+    const allRequests = await getRequestsWithFilter(filter, limit, offset);
+
+    this.setAllRequests(allRequests);
+  }
+
+  async getRequestsForActiveTab(user, limit, offset) {
+    let filter;
+    if (user?.driverInfo) {
+      filter = getDriverFilterForActiveTab(user.id);
+    } else {
+      filter = getUserFilterForActiveTab(user.id);
+    }
+
+    const activeReq = await getRequestsWithFilter(filter, limit, offset);
+
+    this.setActiveRequests(activeReq);
+  }
+
+  async getOrdersForDriver(driver, limit: number, offset: number) {
+    await this.getRequestsForAllTab(driver, limit, offset);
+    console.log(this.allRequests, 'allReq list response');
+    await this.getRequestsForActiveTab(driver, limit, offset);
+    console.log(this.activeRequests, 'activeReq list response');
+  }
+
+  async getOrdersForUser(user, limit: number, offset: number) {
+    await this.getRequestsForAllTab(user, limit, offset);
+    console.log(this.allRequests, 'allReq list response');
+    await this.getRequestsForActiveTab(user, limit, offset);
+    console.log(this.activeRequests, 'activeReq list response');
   }
 
   cancelOrder(id) {
@@ -130,7 +224,7 @@ export class RequestListComponent implements OnInit {
     console.log('cancel in list');
   }
 
-  changeTab(tab) {
+  changeTab(tab: string): void {
     this.currentTab = tab;
   }
 }

@@ -19,7 +19,15 @@ export const getQueryWithSort = (query: string, prop: string): string => {
 // add sort func
 // add logger and linter
 
-export const getQueryWithFilter = (filter: any, tableName: string): string => {
+export const getQueryWithFilter = (
+  filter: any,
+  tableName: string,
+  onlyCount?: boolean
+): string => {
+  let acc = `SELECT * FROM ${tableName} WHERE`
+  if (onlyCount) {
+    acc = `SELECT COUNT (*) FROM ${tableName} WHERE`
+  }
   return Object.keys(filter).reduce((acc, key, i) => {
     let keyQuery
     let value = filter[key]
@@ -33,7 +41,7 @@ export const getQueryWithFilter = (filter: any, tableName: string): string => {
       keyQuery = ` AND ${key} IN ('${value}')`
     }
     return acc + keyQuery
-  }, `SELECT * FROM ${tableName} WHERE`)
+  }, acc)
 }
 
 export const getQueryForCreate = (body: any, tableName: string): string => {

@@ -66,7 +66,7 @@ export class OrderFormComponent implements OnInit {
     !this.form.get('carType').touched &&
       this.form.get('carType').markAsTouched();
 
-    // this.calculatePrice();
+    this.calculatePrice();
   };
 
   calculatePrice() {
