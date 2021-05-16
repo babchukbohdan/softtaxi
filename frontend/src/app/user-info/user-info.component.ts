@@ -73,7 +73,6 @@ export class UserInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('user in info comp', this.user);
     this.setUser();
   }
 }

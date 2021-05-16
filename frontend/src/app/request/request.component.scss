@@ -48,4 +48,29 @@
 
 .request__status {
   padding: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid var(--overlay-bg-color);
+  border-radius: var(--input-border-radius, 3px);
+
+  padding: 5px;
+
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+  &__label {
+  }
+
+  &__value {
+  }
 }

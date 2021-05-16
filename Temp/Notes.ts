@@ -173,7 +173,7 @@ const logClass = (constructor: Function) => {
   console.log(constructor)
 }
 
-@logClass // применение декоратора
+// @logClass // применение декоратора
 class UserClassDecorator {
   constructor(public name: string) {}
   public getPass(): string {
@@ -187,7 +187,7 @@ const logProp = (target: Object, propkey: string | symbol) => {
 }
 
 class UserPropDecorator {
-  @logProp
+  // @logProp
   secret: number
 
   constructor(public name: string, secret: number) {
@@ -210,7 +210,7 @@ const logMethod = (
 class UserMethodDecorator {
   constructor(public name: string) {}
 
-  @logMethod
+  // @logMethod
   public getPass(): string {
     return `${this.name}123`
   }
@@ -229,8 +229,8 @@ const logSet = (
 class UserGetSetDecorator {
   constructor(public name: string, public age: number) {}
 
-  @logSet
-  set myAge(age: number): string {
+  // @logSet
+  set myAge(age: number) {
     this.age = age
   }
 }

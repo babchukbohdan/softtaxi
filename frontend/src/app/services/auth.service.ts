@@ -14,7 +14,7 @@ export class AuthService {
     console.log('%cSet user in service', 'color: #2ECC71', user);
   }
 
-  private async getDriver(id: string) {
+  async getDriver(id: string) {
     const res = await fetch(
       `${environment.apiUrl}driver?filter[user_id]=${id}`
     );
@@ -26,10 +26,30 @@ export class AuthService {
     }
     return dr[0];
   }
+  async getDriverById(id: string) {
+    const res = await fetch(`${environment.apiUrl}driver?filter[id]=${id}`);
+
+    const dr = await res.json();
+
+    if (!dr.length) {
+      return null;
+    }
+    return dr[0];
+  }
+
+  async getUser(id: string) {
+    const res = await fetch(`${environment.apiUrl}user?filter[id]=${id}`);
+
+    const user = await res.json();
+
+    if (!user.length) {
+      return null;
+    }
+    return user[0];
+  }
 
   async getFullDriver(body) {
     const user = await this.login(body);
-    console.log(user, 'user in getFullDriver');
 
     if (user.message) {
       return user;
@@ -163,7 +183,6 @@ export class AuthService {
       car_model: carModel,
       car_number: carNumber,
     };
-    console.log('body in update', body);
     const res = await fetch(`${environment.apiUrl}driver`, {
       method: 'PUT',
       headers: {

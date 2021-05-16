@@ -14,7 +14,6 @@ export class UserComponent implements OnInit {
     this.user = user;
   }
   onLogedOut() {
-    console.log('logout in user');
     this.user = null;
   }
   ngOnInit(): void {

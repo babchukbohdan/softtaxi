@@ -17,19 +17,62 @@
         </li>
         <li>
           <app-icon name="star" size="20px"></app-icon>
-          <span>4.3</span>
+          <span *ngIf="info">{{ info.rating }}</span>
         </li>
         <li>
           <span>{{ request.price }}</span>
         </li>
+        <!-- <li>
+          <span>{{ request.id }}</span>
+        </li> -->
       </ul>
       <div class="group">
         <!-- <ng-content></ng-content> -->
-        <app-button (click)="cancelRequest()" text="Cancel order"></app-button>
+        <app-button
+          *ngIf="page === 'active'"
+          (click)="cancelRequest(request.id)"
+          text="Cancel order"
+        ></app-button>
+        <app-button
+          *ngIf="isDriver && page === 'active'"
+          (click)="finishRequest(request.id)"
+          text="Finish order"
+        ></app-button>
+        <app-button
+          *ngIf="isDriver && page === 'all'"
+          (click)="takeRequest(request.id)"
+          text="Take order"
+        ></app-button>
       </div>
     </div>
   </div>
   <div class="request__status">
-    <span>Status: {{ request.status }}</span>
+    <div class="info">
+      <p class="info__label">Status:</p>
+      <p class="info__value">{{ request.status }}</p>
+    </div>
+    <!-- *ngIf="!isDriver && request.status === 'canceled'"" -->
+    <div class="info">
+      <p class="info__label">Date:</p>
+      <p class="info__value">
+        {{ request.lastUpdate | date: "MMM d, 'at' HH:mm" }}
+      </p>
+    </div>
+    <div class="info" *ngIf="isDriver && info">
+      <p class="info__label">Phone</p>
+      <p class="info__value">{{ info.phone_number }}</p>
+    </div>
+    <div class="info" *ngIf="!isDriver && info">
+      <p class="info__label">Car model:</p>
+      <p class="info__value">{{ info.car_model }}</p>
+    </div>
+    <div class="info" *ngIf="!isDriver && info">
+      <p class="info__label">Car color:</p>
+      <p class="info__value">{{ info.car_color }}</p>
+    </div>
+    <div class="info" *ngIf="!isDriver && info">
+      <p class="info__label">Car number:</p>
+      <p class="info__value">{{ info.car_number }}</p>
+    </div>
   </div>
 </li>

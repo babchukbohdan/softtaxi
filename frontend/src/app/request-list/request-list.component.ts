@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { AuthService } from './../services/auth.service';
 import { Request, CarType, StatusType } from './../../assets/types/types';
 import { Component, OnInit } from '@angular/core';
@@ -8,7 +9,7 @@ const snakeToCamel = (str: string): string =>
     group.toUpperCase().replace('-', '').replace('_', '')
   );
 
-const transformRequest = (requests) => {
+const transformRequests = (requests) => {
   if (!requests.length) {
     return [];
   }
@@ -41,7 +42,7 @@ const getDriverFilterForActiveTab = (id) => ({
   status: ['Accepted', 'accepted', 'waiting_form_customer', 'in_progress'],
   driver_id: [id],
 });
-const getDriverFilterForAllTab = () => ({
+const getDriverFilterForAllTab = (id?) => ({
   status: ['active', 'Active'],
 });
 const getUserFilterForActiveTab = (id) => ({
@@ -59,15 +60,24 @@ const getUserFilterForAllTab = (id) => ({
   customer_id: [id],
 });
 
-const getRequestsWithFilter = async (filter, limit: number, offset: number) => {
-  const res = await fetch(
-    `${environment.apiUrl}requests?${getQueryFromFilter(
-      filter
-    )}&limit=${limit}&offset=${offset}`
-  );
+const getRequestsWithFilter = async (
+  filter,
+  limit: number,
+  offset: number,
+  sorted: boolean = false
+) => {
+  let query = `${environment.apiUrl}requests?${getQueryFromFilter(
+    filter
+  )}&limit=${limit}&offset=${offset}`;
+
+  if (sorted) {
+    query += '&sort=last_update';
+  }
+
+  const res = await fetch(query);
   const requests = await res.json();
 
-  return transformRequest(requests);
+  return transformRequests(requests);
 };
 
 @Component({
@@ -79,11 +89,12 @@ export class RequestListComponent implements OnInit {
   allRequests: Request[] = [];
   activeRequests: Request[] = [];
 
-  countOfAllRequests = [];
-  countOfActiveRequests = [];
+  countOfAllRequests: number;
+  countOfActiveRequests: number;
 
   // "active" | "all"
   currentTab = 'active';
+  isDriver: boolean;
 
   limit = 5;
   currentPage = 1;
@@ -93,19 +104,19 @@ export class RequestListComponent implements OnInit {
 
   async ngOnInit() {
     const user = this.authService.getCurrentUser();
-    console.log(user, 'current User in Requests list');
+
+    this.isDriver = Boolean(user?.driverInfo);
 
     if (user?.driverInfo) {
-      this.getOrdersForDriver(user, this.limit, this.offset);
+      this.getRequestsForDriver(user, this.limit, this.offset);
       this.getCountOfRequestsForDriver(user.id);
     } else if (user) {
-      this.getOrdersForUser(user, this.limit, this.offset);
+      this.getRequestsForUser(user, this.limit, this.offset);
       this.getCountOfRequestsForCustomer(user.id);
     }
   }
 
   changePage = (page) => {
-    console.log(page, 'page');
     this.setOffset(page);
     this.currentPage = page;
 
@@ -141,32 +152,24 @@ export class RequestListComponent implements OnInit {
     const countOfAllReq = await this.getCountOfRequestsWithFilter(
       getDriverFilterForAllTab()
     );
-    this.countOfAllRequests = new Array(
-      Math.ceil(countOfAllReq / this.limit)
-    ).map((val, i) => i + 1);
+    this.countOfAllRequests = Math.ceil(countOfAllReq / this.limit);
 
     const countOfActiveReq = await this.getCountOfRequestsWithFilter(
       getDriverFilterForActiveTab(id)
     );
-    this.countOfActiveRequests = new Array(
-      Math.ceil(countOfActiveReq / this.limit)
-    ).map((val, i) => i + 1);
+    this.countOfActiveRequests = Math.ceil(countOfActiveReq / this.limit);
   }
 
   async getCountOfRequestsForCustomer(id) {
     const countOfAllReq = await this.getCountOfRequestsWithFilter(
       getUserFilterForAllTab(id)
     );
-    this.countOfAllRequests = new Array(
-      Math.ceil(countOfAllReq / this.limit)
-    ).map((val, i) => i + 1);
+    this.countOfAllRequests = Math.ceil(countOfAllReq / this.limit);
 
     const countOfActiveReq = await this.getCountOfRequestsWithFilter(
       getUserFilterForActiveTab(id)
     );
-    this.countOfActiveRequests = new Array(
-      Math.ceil(countOfActiveReq / this.limit)
-    ).map((val, i) => i + 1);
+    this.countOfActiveRequests = Math.ceil(countOfActiveReq / this.limit);
   }
 
   setAllRequests(requests) {
@@ -177,51 +180,78 @@ export class RequestListComponent implements OnInit {
   }
 
   async getRequestsForAllTab(user, limit, offset) {
-    let filter;
+    let filter,
+      sorted = false;
     if (user?.driverInfo) {
       filter = getDriverFilterForAllTab();
     } else {
+      sorted = true;
       filter = getUserFilterForAllTab(user.id);
     }
 
-    const allRequests = await getRequestsWithFilter(filter, limit, offset);
+    const allRequests = await getRequestsWithFilter(
+      filter,
+      limit,
+      offset,
+      sorted
+    );
 
     this.setAllRequests(allRequests);
   }
 
   async getRequestsForActiveTab(user, limit, offset) {
-    let filter;
+    let filter,
+      sorted = false;
     if (user?.driverInfo) {
       filter = getDriverFilterForActiveTab(user.id);
     } else {
+      sorted = true;
       filter = getUserFilterForActiveTab(user.id);
     }
 
-    const activeReq = await getRequestsWithFilter(filter, limit, offset);
+    const activeReq = await getRequestsWithFilter(
+      filter,
+      limit,
+      offset,
+      sorted
+    );
 
     this.setActiveRequests(activeReq);
   }
 
-  async getOrdersForDriver(driver, limit: number, offset: number) {
+  async getRequestsForDriver(driver, limit: number, offset: number) {
     await this.getRequestsForAllTab(driver, limit, offset);
-    console.log(this.allRequests, 'allReq list response');
     await this.getRequestsForActiveTab(driver, limit, offset);
-    console.log(this.activeRequests, 'activeReq list response');
   }
 
-  async getOrdersForUser(user, limit: number, offset: number) {
+  async getRequestsForUser(user, limit: number, offset: number) {
     await this.getRequestsForAllTab(user, limit, offset);
-    console.log(this.allRequests, 'allReq list response');
     await this.getRequestsForActiveTab(user, limit, offset);
-    console.log(this.activeRequests, 'activeReq list response');
   }
 
-  cancelOrder(id) {
+  removeRequestFromActiveTab(id) {
     const idx = this.activeRequests.findIndex((val) => {
       return val.id === id;
     });
     this.activeRequests.splice(idx, 1);
-    console.log('cancel in list');
+  }
+
+  moveRequestToActiveTab(request) {
+    const newRequest = transformRequests([request])[0];
+    const idx = this.allRequests.findIndex((val) => {
+      return val.id === newRequest.id;
+    });
+
+    this.allRequests.splice(idx, 1);
+
+    this.activeRequests.push(newRequest);
+
+    this.getRequestsForAllTab(
+      this.authService.getCurrentUser(),
+      this.limit,
+      this.offset
+    );
+    this.changeTab('active');
   }
 
   changeTab(tab: string): void {

@@ -120,10 +120,8 @@ export class OrderFormComponent implements OnInit {
 
   async makeOrder() {
     const formData = { ...this.form.value };
-    console.log('formData', formData);
 
     const user = await this.checkUser();
-    console.log('user in make order', user);
     if (user) {
       console.log('%cuser is already exist in DB', 'color: #2ECC71', user);
       this.id = user.id;

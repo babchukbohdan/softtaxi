@@ -6,6 +6,7 @@ import {
   getQueryWithFilter,
   getQueryForCreate,
   getQueryForUpdate,
+  getQueryWithSort,
 } from './utils'
 
 // change name
@@ -28,17 +29,13 @@ export default class CrudController {
     }
   }
   get = async (req: Request, res: Response): Promise<any> => {
-    const selectCount = `SELECT COUNT (*) FROM ${this.tableName}`
-    const selectAll = `SELECT * FROM ${this.tableName}`
+    // const selectCount = `SELECT COUNT (*) FROM ${this.tableName}`
+    // const selectAll = `SELECT * FROM ${this.tableName}`
     let queryString, onlyCount
-    const { filter, offset, limit, count } = req.query
-    console.log(typeof count, 'count')
+    const { filter, offset, limit, count, sort } = req.query
     if (count) {
       onlyCount = Boolean(+count)
     }
-    console.log(onlyCount, 'onlyCount')
-
-    console.log(req.query)
 
     if (filter) {
       queryString = getQueryWithFilter(filter, this.tableName, onlyCount)
@@ -46,10 +43,13 @@ export default class CrudController {
       queryString = `SELECT * FROM ${this.tableName}`
     }
 
+    if (sort) {
+      queryString = getQueryWithSort(queryString, sort)
+    }
+
     if (offset || limit) {
       queryString = getQueryWithLimitAndOffset(queryString, offset, limit)
     }
-    console.log(queryString)
 
     const values = await db.query(queryString)
     res.json(values.rows)

@@ -13,11 +13,20 @@
 
 <div *ngIf="currentTab === 'all'">
   <ul class="list">
-    <app-request *ngFor="let r of allRequests" [request]="r"></app-request>
-    <li *ngIf="allRequests.length === 0">You haven't finished orders</li>
+    <app-request
+      (takeOrder)="moveRequestToActiveTab($event)"
+      *ngFor="let r of allRequests"
+      [request]="r"
+      [isDriver]="isDriver"
+      [page]="currentTab"
+    ></app-request>
+    <li *ngIf="allRequests.length === 0 && !isDriver">
+      You haven't finished orders
+    </li>
+    <li *ngIf="allRequests.length === 0 && isDriver">No active requests yet</li>
   </ul>
   <app-pagination
-    *ngIf="countOfAllRequests"
+    *ngIf="countOfAllRequests > 1"
     [count]="countOfAllRequests"
     [clickHandler]="changePage"
     [currentPage]="currentPage"
@@ -27,16 +36,18 @@
 <div *ngIf="currentTab === 'active'">
   <ul class="list">
     <app-request
-      (cancelOrder)="cancelOrder($event)"
+      (deleteOrder)="removeRequestFromActiveTab($event)"
       *ngFor="let r of activeRequests"
       [request]="r"
+      [isDriver]="isDriver"
+      [page]="currentTab"
     >
       <!-- <app-button (click)="cancelRequest()" text="Cancel order"></app-button> -->
     </app-request>
     <li *ngIf="activeRequests.length === 0">You haven't active orders</li>
   </ul>
   <app-pagination
-    *ngIf="countOfActiveRequests.length > 1"
+    *ngIf="countOfActiveRequests > 1"
     [count]="countOfActiveRequests"
     [clickHandler]="changePage"
     [currentPage]="currentPage"

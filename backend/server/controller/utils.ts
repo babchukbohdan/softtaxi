@@ -12,8 +12,8 @@ export const getQueryWithLimitAndOffset = (
   return query
 }
 
-export const getQueryWithSort = (query: string, prop: string): string => {
-  return (query += ` ORDER BY ${prop}`)
+export const getQueryWithSort = (query: string, prop: any): string => {
+  return query + ` ORDER BY ${prop} DESC`
 }
 
 // add sort func
@@ -60,5 +60,6 @@ export const getQueryForUpdate = (body: any, tableName: string): string => {
   const newValues = Object.entries(columns)
     .map((data) => `${data[0]} = '${data[1]}'`)
     .join(', ')
+
   return `UPDATE ${tableName} set ${newValues} WHERE id = ${id} RETURNING *`
 }
