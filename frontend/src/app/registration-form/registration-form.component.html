@@ -1,0 +1,99 @@
+<main class="login">
+  <form action="" (ngSubmit)="register()" [formGroup]="registrationForm">
+    <ul class="login__list list">
+      <li>
+        <label class="login__label" for=""
+          >Phone:
+          <input
+            class="login__input input"
+            type="text"
+            formControlName="phoneNumber"
+            name="phoneNumber"
+          />
+        </label>
+        <div
+          *ngIf="
+            registrationForm.get('phoneNumber').invalid &&
+            registrationForm.get('phoneNumber').touched
+          "
+          class="form__validation"
+        >
+          <small>Phone number is required.</small>
+        </div>
+      </li>
+      <li>
+        <label class="login__label" for=""
+          >Password:
+          <input
+            class="login__input input"
+            type="text"
+            formControlName="password"
+            name="password"
+          />
+        </label>
+        <div
+          *ngIf="
+            registrationForm.get('password').invalid &&
+            registrationForm.get('password').touched
+          "
+          class="form__validation"
+        >
+          <small>Password is required.</small>
+        </div>
+      </li>
+      <li>
+        <label class="login__label" for=""
+          >Repeat password:
+          <input
+            class="login__input input"
+            type="text"
+            formControlName="password2"
+            name="password2"
+          />
+        </label>
+        <div
+          *ngIf="
+            registrationForm.get('password2').invalid &&
+            registrationForm.get('password2').touched
+          "
+          class="form__validation"
+        >
+          <small>Password is required.</small>
+        </div>
+      </li>
+
+      <li *ngIf="isDriver">
+        <label class="login__label" for=""
+          >Car color:
+          <input class="login__input input" type="text" />
+        </label>
+      </li>
+      <li *ngIf="isDriver">
+        <label class="login__label" for=""
+          >Car model:
+          <input class="login__input input" type="text" />
+        </label>
+      </li>
+      <li *ngIf="isDriver">
+        <label class="login__label" for=""
+          >Car number:
+          <input class="login__input input" type="text" />
+        </label>
+      </li>
+
+      <li>
+        <app-button
+          class="login__btn"
+          text="Register"
+          type="submit"
+          [disabled]="registrationForm.invalid"
+        ></app-button>
+      </li>
+      <li>
+        <label for="">Register as driver</label
+        ><input type="checkbox" name="loginAsDriver" />
+      </li>
+    </ul>
+    <div *ngIf="errorMessage">{{ errorMessage }}</div>
+  </form>
+</main>

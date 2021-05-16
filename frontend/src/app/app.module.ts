@@ -18,6 +18,7 @@ import { UserComponent } from './user/user.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { CarTypeComponent } from './car-type/car-type.component';
 import { PaginationComponent } from './pagination/pagination.component';
+import { RegistrationFormComponent } from './registration-form/registration-form.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { PaginationComponent } from './pagination/pagination.component';
     UserInfoComponent,
     CarTypeComponent,
     PaginationComponent,
+    RegistrationFormComponent,
   ],
   imports: [
     BrowserModule,
