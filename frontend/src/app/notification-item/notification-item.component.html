@@ -1,0 +1,15 @@
+<li class="notification__item" [@note]="noteState">
+  <div>
+    <p class="notification__title">{{ title }}</p>
+    <p class="notification__message">{{ message }}</p>
+  </div>
+  <button
+    (click)="closeNotification(id)"
+    type="button"
+    class="notification__btn"
+  >
+    <div class="notification__rotate">
+      <app-icon name="add" size="inherit"></app-icon>
+    </div>
+  </button>
+</li>

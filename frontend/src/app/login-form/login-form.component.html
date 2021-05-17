@@ -41,6 +41,18 @@
         <input [(ngModel)]="carNumber" class="login__input input" type="text" />
       </label>
     </li>
+    <li *ngIf="isDriver">
+      <label class="login__label" for=""
+        >Car type:
+        <input [(ngModel)]="carType" class="login__input input" type="text" />
+        <select name="" id="">
+          <option value=""></option>
+          <option value=""></option>
+          <option value=""></option>
+          <option value=""></option>
+        </select>
+      </label>
+    </li>
 
     <li>
       <app-button

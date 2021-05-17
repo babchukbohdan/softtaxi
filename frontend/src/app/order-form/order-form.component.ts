@@ -1,3 +1,7 @@
+import {
+  NotificationService,
+  Notification,
+} from './../services/notification.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -43,7 +47,20 @@ export class OrderFormComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private note: NotificationService
+  ) {}
+
+  addNote() {
+    const newNote = new Notification(
+      'Title',
+      'text',
+      randomInteger(1000, 5000)
+    );
+    this.note.addNotification(newNote);
+  }
 
   initForm() {
     this.form = new FormGroup({
@@ -120,6 +137,7 @@ export class OrderFormComponent implements OnInit {
 
   async makeOrder() {
     const formData = { ...this.form.value };
+    console.log('formData', formData);
 
     const user = await this.checkUser();
     if (user) {

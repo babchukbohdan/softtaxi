@@ -16,6 +16,7 @@ export class LoginFormComponent implements OnInit {
   public carColor: string;
   public carModel: string;
   public carNumber: string;
+  public carType: string;
   public currentRequest: string;
 
   @Output() onLogedIn = new EventEmitter();

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes/routes';
@@ -19,6 +20,8 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import { CarTypeComponent } from './car-type/car-type.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { RegistrationFormComponent } from './registration-form/registration-form.component';
+import { NotificationComponent } from './notification/notification.component';
+import { NotificationItemComponent } from './notification-item/notification-item.component';
 
 @NgModule({
   declarations: [
@@ -36,8 +39,11 @@ import { RegistrationFormComponent } from './registration-form/registration-form
     CarTypeComponent,
     PaginationComponent,
     RegistrationFormComponent,
+    NotificationComponent,
+    NotificationItemComponent,
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),

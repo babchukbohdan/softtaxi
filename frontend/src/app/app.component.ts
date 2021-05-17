@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { NotificationService } from './services/notification.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,6 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title: string = 'softtaxi';
   // page: string = 'make-order';
-
   constructor() {}
 
   // changePage(page: string) {

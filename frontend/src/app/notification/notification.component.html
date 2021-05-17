@@ -1,0 +1,30 @@
+<section class="notification">
+  <ul class="notification__list list">
+    <li
+      [@note]="noteState"
+      class="notification__item"
+      *ngFor="let n of notificationService._notifications | async"
+    >
+      <div>
+        <p class="notification__title">{{ n.title }}</p>
+        <p class="notification__message">{{ n.message + " " + n.id }}</p>
+        <p class="notification__message">{{ "timer " + n.timer }}</p>
+      </div>
+      <button
+        (click)="closeNotification(n.id)"
+        type="button"
+        class="notification__btn"
+      >
+        <div class="notification__rotate">
+          <app-icon name="add" size="inherit"></app-icon>
+        </div>
+      </button>
+    </li>
+    <!-- <app-notification-item
+      *ngFor="let n of notificationService._notifications | async; index as i"
+      [title]="n.title"
+      [message]="n.message"
+      [id]="n.id"
+    ></app-notification-item> -->
+  </ul>
+</section>

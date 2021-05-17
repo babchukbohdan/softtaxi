@@ -1,6 +1,7 @@
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
+// TODO name user profile
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
