@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { AuthService } from './../services/auth.service';
 import { environment } from './../../environments/environment';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
@@ -8,7 +9,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./user-info.component.scss'],
 })
 export class UserInfoComponent implements OnInit {
-  @Input() user;
+  user;
   @Output() onLogedOut = new EventEmitter();
 
   public isDriver: boolean;
@@ -23,17 +24,20 @@ export class UserInfoComponent implements OnInit {
   public carNumber: string;
   public currentRequest: string;
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
   setUser() {
-    this.name = this.user.name;
-    this.phone = this.user.phone_number;
-    this.email = this.user.email;
-    this.password = this.user.password;
-    this.isDriver = false;
+    console.log(this.user, 'user in user info');
+    if (this.user?.token) {
+      this.name = this.user.name;
+      this.phone = this.user.phone_number;
+      this.email = this.user.email;
+      this.password = this.user.password;
+      this.isDriver = false;
 
-    if (this.user?.driverInfo) {
-      this.setDriver();
+      if (this.user?.driverInfo) {
+        this.setDriver();
+      }
     }
   }
 
@@ -70,9 +74,11 @@ export class UserInfoComponent implements OnInit {
   logout() {
     this.authService.logout();
     this.onLogedOut.emit();
+    this.router.navigate(['/user/login']);
   }
 
   ngOnInit(): void {
+    this.user = this.authService.getCurrentUser();
     this.setUser();
   }
 }

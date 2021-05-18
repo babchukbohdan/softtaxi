@@ -100,6 +100,7 @@ export class AuthService {
     });
 
     const user = await res.json();
+
     this.setCurrentUser(user);
     return user;
   }
@@ -117,10 +118,11 @@ export class AuthService {
       });
 
       const response = await res.json();
+      console.log('response in login service', response);
 
       if (response.user) {
         this.setCurrentUser(response.user);
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('token', response.user.token);
       }
       // console.log('%cresponse', 'color: #2ECC71', response);
       return response;
@@ -138,13 +140,44 @@ export class AuthService {
       });
 
       const response = await res.json();
-      const { user, token } = response;
+      const { user, message } = response;
+      console.log('response', response);
+
+      if (message) {
+        return { message };
+      }
       console.log('sestUser', user);
       this.setCurrentUser(user);
-      localStorage.setItem('token', token);
-      console.log('%cresponse', 'color: #2ECC71', response);
+      localStorage.setItem('token', user.token);
+      console.log('%cuser', 'color: #2ECC71', user);
 
-      return response;
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async registerDriver(body) {
+    console.log('register Driver');
+    try {
+      const res = await fetch(`${environment.apiUrl}user/registration/driver`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      const { user, message } = await res.json();
+      if (message) {
+        return message;
+      }
+      // const { user, token } = response;
+      console.log('user', user);
+      this.setCurrentUser(user);
+      localStorage.setItem('token', user.token);
+      console.log('%cuser', 'color: #2ECC71', user);
+
+      return user;
     } catch (error) {
       console.log(error);
     }

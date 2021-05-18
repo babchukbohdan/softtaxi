@@ -1,3 +1,14 @@
+import db from '../db'
+
+interface UserFromDb {
+  id: string
+  name: null | string
+  email: null | string
+  password?: null | string
+  phone_number: string
+  rating: null | string
+}
+
 export const getQueryWithLimitAndOffset = (
   query: string,
   offset?: any,
@@ -62,4 +73,44 @@ export const getQueryForUpdate = (body: any, tableName: string): string => {
     .join(', ')
 
   return `UPDATE ${tableName} set ${newValues} WHERE id = ${id} RETURNING *`
+}
+
+export const getUserFromDbByPhone = async (phone: string) => {
+  const query = getQueryWithFilter({ phone_number: phone }, 'users')
+  const userInDB = await db.query(query)
+  const candidate: UserFromDb = userInDB.rows[0]
+  return candidate
+}
+
+// export const getDriverByUserID = async (id: string) => {
+//   const query = getQueryWithFilter({ user_id: id }, 'drivers')
+
+//   const res = await db.query(query)
+
+//   const driver = res.rows[0]
+
+//   return driver
+// }
+
+export const getDriverByFilter = async (filter: any) => {
+  const query = getQueryWithFilter(filter, 'drivers')
+
+  const res = await db.query(query)
+  const driver = res.rows[0]
+
+  return driver
+}
+export const createUserInDB = async (body: any) => {
+  const query = getQueryForCreate(body, 'users')
+  const res = await db.query(query)
+  const newUser = res.rows[0]
+
+  return newUser
+}
+export const createDriverInDB = async (body: any) => {
+  const query = getQueryForCreate(body, 'drivers')
+  const res = await db.query(query)
+  const newDriver = res.rows[0]
+
+  return newDriver
 }

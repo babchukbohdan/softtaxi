@@ -19,11 +19,18 @@ export default class CrudController {
 
   create = async (req: Request, res: Response): Promise<any> => {
     try {
-      const newValue = await db.query(
+      const dbResponse = await db.query(
         getQueryForCreate(req.body, this.tableName)
       )
 
-      res.json(newValue.rows[0])
+      let newValue = dbResponse.rows[0]
+      console.log(newValue, 'created')
+
+      if ('password' in newValue) {
+        newValue = { ...newValue }
+        delete newValue.password
+      }
+      res.json(newValue)
     } catch (error) {
       res.json(error)
     }
