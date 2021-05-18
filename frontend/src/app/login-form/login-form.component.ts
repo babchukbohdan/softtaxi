@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
@@ -13,17 +14,13 @@ export class LoginFormComponent implements OnInit {
 
   public isDriver: boolean = false;
 
-  public carColor: string;
-  public carModel: string;
-  public carNumber: string;
-  public carType: string;
   public currentRequest: string;
 
   @Output() onLogedIn = new EventEmitter();
   logedIn(user) {
     this.onLogedIn.emit(user);
   }
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
   async loginAsDriver() {
     const body = {
@@ -52,6 +49,7 @@ export class LoginFormComponent implements OnInit {
     }
     if (response?.user) {
       this.logedIn(response.user);
+      this.router.navigate(['/user/info']);
     }
   }
 
@@ -70,15 +68,6 @@ export class LoginFormComponent implements OnInit {
         this.errorMessage = res.message;
       }
 
-      // if (this.isDriver) {
-      //   const driverData = {
-      //     user_id: res.user.id,
-      //     car_model: this.carModel,
-      //     car_number: this.carNumber,
-      //     car_color: this.carColor,
-      //   };
-      //   const driver = await this.authService.createDriver(driverData);
-      // }
       return res;
     } catch (error) {
       this.errorMessage = error;
@@ -89,5 +78,9 @@ export class LoginFormComponent implements OnInit {
     return JSON.stringify(this.authService.getCurrentUser(), null, 2);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.authService.getCurrentUser()?.token) {
+      this.router.navigate(['user/info']);
+    }
+  }
 }
