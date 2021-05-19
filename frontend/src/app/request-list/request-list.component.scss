@@ -1,0 +1,14 @@
+.request__wrap {
+  min-height: calc(100vh - 61px);
+}
+
+label {
+  border: 1px solid var(--overlay-bg-color);
+  border-radius: var(--input-border-radius, 3px);
+
+  padding: 10px;
+
+  display: inline-block;
+
+  user-select: none;
+}

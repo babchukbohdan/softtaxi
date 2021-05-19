@@ -137,6 +137,17 @@
         </label>
       </li>
 
+      <li *ngIf="showVerifyCodeInput">
+        <label class="login__label" for=""
+          >Please enter your verify code:
+          <input
+            formControlName="verifyCode"
+            class="login__input input"
+            type="text"
+          />
+        </label>
+      </li>
+
       <li>
         <label for="">Register as driver</label
         ><input type="checkbox" name="isDriver" formControlName="isDriver" />

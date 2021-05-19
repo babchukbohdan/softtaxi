@@ -96,23 +96,40 @@ export class RequestListComponent implements OnInit {
   currentTab = 'active';
   isDriver: boolean;
 
+  showAsDriver: boolean;
+
   limit = 5;
   currentPage = 1;
   offset = 0;
+
+  user;
 
   constructor(private authService: AuthService) {}
 
   async ngOnInit() {
     const user = this.authService.getCurrentUser();
+    this.user = user;
+    console.log(user, 'user in request list');
 
     this.isDriver = Boolean(user?.driverInfo);
 
-    if (user?.driverInfo) {
-      this.getRequestsForDriver(user, this.limit, this.offset);
-      this.getCountOfRequestsForDriver(user.id);
-    } else if (user) {
-      this.getRequestsForUser(user, this.limit, this.offset);
-      this.getCountOfRequestsForCustomer(user.id);
+    this.getRequests();
+  }
+
+  getRequests() {
+    if (this.user?.driverInfo && this.showAsDriver) {
+      console.log('show for driver if driver');
+
+      this.getRequestsForDriver(this.user, this.limit, this.offset);
+      this.getCountOfRequestsForDriver(this.user.id);
+    } else if (this.user?.driverInfo && !this.showAsDriver) {
+      console.log('show for user if driver');
+      this.getRequestsForUser(this.user, this.limit, this.offset);
+      this.getCountOfRequestsForCustomer(this.user.id);
+    } else if (this.user) {
+      console.log('show for user');
+      this.getRequestsForUser(this.user, this.limit, this.offset);
+      this.getCountOfRequestsForCustomer(this.user.id);
     }
   }
 
@@ -174,15 +191,17 @@ export class RequestListComponent implements OnInit {
 
   setAllRequests(requests) {
     this.allRequests = requests;
+    console.log('all req ', requests);
   }
   setActiveRequests(requests) {
     this.activeRequests = requests;
+    console.log('active req ', requests);
   }
 
   async getRequestsForAllTab(user, limit, offset) {
     let filter,
       sorted = false;
-    if (user?.driverInfo) {
+    if (this.showAsDriver) {
       filter = getDriverFilterForAllTab();
     } else {
       sorted = true;
@@ -202,8 +221,9 @@ export class RequestListComponent implements OnInit {
   async getRequestsForActiveTab(user, limit, offset) {
     let filter,
       sorted = false;
-    if (user?.driverInfo) {
-      filter = getDriverFilterForActiveTab(user.id);
+    if (this.showAsDriver && user.driverInfo) {
+      const id = user.driverInfo.id;
+      filter = getDriverFilterForActiveTab(id);
     } else {
       sorted = true;
       filter = getUserFilterForActiveTab(user.id);

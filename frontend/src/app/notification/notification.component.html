@@ -7,8 +7,9 @@
     >
       <div>
         <p class="notification__title">{{ n.title }}</p>
-        <p class="notification__message">{{ n.message + " " + n.id }}</p>
-        <p class="notification__message">{{ "timer " + n.timer }}</p>
+        <p class="notification__message">
+          {{ n.message }}
+        </p>
       </div>
       <button
         (click)="closeNotification(n.id)"

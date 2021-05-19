@@ -7,6 +7,12 @@ interface UserFromDb {
   password?: null | string
   phone_number: string
   rating: null | string
+  verify_code: null | string
+}
+
+export function randomInteger(min: number, max: number): number {
+  const rand = min - 0.5 + Math.random() * (max - min + 1)
+  return Math.round(rand)
 }
 
 export const getQueryWithLimitAndOffset = (
@@ -73,6 +79,14 @@ export const getQueryForUpdate = (body: any, tableName: string): string => {
     .join(', ')
 
   return `UPDATE ${tableName} set ${newValues} WHERE id = ${id} RETURNING *`
+}
+
+// export const getVerifyCodeFromDB = async (id: string) => {
+//   const code = await getQueryWithFilter()
+// }
+
+export const generateVerifyCode = (): number => {
+  return randomInteger(1000, 9999)
 }
 
 export const getUserFromDbByPhone = async (phone: string) => {

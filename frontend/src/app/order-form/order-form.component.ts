@@ -137,19 +137,24 @@ export class OrderFormComponent implements OnInit {
 
   async makeOrder() {
     const formData = { ...this.form.value };
-    console.log('formData', formData);
+    // console.log('formData', formData);
 
-    const user = await this.checkUser();
-    if (user) {
-      console.log('%cuser is already exist in DB', 'color: #2ECC71', user);
-      this.id = user.id;
-      this.authService.setCurrentUser(user);
-    } else {
-      console.log('%cuser not found in DB', 'color: red');
-      console.log('%ccreate user in DB', 'color: #2E86C1');
-      const newUser = await this.authService.createUser(formData.phoneNumber);
-      console.log('%cnew user', 'color: yellow', newUser);
-      this.id = newUser.id;
+    const userInService = this.authService.getCurrentUser();
+
+    if (!userInService?.token) {
+      const user = await this.checkUser();
+
+      if (user) {
+        console.log('%cuser is already exist in DB', 'color: #2ECC71', user);
+        this.id = user.id;
+        this.authService.setCurrentUser(user);
+      } else {
+        console.log('%cuser not found in DB', 'color: red');
+        console.log('%ccreate user in DB', 'color: #2E86C1');
+        const newUser = await this.authService.createUser(formData.phoneNumber);
+        console.log('%cnew user', 'color: yellow', newUser);
+        this.id = newUser.id;
+      }
     }
 
     if (this.form.valid) {

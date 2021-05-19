@@ -7,7 +7,7 @@ export class Notification {
   constructor(
     public title: string = 'Your verify code: ',
     public message: string = '5151',
-    public timer: number = 2000
+    public timer?: number
   ) {}
 }
 

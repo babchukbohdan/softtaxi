@@ -12,6 +12,7 @@ import {
   getDriverByFilter,
   createDriverInDB,
   createUserInDB,
+  generateVerifyCode,
 } from './utils'
 
 const secret: Secret = process.env.SECRET_KEY!
@@ -25,56 +26,99 @@ class UserController extends CrudController {
     super(tableName)
   }
   registration = async (req: Request, res: Response) => {
-    const { phone, password } = req.body
+    const { phone, password, verifyCode } = req.body
 
     const candidate = await getUserFromDbByPhone(phone)
-    console.log('candidate', candidate)
 
     if (candidate) {
-      const isVerified = Boolean(candidate?.password)
+      // BUG: equel to string 'null' because i wrap all values in single quotes
+      const isVerified = candidate.verify_code === 'null'
       if (isVerified) {
         console.log('User exist in DB and verified')
         return res.json({
           message: 'User with this phone number already exist',
         })
       } else {
+        // Not verified user
+        if (verifyCode) {
+          const codeForVerify = candidate.verify_code
+          const isCodesEquel = codeForVerify === verifyCode
+
+          if (isCodesEquel) {
+            const hashPassword = await bcrypt.hash(password, 2)
+            await db.query(
+              getQueryForUpdate(
+                { id: candidate.id, password: hashPassword, verify_code: null },
+                'users'
+              )
+            )
+
+            const token = generateJwt(candidate.id, phone)
+
+            const user = { ...candidate }
+            delete user.password
+
+            return res.status(200).json({ token, user })
+          } else {
+            return res.status(400).json({ message: 'Wrong verify code' })
+          }
+        }
         console.log('User exist in DB but not verified')
 
-        const hashPassword = await bcrypt.hash(password, 2)
-        await db.query(
-          getQueryForUpdate(
-            { id: candidate.id, password: hashPassword },
-            'users'
-          )
-        )
+        return res.status(401).json({
+          message: 'You should verify your account',
+          status: 'NOT_VERIFIED',
+          verifyCode: candidate.verify_code,
+        })
 
-        const token = generateJwt(candidate.id, phone)
+        // const hashPassword = await bcrypt.hash(password, 2)
+        // await db.query(
+        //   getQueryForUpdate(
+        //     { id: candidate.id, password: hashPassword },
+        //     'users'
+        //   )
+        // )
 
-        const user = { ...candidate }
-        delete user.password
+        // const token = generateJwt(candidate.id, phone)
 
-        return res.json({ token, user })
+        // const user = { ...candidate }
+        // delete user.password
+
+        // return res.json({ token, user })
       }
-    }
+    } else {
+      console.log("User don't exist in DB")
 
-    console.log("User don't exist in DB")
+      // const hashPassword = await bcrypt.hash(password, 2)
+      const verifyCode = generateVerifyCode()
 
-    const hashPassword = await bcrypt.hash(password, 2)
-    const response = await db.query(
-      getQueryForCreate(
-        { phone_number: phone, password: hashPassword },
-        'users'
+      const response = await db.query(
+        getQueryForCreate(
+          {
+            phone_number: phone,
+            // password: hashPassword,
+            verify_code: verifyCode,
+          },
+          'users'
+        )
       )
-    )
-    const user = { ...response.rows[0] }
+      // const user = { ...response.rows[0] }
 
-    const token = generateJwt(user.id, phone)
-    delete user.password
-    return res.json({ user: { token, ...user } })
+      // const token = generateJwt(user.id, phone)
+      // delete user.password
+      // return res.json({ user: { token, ...user } })
+
+      return res.status(401).json({
+        message: 'You should verify your account',
+        status: 'NOT_VERIFIED',
+        verifyCode,
+      })
+    }
   }
 
   login = async (req: Request, res: Response) => {
     const { phone, password } = req.body
+    console.log('body in login', req.body)
 
     const query = getQueryWithFilter({ phone_number: phone }, 'users')
     const response = await db.query(query)
@@ -84,8 +128,12 @@ class UserController extends CrudController {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    if (user && !user.password) {
-      return res.status(401).json({ message: 'You should verify your account' })
+    if (user && user.verify_code) {
+      return res.status(401).json({
+        message: 'You should register in app first',
+        status: 'NOT_VERIFIED',
+      })
+      // return code for registration
     }
 
     const comparePassword = await bcrypt.compare(password, user.password)
@@ -110,24 +158,14 @@ class UserController extends CrudController {
   }
 
   registrationDriver = async (req: Request, res: Response) => {
-    //  Check if user exist in db
-    //  1 If exist =>  check if user registred
-    //    2 If registred check if user already exist as driver
-    //      2.1 If not exist as driver => create driver in driver table
-    //      2.2 If exist return error message.
-
-    //  2. If not exist create user in user table
-
-    //  1.4 IF exist but not registred
-
     const { userInfo, driverInfo } = req.body
     const { carType, carColor, carNumber, carModel } = driverInfo
-    const { phone, password, email, name } = userInfo
+    const { phone, password, email, name, verifyCode } = userInfo
 
     const userInDB = await getUserFromDbByPhone(phone)
 
     if (userInDB) {
-      const isVerified = Boolean(userInDB.password)
+      const isVerified = userInDB.verify_code === 'null'
 
       if (isVerified) {
         console.log('User exist in DB and verified')
@@ -155,45 +193,71 @@ class UserController extends CrudController {
         }
       } else {
         // NOT VERIFIED
-        const hashPassword = await bcrypt.hash(password, 2)
-        const response = await db.query(
-          getQueryForUpdate(
-            { id: userInDB.id, password: hashPassword },
-            'users'
-          )
-        )
-        const user = { ...response.rows[0] }
-        delete user.password
-        const driver = await createDriverInDB({
-          car_type: carType,
-          car_color: carColor,
-          car_number: carNumber,
-          car_model: carModel,
-          user_id: userInDB.id,
-          is_avaliable: false,
-        })
-        return res.json({
-          user: { ...user, driverInfo: { ...driver } },
+
+        if (verifyCode) {
+          const codeForVerify = userInDB.verify_code
+          const isCodesEquel = codeForVerify === verifyCode
+
+          if (isCodesEquel) {
+            const hashPassword = await bcrypt.hash(password, 2)
+
+            const response = await db.query(
+              getQueryForUpdate(
+                { id: userInDB.id, password: hashPassword },
+                'users'
+              )
+            )
+
+            const token = generateJwt(userInDB.id, phone)
+            const user = { ...response.rows[0] }
+            delete user.password
+            const driver = await createDriverInDB({
+              car_type: carType,
+              car_color: carColor,
+              car_number: carNumber,
+              car_model: carModel,
+              user_id: userInDB.id,
+              is_avaliable: false,
+            })
+            return res.json({
+              user: { ...user, token, driverInfo: { ...driver } },
+            })
+          } else {
+            return res.status(400).json({ message: 'Wrong verify code' })
+          }
+        }
+        return res.status(401).json({
+          message: 'You should verify your account',
+          status: 'NOT_VERIFIED',
+          verifyCode: userInDB.verify_code,
         })
       }
     } else {
-      const hashPassword = await bcrypt.hash(password, 2)
+      // const hashPassword = await bcrypt.hash(password, 2)
+      const verifyCode = generateVerifyCode()
+
       const user = await createUserInDB({
         phone_number: phone,
         name,
         email,
-        password: hashPassword,
+        verify_code: verifyCode,
       })
-      const driver = await createDriverInDB({
-        car_type: carType,
-        car_color: carColor,
-        car_number: carNumber,
-        car_model: carModel,
-        user_id: user.id,
-        is_avaliable: false,
-      })
+      // const driver = await createDriverInDB({
+      //   car_type: carType,
+      //   car_color: carColor,
+      //   car_number: carNumber,
+      //   car_model: carModel,
+      //   user_id: user.id,
+      //   is_avaliable: false,
+      // })
 
-      return res.json({ user: { ...user, driverInfo: { ...driver } } })
+      // return res.json({ user: { ...user, driverInfo: { ...driver } } })
+
+      return res.status(401).json({
+        message: 'You should verify your account',
+        status: 'NOT_VERIFIED',
+        verifyCode,
+      })
     }
   }
 }

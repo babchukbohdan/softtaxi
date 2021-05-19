@@ -1,5 +1,6 @@
 <div class="theme dark">
   <div class="wrap">
+    <app-notification></app-notification>
     <!-- <ng-template ngSwitchCase="make-order">
       <app-order-form></app-order-form>
     </ng-template>
@@ -12,8 +13,10 @@
     <ng-template ngSwitchCase="login">
       <app-login-form></app-login-form>
     </ng-template> -->
-    <app-notification></app-notification>
-    <router-outlet></router-outlet>
+
+    <div>
+      <router-outlet></router-outlet>
+    </div>
 
     <app-nav></app-nav>
   </div>

@@ -1,3 +1,4 @@
+import { NotificationService } from './../services/notification.service';
 import { Router } from '@angular/router';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
@@ -20,7 +21,11 @@ export class LoginFormComponent implements OnInit {
   logedIn(user) {
     this.onLogedIn.emit(user);
   }
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+    private notification: NotificationService
+  ) {}
 
   async loginAsDriver() {
     const body = {
@@ -44,12 +49,20 @@ export class LoginFormComponent implements OnInit {
       password: this.password,
     };
     const response = await this.authService.login(data);
+
     if (response?.message) {
       this.errorMessage = response.message;
     }
     if (response?.user) {
       this.logedIn(response.user);
       this.router.navigate(['/user/info']);
+    }
+    if (response?.status === 'NOT_VERIFIED') {
+      this.router.navigate(['/user/registration']);
+      this.notification.addNotification({
+        message: 'You should register in app first',
+        title: '',
+      });
     }
   }
 

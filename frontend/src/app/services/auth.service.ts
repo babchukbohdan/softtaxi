@@ -1,9 +1,15 @@
+import { generateVerifyCode } from './../../assets/utils';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private user;
+  // private token: string;
+
+  isAuthenticated() {
+    return Boolean(this.user.token);
+  }
 
   getCurrentUser() {
     return this.user;
@@ -71,8 +77,9 @@ export class AuthService {
         `${environment.apiUrl}user?filter[phone_number]=${phone}`
       );
       const user = await res.json();
+      // console.log('user getUserbyphone', user);
 
-      // this.setCurrentUser(user[0]);
+      this.setCurrentUser(user[0]);
       return user[0];
     } catch (error) {}
   }
@@ -96,7 +103,10 @@ export class AuthService {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ phone_number: phone }),
+      body: JSON.stringify({
+        phone_number: phone,
+        verify_code: generateVerifyCode(),
+      }),
     });
 
     const user = await res.json();
@@ -140,18 +150,18 @@ export class AuthService {
       });
 
       const response = await res.json();
-      const { user, message } = response;
+      const { user, message, status, verifyCode, token } = response;
       console.log('response', response);
 
       if (message) {
-        return { message };
+        return { message, status, verifyCode };
       }
-      console.log('sestUser', user);
-      this.setCurrentUser(user);
-      localStorage.setItem('token', user.token);
+      // console.log('sestUser', user);
+      this.setCurrentUser({ ...user, token });
+      localStorage.setItem('token', token);
       console.log('%cuser', 'color: #2ECC71', user);
 
-      return user;
+      return response;
     } catch (error) {
       console.log(error);
     }
@@ -166,18 +176,18 @@ export class AuthService {
         },
         body: JSON.stringify(body),
       });
-
-      const { user, message } = await res.json();
+      const response = await res.json();
+      const { user, message, status, verifyCode } = response;
       if (message) {
-        return message;
+        return { message, status, verifyCode };
       }
       // const { user, token } = response;
-      console.log('user', user);
+      // console.log('user', user);
       this.setCurrentUser(user);
       localStorage.setItem('token', user.token);
-      console.log('%cuser', 'color: #2ECC71', user);
+      // console.log('%cuser', 'color: #2ECC71', user);
 
-      return user;
+      return response;
     } catch (error) {
       console.log(error);
     }

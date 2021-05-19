@@ -27,7 +27,7 @@ export class UserInfoComponent implements OnInit {
   constructor(public authService: AuthService, private router: Router) {}
 
   setUser() {
-    console.log(this.user, 'user in user info');
+    // console.log(this.user, 'user in user info');
     if (this.user?.token) {
       this.name = this.user.name;
       this.phone = this.user.phone_number;
@@ -79,6 +79,7 @@ export class UserInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.authService.getCurrentUser();
+
     this.setUser();
   }
 }
