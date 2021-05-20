@@ -24,11 +24,25 @@
           />
           <div
             *ngIf="
-              form.get('phoneNumber').invalid && form.get('phoneNumber').touched
+              form.get('phoneNumber').invalid &&
+              form.get('phoneNumber').touched &&
+              form.get('phoneNumber').errors.required
             "
             class="form__validation"
           >
             <small>Phone number is required.</small>
+          </div>
+          <div
+            *ngIf="
+              form.get('phoneNumber').invalid &&
+              form.get('phoneNumber').touched &&
+              form.get('phoneNumber').errors.pattern
+            "
+            class="form__validation"
+          >
+            <small
+              >Phone number must start with 380 and have 9 digits after.</small
+            >
           </div>
         </li>
         <li class="form__item">
@@ -97,9 +111,9 @@
         text="Make order"
       ></app-button>
       <app-button
+        (click)="toggleTheme()"
         type="button"
-        text="Make note"
-        (click)="addNote()"
+        text="Change theme"
       ></app-button>
     </section>
   </form>

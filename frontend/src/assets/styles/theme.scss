@@ -17,7 +17,7 @@
   --svg-color: #909090;
   --invalid-color: red;
   --valid-color: var(--accent-color);
-  // Progress chart
+
   --cartesian-grid-line-color: rgba(255, 255, 255, 0.1);
 
   background-color: var(--wrap-bg-color);
@@ -26,24 +26,28 @@
 
 .light {
   --accent-color: #ffc107;
-  --wrap-bg-color: #fff;
-  --section-bg-color: #f9f9f9;
-  --navbar-bg-color: white;
+  --wrap-bg-color: #919191;
+  // --section-bg-color: #f9f9f9;
+  --section-bg-color: #bababa;
+  --navbar-bg-color: lemonchiffon;
   --danger-color: red;
 
-  --hover-bg-color: rgb(230, 230, 234);
+  --hover-bg-color: #c5bfab;
   --border-color: #181818;
   --overlay-bg-color: rgba(0, 0, 0, 0.2);
 
-  --text-color: rgba(0, 0, 0, 0.87);
+  --text-color: rgba(0, 0, 0, 1);
+  --text-color-disabled: #727070;
   --text-link-color: rgb(83, 83, 95);
   --text-link-active-color: rgb(0, 0, 0);
 
-  --svg-color: rgb(14, 14, 16);
+  --svg-color: #909090;
+  --invalid-color: red;
+  --valid-color: var(--accent-color);
 
-  // Progress chart
   --cartesian-grid-line-color: #ccc;
 
-  background-color: var(--section-bg-color);
+  background-color: var(--wrap-bg-color);
+
   color: var(--text-color);
 }

@@ -1,22 +1,9 @@
+import { randomInteger } from 'src/assets/utils';
 import { Router } from '@angular/router';
 import { AuthService } from './../services/auth.service';
-import { environment } from 'src/environments/environment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
-import { ClassGetter } from '@angular/compiler/src/output/output_ast';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { NotificationService } from '../services/notification.service';
-
-const samePasswords = (
-  control: FormControl
-): { [key: string]: boolean } | null => {
-  console.log(control, 'control');
-  // const isSame = .value.password === control.value;
-  if (true) {
-    return { samePasswords: true };
-  }
-
-  return null;
-};
 
 @Component({
   selector: 'app-registration-form',
@@ -24,9 +11,8 @@ const samePasswords = (
   styleUrls: ['./registration-form.component.scss'],
 })
 export class RegistrationFormComponent implements OnInit {
-  errorMessage = '';
-  // public verifyCode: string = '';
-  public showVerifyCodeInput;
+  public errorMessage = '';
+  public showVerifyCodeInput = false;
 
   registrationForm: FormGroup;
 
@@ -38,29 +24,69 @@ export class RegistrationFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+
+    const user = this.authService.getCurrentUser();
+
+    if (!this.authService.isAuthenticated && user) {
+      this.registrationForm.patchValue({
+        phone: user.phone_number,
+      });
+    }
   }
+
+  ngDoCheck(): void {}
 
   initForm() {
     this.registrationForm = new FormGroup({
-      phone: new FormControl('11[]', [Validators.required]),
+      name: new FormControl(`Zdzislav Beksinsky`, []),
+      email: new FormControl(`zdislav@gmail.com`, [Validators.email]),
+      phone: new FormControl('380954061246', [
+        Validators.required,
+        Validators.pattern('380[0-9]{9}'),
+      ]),
       password: new FormControl(`test`, [Validators.required]),
       password2: new FormControl(`test`, [Validators.required]),
-      isDriver: new FormControl(false),
+      isDriver: new FormControl(true),
       carColor: new FormControl('black', [Validators.required]),
       verifyCode: new FormControl('', []),
 
       carModel: new FormControl('BMW', [Validators.required]),
       carNumber: new FormControl('CE1111AA', [Validators.required]),
       carType: new FormControl('basic', [Validators.required]),
-      // pas: new FormGroup(
-      //   {
-      //     password: new FormControl(`test`, [Validators.required]),
-      //     password2: new FormControl(`test`, [Validators.required]),
-      //   },
-      //   samePasswords
-      // ),
     });
+
+    // this.registrationForm.valueChanges.subscribe(() => {
+    //   console.log(this.registrationForm, 'form');
+    // });
+
+    // same valuer for passwords
+    this.registrationForm.get('password2').valueChanges.subscribe(() => {
+      this.comparePasswords();
+    });
+    this.registrationForm.get('password').valueChanges.subscribe(() => {
+      this.comparePasswords();
+    });
+
+    // this.registrationForm
+    //     .get('verifyCode')
+    //     .setValidators([Validators.required]);
   }
+
+  comparePasswords = () => {
+    const pas1Value = this.registrationForm.get('password');
+    const pas2Value = this.registrationForm.get('password2');
+
+    if (pas1Value.dirty && pas2Value.dirty) {
+      const isEquel = pas1Value.value === pas2Value.value;
+      if (!isEquel) {
+        pas1Value.setErrors({ ...pas1Value.errors, isEquel: true });
+        pas2Value.setErrors({ ...pas2Value.errors, isEquel: true });
+      } else {
+        pas2Value.setErrors({ ...pas2Value.errors });
+        pas1Value.setErrors({ ...pas2Value.errors });
+      }
+    }
+  };
 
   async register() {
     if (this.registrationForm.value.isDriver) {
@@ -68,8 +94,8 @@ export class RegistrationFormComponent implements OnInit {
         userInfo: {
           phone: this.registrationForm.value.phone,
           password: this.registrationForm.value.password,
-          email: this.registrationForm.value.email,
-          name: this.registrationForm.value.name,
+          email: this.registrationForm.value.email || '',
+          name: this.registrationForm.value.name || '',
           verifyCode: this.registrationForm.value.verifyCode,
         },
         driverInfo: {
@@ -83,6 +109,10 @@ export class RegistrationFormComponent implements OnInit {
 
       if (resp.user) {
         this.router.navigate(['/user/info']);
+        this.notification.addNotification({
+          message: 'You successful register in app.',
+          title: '',
+        });
       }
 
       if (resp?.message) {
@@ -93,21 +123,23 @@ export class RegistrationFormComponent implements OnInit {
         });
       }
       if (resp?.status === 'NOT_VERIFIED') {
-        this.showVerifyCodeInput = true;
-
         this.notification.addNotification({
           message: this.registrationForm.value.phone,
           title: 'We sent you verify code on this phone number ',
         });
 
+        // console.log(this.registrationForm);
+
         const verifyCode = resp.verifyCode;
-        const fakeLatency = 3000;
+        const fakeLatency = randomInteger(2000, 3500);
         setTimeout(() => {
           this.notification.addNotification({
             message: verifyCode,
             title: `Your verify code:`,
           });
         }, fakeLatency);
+
+        this.showVerifyCodeInput = true;
       }
     } else {
       const body = {
@@ -124,13 +156,18 @@ export class RegistrationFormComponent implements OnInit {
 
       if (resp?.message) {
         this.errorMessage = resp.message;
-        this.notification.addNotification({
-          message: resp.message,
-          title: 'Error: ',
-        });
+        // this.notification.addNotification({
+        //   message: resp.message,
+        //   title: 'Error: ',
+        // });
       }
       if (resp?.status === 'NOT_VERIFIED') {
         this.showVerifyCodeInput = true;
+
+        this.registrationForm
+          .get('verifyCode')
+          .setValidators([Validators.required]);
+        this.registrationForm.updateValueAndValidity();
 
         this.notification.addNotification({
           message: this.registrationForm.value.phone,
@@ -138,7 +175,7 @@ export class RegistrationFormComponent implements OnInit {
         });
 
         const verifyCode = resp.verifyCode;
-        const fakeLatency = 3000;
+        const fakeLatency = randomInteger(2000, 3500);
         setTimeout(() => {
           this.notification.addNotification({
             message: verifyCode,

@@ -1,0 +1,41 @@
+select.login__input {
+  option {
+    color: var(--text--color);
+    background-color: var(--navbar-bg-color);
+    border: none;
+    outline: 0;
+
+    &:hover {
+      background-color: var(--accent-color);
+    }
+  }
+}
+.login__label {
+  text-transform: uppercase;
+}
+
+.login__input {
+  margin-bottom: 10px;
+  margin-top: 5px;
+
+  width: 100%;
+}
+
+.link {
+  padding: 10px;
+
+  border: 1px solid var(--overlay-bg-color);
+
+  background-color: transparent;
+
+  cursor: pointer;
+  color: var(--text-color);
+  line-height: 0;
+  font-size: 1rem;
+
+  transition: background 0.2s ease-out;
+
+  &:hover {
+    color: var(--accent-color);
+  }
+}

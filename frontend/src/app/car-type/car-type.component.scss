@@ -1,0 +1,22 @@
+.cars__item {
+  &:hover {
+    color: var(--svg-color);
+  }
+}
+
+.cars__label {
+  display: flex;
+  flex-direction: column;
+
+  cursor: pointer;
+}
+
+.cars__name {
+  text-transform: capitalize;
+  text-align: center;
+  transition: color 0.1s ease-in;
+
+  &.active {
+    color: var(--accent-color);
+  }
+}

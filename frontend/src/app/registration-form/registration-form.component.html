@@ -2,39 +2,87 @@
   <form action="" (ngSubmit)="register()" [formGroup]="registrationForm">
     <ul class="login__list list">
       <li>
-        <label class="login__label" for=""
+        <label class="login__label"
+          >Name:
+          <input
+            type="text"
+            class="login__input input"
+            formControlName="name"
+            name="name"
+          />
+        </label>
+      </li>
+      <li>
+        <label class="login__label"
+          >Email:
+          <input
+            type="email"
+            class="login__input input"
+            formControlName="email"
+            name="email"
+          />
+        </label>
+        <div
+          *ngIf="
+            registrationForm.get('email').invalid &&
+            registrationForm.get('email').touched &&
+            registrationForm.get('email').errors.email
+          "
+          class="form__validation"
+        >
+          <small>Email not required but incorrect.</small>
+        </div>
+      </li>
+      <li>
+        <label class="login__label"
           >Phone:
           <input
             class="login__input input"
             type="text"
             formControlName="phone"
             name="phone"
+            autocomplete="off"
           />
         </label>
         <div
           *ngIf="
             registrationForm.get('phone').invalid &&
-            registrationForm.get('phone').touched
+            registrationForm.get('phone').touched &&
+            registrationForm.get('phone').errors.required
           "
           class="form__validation"
         >
           <small>Phone number is required.</small>
         </div>
+        <div
+          *ngIf="
+            registrationForm.get('phone').invalid &&
+            registrationForm.get('phone').touched &&
+            registrationForm.get('phone').errors.pattern
+          "
+          class="form__validation"
+        >
+          <small
+            >Phone number must start with 380 and have 9 digits after.</small
+          >
+        </div>
       </li>
       <li>
-        <label class="login__label" for=""
+        <label class="login__label"
           >Password:
           <input
+            type="password"
             class="login__input input"
-            type="text"
             formControlName="password"
             name="password"
+            autocomplete="new-password"
           />
         </label>
         <div
           *ngIf="
             registrationForm.get('password').invalid &&
-            registrationForm.get('password').touched
+            registrationForm.get('password').touched &&
+            registrationForm.get('password').errors.required
           "
           class="form__validation"
         >
@@ -42,28 +90,40 @@
         </div>
       </li>
       <li>
-        <label class="login__label" for=""
+        <label class="login__label"
           >Repeat password:
           <input
+            type="password"
             class="login__input input"
-            type="text"
             formControlName="password2"
             name="password2"
+            autocomplete="off"
           />
         </label>
         <div
           *ngIf="
             registrationForm.get('password2').invalid &&
-            registrationForm.get('password2').touched
+            registrationForm.get('password2').touched &&
+            registrationForm.get('password2').errors.required
           "
           class="form__validation"
         >
           <small>Password is required.</small>
         </div>
+        <div
+          *ngIf="
+            registrationForm.get('password2').invalid &&
+            registrationForm.get('password2').touched &&
+            registrationForm.get('password2').errors.isEquel
+          "
+          class="form__validation"
+        >
+          <small>Passwords should be same.</small>
+        </div>
       </li>
 
       <li *ngIf="registrationForm.get('isDriver').value">
-        <label class="login__label" for=""
+        <label class="login__label"
           >Car color:
           <input
             formControlName="carColor"
@@ -82,7 +142,7 @@
         </div>
       </li>
       <li *ngIf="registrationForm.get('isDriver').value">
-        <label class="login__label" for=""
+        <label class="login__label"
           >Car model:
           <input
             formControlName="carModel"
@@ -101,7 +161,7 @@
         </div>
       </li>
       <li *ngIf="registrationForm.get('isDriver').value">
-        <label class="login__label" for=""
+        <label class="login__label"
           >Car number:
           <input
             formControlName="carNumber"
@@ -121,12 +181,11 @@
       </li>
 
       <li *ngIf="registrationForm.get('isDriver').value">
-        <label class="login__label" for=""
+        <label class="login__label"
           >Car type:
-          <!-- <input [(ngModel)]="carType" class="login__input input" type="text" /> -->
           <select
             name="carType"
-            class="data__input input"
+            class="login__input input"
             formControlName="carType"
           >
             <option value="basic">Basic</option>
@@ -138,9 +197,10 @@
       </li>
 
       <li *ngIf="showVerifyCodeInput">
-        <label class="login__label" for=""
+        <label class="login__label" for="verifyCode"
           >Please enter your verify code:
           <input
+            id="verifyCode"
             formControlName="verifyCode"
             class="login__input input"
             type="text"
@@ -149,8 +209,13 @@
       </li>
 
       <li>
-        <label for="">Register as driver</label
-        ><input type="checkbox" name="isDriver" formControlName="isDriver" />
+        <label
+          >Register as driver<input
+            type="checkbox"
+            name="isDriver"
+            formControlName="isDriver"
+            class="login__isDriver"
+        /></label>
       </li>
 
       <li>

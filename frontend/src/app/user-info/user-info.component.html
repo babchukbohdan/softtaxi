@@ -1,60 +1,116 @@
 <main class="user">
-  <ul class="user__list list">
-    <li>
-      <label class="login__label" for=""
-        >Name: <input [(ngModel)]="name" class="login__input input" type="text"
-      /></label>
-    </li>
-    <li>
-      <label class="login__label" for=""
-        >Email:
-        <input [(ngModel)]="email" class="login__input input" type="email"
-      /></label>
-    </li>
-    <li>
-      <label class="login__label" for=""
-        >Phone:
-        <input [(ngModel)]="phone" class="login__input input" type="text" />
-      </label>
-    </li>
-    <!-- <li>
-      <label class="login__label" for=""
-        >Password:
-        <input [(ngModel)]="password" class="login__input input" type="text" />
-      </label>
-    </li> -->
+  <form [formGroup]="profileForm" (ngSubmit)="updateUser()">
+    <ul class="user__list list">
+      <li>
+        <label class="login__label"
+          >Name:
+          <input formControlName="name" class="login__input input" type="text"
+        /></label>
+      </li>
+      <li>
+        <label class="login__label"
+          >Email:
+          <input
+            formControlName="email"
+            class="login__input input"
+            type="email"
+        /></label>
+        <div
+          *ngIf="
+            profileForm.get('email').invalid &&
+            profileForm.get('email').touched &&
+            profileForm.get('email').errors.email
+          "
+          class="form__validation"
+        >
+          <small>Invalid email.</small>
+        </div>
+      </li>
+      <li>
+        <label class="login__label"
+          >Phone:
+          <input
+            formControlName="phone"
+            class="login__input input"
+            type="text"
+          />
+        </label>
+        <div
+          *ngIf="
+            profileForm.get('phone').invalid &&
+            profileForm.get('phone').touched &&
+            profileForm.get('phone').errors.pattern
+          "
+          class="form__validation"
+        >
+          <small
+            >Phone number must start with 380 and have 9 digits after.</small
+          >
+        </div>
+      </li>
 
-    <li *ngIf="isDriver">
-      <label class="login__label" for=""
-        >Car color:
-        <input [(ngModel)]="carColor" class="login__input input" type="text" />
-      </label>
-    </li>
-    <li *ngIf="isDriver">
-      <label class="login__label" for=""
-        >Car model:
-        <input [(ngModel)]="carModel" class="login__input input" type="text" />
-      </label>
-    </li>
-    <li *ngIf="isDriver">
-      <label class="login__label" for=""
-        >Car number:
-        <input [(ngModel)]="carNumber" class="login__input input" type="text" />
-      </label>
-    </li>
+      <li *ngIf="isDriver">
+        <label class="login__label"
+          >Car color:
+          <input
+            formControlName="carColor"
+            class="login__input input"
+            type="text"
+          />
+        </label>
+      </li>
+      <li *ngIf="isDriver">
+        <label class="login__label"
+          >Car model:
+          <input
+            formControlName="carModel"
+            class="login__input input"
+            type="text"
+          />
+        </label>
+      </li>
+      <li *ngIf="isDriver">
+        <label class="login__label"
+          >Car number:
+          <input
+            formControlName="carNumber"
+            class="login__input input"
+            type="text"
+          />
+        </label>
+      </li>
 
-    <li>
-      <app-button
-        (click)="updateUser()"
-        class="login__btn"
-        text="Save"
-      ></app-button>
+      <li *ngIf="isDriver">
+        <label class="login__label"
+          >Car type:
+          <select
+            name="carType"
+            class="login__input input"
+            formControlName="carType"
+          >
+            <option value="basic">Basic</option>
+            <option value="comfort">Comfort</option>
+            <option value="eco">Eco</option>
+            <option value="xl">Xl</option>
+          </select>
+        </label>
+      </li>
 
-      <app-button
-        (click)="logout()"
-        class="login__btn"
-        text="Logout"
-      ></app-button>
-    </li>
-  </ul>
+      <li>
+        <app-button
+          type="submit"
+          class="login__btn"
+          text="Save"
+          [disabled]="!profileForm.dirty || profileForm.invalid"
+        ></app-button>
+
+        <app-button
+          type="button"
+          (click)="logout()"
+          class="login__btn"
+          text="Logout"
+        ></app-button>
+      </li>
+    </ul>
+  </form>
 </main>

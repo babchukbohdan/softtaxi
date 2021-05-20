@@ -1,3 +1,4 @@
+import { ThemeService } from './../services/theme.service';
 import {
   NotificationService,
   Notification,
@@ -50,21 +51,30 @@ export class OrderFormComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private note: NotificationService
+    private note: NotificationService,
+    private theme: ThemeService
   ) {}
 
-  addNote() {
-    const newNote = new Notification(
-      'Title',
-      'text',
-      randomInteger(1000, 5000)
-    );
-    this.note.addNotification(newNote);
+  ngOnInit(): void {
+    this.initForm();
+    const user = this.authService.getCurrentUser();
+
+    if (user) {
+      this.id = user.id;
+      this.form.get('phoneNumber').setValue(user.phone_number);
+    }
+  }
+
+  toggleTheme() {
+    this.theme.toggleTheme();
   }
 
   initForm() {
     this.form = new FormGroup({
-      phoneNumber: new FormControl('11', [Validators.required]),
+      phoneNumber: new FormControl('380954061246', [
+        Validators.required,
+        Validators.pattern('380[0-9]{9}'),
+      ]),
       from: new FormControl(`Головна, ${randomInteger(1, 260)}`, [
         Validators.required,
       ]),
@@ -92,20 +102,6 @@ export class OrderFormComponent implements OnInit {
 
   getFormValue(name) {
     return this.form.get(name).value;
-  }
-
-  ngOnInit(): void {
-    this.initForm();
-    const user = this.authService.getCurrentUser();
-
-    if (user) {
-      this.id = user.id;
-      this.form.get('phoneNumber').setValue(user.phone_number);
-    }
-  }
-
-  getPrice(): number {
-    return randomInteger(5, 33);
   }
 
   async checkUser() {
@@ -141,7 +137,7 @@ export class OrderFormComponent implements OnInit {
 
     const userInService = this.authService.getCurrentUser();
 
-    if (!userInService?.token) {
+    if (!this.authService.isAuthenticated()) {
       const user = await this.checkUser();
 
       if (user) {

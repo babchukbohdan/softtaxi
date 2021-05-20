@@ -1,4 +1,4 @@
-import { NotificationService } from './services/notification.service';
+import { ThemeService, Theme } from './services/theme.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,11 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss'],
   providers: [],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title: string = 'softtaxi';
+  theme: Theme;
   // page: string = 'make-order';
-  constructor() {}
-
+  constructor(private themeService: ThemeService) {}
+  ngOnInit() {
+    this.themeService._theme.subscribe((t) => {
+      this.theme = t;
+    });
+  }
   // changePage(page: string) {
   //   this.page = page;
   // }

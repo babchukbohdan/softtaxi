@@ -128,7 +128,9 @@ class UserController extends CrudController {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    if (user && user.verify_code) {
+    const isVerified = user.verify_code === 'null'
+
+    if (user && !isVerified) {
       return res.status(401).json({
         message: 'You should register in app first',
         status: 'NOT_VERIFIED',
@@ -203,7 +205,7 @@ class UserController extends CrudController {
 
             const response = await db.query(
               getQueryForUpdate(
-                { id: userInDB.id, password: hashPassword },
+                { id: userInDB.id, password: hashPassword, verify_code: null },
                 'users'
               )
             )

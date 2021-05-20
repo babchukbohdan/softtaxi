@@ -1,24 +1,73 @@
 <main class="login">
-  <ul class="login__list list">
-    <li>
-      <label class="login__label" for=""
-        >Phone:
-        <input [(ngModel)]="phone" class="login__input input" type="text" />
-      </label>
-    </li>
-    <li>
-      <label class="login__label" for=""
-        >Password:
-        <input [(ngModel)]="password" class="login__input input" type="text" />
-      </label>
-    </li>
+  <form action="" (ngSubmit)="login()" [formGroup]="loginForm">
+    <ul class="login__list list">
+      <li>
+        <label class="login__label"
+          >Phone:
+          <input
+            class="login__input input"
+            type="text"
+            formControlName="phone"
+            name="phone"
+          />
+        </label>
+        <div
+          *ngIf="
+            loginForm.get('phone').invalid &&
+            loginForm.get('phone').touched &&
+            loginForm.get('phone').errors.required
+          "
+          class="form__validation"
+        >
+          <small>Phone number is required.</small>
+        </div>
+        <div
+          *ngIf="
+            loginForm.get('phone').invalid &&
+            loginForm.get('phone').touched &&
+            loginForm.get('phone').errors.pattern
+          "
+          class="form__validation"
+        >
+          <small
+            >Phone number must start with 380 and have 9 digits after.</small
+          >
+        </div>
+      </li>
+      <li>
+        <label class="login__label"
+          >Password:
+          <input
+            class="login__input input"
+            type="text"
+            formControlName="password"
+            name="password"
+          />
+        </label>
 
-    <li>
-      <app-button (click)="login()" text="Login"></app-button>
-      <a class="link" [routerLink]="['/user/registration']"
-        >or you can Register</a
-      >
-    </li>
-  </ul>
-  <div *ngIf="errorMessage">{{ errorMessage }}</div>
+        <div
+          *ngIf="
+            loginForm.get('password').invalid &&
+            loginForm.get('password').touched &&
+            loginForm.get('password').errors.required
+          "
+          class="form__validation"
+        >
+          <small>Password is required.</small>
+        </div>
+      </li>
+
+      <li>
+        <app-button
+          type="submit"
+          text="Login"
+          [disabled]="loginForm.invalid"
+        ></app-button>
+        <a class="link" [routerLink]="['/user/registration']"
+          >or you can Register</a
+        >
+      </li>
+    </ul>
+    <div *ngIf="errorMessage">{{ errorMessage }}</div>
+  </form>
 </main>

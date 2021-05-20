@@ -8,7 +8,7 @@ export class AuthService {
   // private token: string;
 
   isAuthenticated() {
-    return Boolean(this.user.token);
+    return Boolean(this.user?.token);
   }
 
   getCurrentUser() {
@@ -77,7 +77,8 @@ export class AuthService {
         `${environment.apiUrl}user?filter[phone_number]=${phone}`
       );
       const user = await res.json();
-      // console.log('user getUserbyphone', user);
+      console.log('user getUserbyphone', user);
+      console.log('user getUserbyphone phone', phone);
 
       this.setCurrentUser(user[0]);
       return user[0];
@@ -216,15 +217,19 @@ export class AuthService {
       },
       body: JSON.stringify(body),
     });
-    return await res.json();
+    const a = await res.json();
+    console.log('updated user', a);
+
+    return a;
   }
 
-  async updateDriver({ id, carColor, carModel, carNumber }) {
+  async updateDriver({ id, carColor, carModel, carNumber, carType }) {
     const body = {
       id,
       car_color: carColor,
       car_model: carModel,
       car_number: carNumber,
+      car_type: carType,
     };
     const res = await fetch(`${environment.apiUrl}driver`, {
       method: 'PUT',
