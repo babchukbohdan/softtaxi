@@ -33,6 +33,9 @@
 .request__adress {
   // border: 1px solid var(--overlay-bg-color);
   // border-radius: var(--input-border-radius, 3px);
+  div span:first-child {
+    margin-right: 5px;
+  }
 }
 
 .request__street {
@@ -87,8 +90,10 @@
     margin: 0;
   }
   &__label {
+    text-transform: uppercase;
   }
 
   &__value {
+    text-transform: lowercase;
   }
 }
