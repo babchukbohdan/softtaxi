@@ -111,8 +111,13 @@ export class RequestListComponent implements OnInit {
     this.user = user;
     console.log(user, 'user in request list');
 
-    this.isDriver = Boolean(user?.driverInfo);
+    this.isDriver = this.authService.isDriver();
 
+    this.getRequests();
+  }
+
+  showForDriver() {
+    this.showAsDriver = !this.showAsDriver;
     this.getRequests();
   }
 
@@ -191,11 +196,11 @@ export class RequestListComponent implements OnInit {
 
   setAllRequests(requests) {
     this.allRequests = requests;
-    console.log('all req ', requests);
+    // console.log('all req ', requests);
   }
   setActiveRequests(requests) {
     this.activeRequests = requests;
-    console.log('active req ', requests);
+    // console.log('active req ', requests);
   }
 
   async getRequestsForAllTab(user, limit, offset) {

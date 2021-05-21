@@ -20,7 +20,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class OrderFormComponent implements OnInit {
   @Output() onAdd: EventEmitter<Request> = new EventEmitter<Request>();
-  id = '';
   price = randomInteger(5, 33);
 
   carTypes = [
@@ -60,7 +59,6 @@ export class OrderFormComponent implements OnInit {
     const user = this.authService.getCurrentUser();
 
     if (user) {
-      this.id = user.id;
       this.form.get('phoneNumber').setValue(user.phone_number);
     }
   }
@@ -116,7 +114,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   async sendOrder(order: Order) {
-    console.log('%csending new order', 'color: #2E86C1', order);
+    console.log('%csending new order', 'color: #2E86C1');
     try {
       const res = await fetch(`${environment.apiUrl}requests`, {
         method: 'POST',
@@ -137,25 +135,22 @@ export class OrderFormComponent implements OnInit {
 
     const userInService = this.authService.getCurrentUser();
 
-    if (!this.authService.isAuthenticated()) {
+    if (!userInService) {
       const user = await this.checkUser();
 
       if (user) {
         console.log('%cuser is already exist in DB', 'color: #2ECC71', user);
-        this.id = user.id;
-        this.authService.setCurrentUser(user);
       } else {
         console.log('%cuser not found in DB', 'color: red');
         console.log('%ccreate user in DB', 'color: #2E86C1');
         const newUser = await this.authService.createUser(formData.phoneNumber);
         console.log('%cnew user', 'color: yellow', newUser);
-        this.id = newUser.id;
       }
     }
 
     if (this.form.valid) {
       const order: Order = new Order({
-        id: this.id,
+        id: this.authService.getCurrentUser().id,
         price: '$ ' + this.price,
         ...this.form.value,
       });

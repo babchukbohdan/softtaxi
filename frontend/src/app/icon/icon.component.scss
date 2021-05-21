@@ -7,7 +7,8 @@
 .nav__img:hover {
   color: var(--svg-color);
 }
-.cars__img.active {
+.cars__img.active,
+.request__car.active {
   color: var(--accent-color);
 }
 .nav__img {

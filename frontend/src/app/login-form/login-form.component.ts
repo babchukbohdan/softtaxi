@@ -74,7 +74,11 @@ export class LoginFormComponent implements OnInit {
       this.logedIn(response.user);
       this.router.navigate(['/user/info']);
     }
-    if (response?.status === 'NOT_VERIFIED') {
+
+    if (
+      response?.status === 'NOT_VERIFIED' ||
+      response?.status === 'NOT_REGISTERED'
+    ) {
       this.router.navigate(['/user/registration']);
       this.notification.addNotification({
         message: 'You should register in app first',

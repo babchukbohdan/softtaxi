@@ -1,29 +1,28 @@
 <div class="request__wrap">
-  <div>
-    <app-button
-      [isActive]="currentTab === 'all'"
-      (click)="changeTab('all')"
-      text="All orders"
-    ></app-button>
-    <app-button
-      [isActive]="currentTab === 'active'"
-      (click)="changeTab('active')"
-      text="Active orders"
-    ></app-button>
-    <label for="isDriver" *ngIf="user">
-      Watch as driver
-      <input
-        [(ngModel)]="showAsDriver"
-        (change)="getRequests()"
-        type="checkbox"
-        name="isDriver"
-        id="isDriver"
-      />
-    </label>
+  <div class="request__nav">
+    <div class="request__tab">
+      <app-button
+        [isActive]="currentTab === 'all'"
+        (click)="changeTab('all')"
+        text="All orders"
+      ></app-button>
+      <app-button
+        [isActive]="currentTab === 'active'"
+        (click)="changeTab('active')"
+        text="Active orders"
+      ></app-button>
+    </div>
+    <div class="request__asdriver" *ngIf="isDriver">
+      <span>Watch as driver</span>
+      <app-toggle
+        [isActive]="showAsDriver"
+        (changeHandler)="showForDriver()"
+      ></app-toggle>
+    </div>
   </div>
 
   <div *ngIf="currentTab === 'all'">
-    <ul class="list">
+    <ul class="requests__list list">
       <app-request
         (takeOrder)="moveRequestToActiveTab($event)"
         *ngFor="let r of allRequests"
@@ -47,7 +46,7 @@
   </div>
 
   <div *ngIf="currentTab === 'active'">
-    <ul class="list">
+    <ul class="list requests__list">
       <app-request
         (deleteOrder)="removeRequestFromActiveTab($event)"
         *ngFor="let r of activeRequests"

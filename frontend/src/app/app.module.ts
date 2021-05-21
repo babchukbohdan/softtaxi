@@ -22,6 +22,7 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { RegistrationFormComponent } from './registration-form/registration-form.component';
 import { NotificationComponent } from './notification/notification.component';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
+import { ToggleComponent } from './toggle/toggle.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { NotificationItemComponent } from './notification-item/notification-item
     RegistrationFormComponent,
     NotificationComponent,
     NotificationItemComponent,
+    ToggleComponent,
   ],
   imports: [
     BrowserAnimationsModule,

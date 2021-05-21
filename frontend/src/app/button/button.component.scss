@@ -19,11 +19,13 @@
     &:hover {
       background-color: inherit;
       cursor: not-allowed;
+      color: var(--text-color-disabled);
     }
   }
 
   &.active {
     background-color: var(--hover-bg-color);
+    color: var(--accent-color);
   }
 
   &--hovered {
@@ -62,4 +64,11 @@
 
   //   font-size: 20px;
   // }
+
+  &.cancel {
+    width: 100%;
+  }
+}
+.request__btn {
+  flex-basis: 100%;
 }

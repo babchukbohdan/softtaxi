@@ -24,11 +24,11 @@ export default class CrudController {
       )
 
       let newValue = dbResponse.rows[0]
-      console.log(newValue, 'created')
 
       if ('password' in newValue) {
         newValue = { ...newValue }
         delete newValue.password
+        delete newValue.verify_code
       }
       res.json(newValue)
     } catch (error) {
@@ -59,7 +59,19 @@ export default class CrudController {
     }
 
     const values = await db.query(queryString)
-    res.json(values.rows)
+    const isUser = !!values.rows[0]?.phone_number
+    if (isUser) {
+      const maped = values.rows.map((user) => {
+        const clearUser = { ...user }
+        delete clearUser.password
+        delete clearUser.verify_code
+        return clearUser
+      })
+
+      return res.json(maped)
+    }
+
+    return res.json(values.rows)
   }
 
   getOne = async (req: Request, res: Response) => {

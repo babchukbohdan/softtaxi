@@ -1,3 +1,4 @@
+import { trigger, transition, style, animate } from '@angular/animations';
 import { AuthService } from './../services/auth.service';
 import { environment } from './../../environments/environment';
 import { Request, StatusType } from './../../assets/types/types';
@@ -27,7 +28,7 @@ export class RequestComponent implements OnInit {
       },
       body: JSON.stringify({
         id: this.request.id,
-        status: 'canceled',
+        status: StatusType.Canceled,
         last_update: new Date(),
       }),
     });
@@ -45,7 +46,7 @@ export class RequestComponent implements OnInit {
       },
       body: JSON.stringify({
         id: this.request.id,
-        status: 'finished',
+        status: StatusType.Done,
         last_update: new Date(),
       }),
     });

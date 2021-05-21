@@ -110,7 +110,7 @@ export class RegistrationFormComponent implements OnInit {
       if (resp.user) {
         this.router.navigate(['/user/info']);
         this.notification.addNotification({
-          message: 'You successful register in app.',
+          message: 'You successfully registered in app.',
           title: '',
         });
       }

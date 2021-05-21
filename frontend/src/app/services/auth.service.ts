@@ -10,6 +10,9 @@ export class AuthService {
   isAuthenticated() {
     return Boolean(this.user?.token);
   }
+  isDriver() {
+    return Boolean(this.user?.driverInfo);
+  }
 
   getCurrentUser() {
     return this.user;
@@ -77,8 +80,6 @@ export class AuthService {
         `${environment.apiUrl}user?filter[phone_number]=${phone}`
       );
       const user = await res.json();
-      console.log('user getUserbyphone', user);
-      console.log('user getUserbyphone phone', phone);
 
       this.setCurrentUser(user[0]);
       return user[0];
@@ -129,7 +130,7 @@ export class AuthService {
       });
 
       const response = await res.json();
-      console.log('response in login service', response);
+      // console.log('response in login service', response);
 
       if (response.user) {
         this.setCurrentUser(response.user);
@@ -178,6 +179,8 @@ export class AuthService {
         body: JSON.stringify(body),
       });
       const response = await res.json();
+      console.log('response in register DRiver', response);
+
       const { user, message, status, verifyCode } = response;
       if (message) {
         return { message, status, verifyCode };
@@ -217,10 +220,16 @@ export class AuthService {
       },
       body: JSON.stringify(body),
     });
-    const a = await res.json();
-    console.log('updated user', a);
+    const user = await res.json();
 
-    return a;
+    const currentUser = this.getCurrentUser();
+    this.setCurrentUser({
+      ...currentUser,
+      ...user,
+    });
+    console.log('updated user', user);
+
+    return user;
   }
 
   async updateDriver({ id, carColor, carModel, carNumber, carType }) {
@@ -238,7 +247,17 @@ export class AuthService {
       },
       body: JSON.stringify(body),
     });
-    return await res.json();
+    const driverInfo = await res.json();
+
+    console.log('driver res in update', driverInfo);
+
+    this.setCurrentUser({
+      ...this.user,
+      driverInfo: {
+        ...driverInfo,
+      },
+    });
+    return driverInfo;
   }
 
   logout() {

@@ -3,12 +3,31 @@
 }
 
 label {
-  border: 1px solid var(--overlay-bg-color);
-  border-radius: var(--input-border-radius, 3px);
-
   padding: 10px;
 
   display: inline-block;
 
   user-select: none;
+}
+.requests__list {
+  transform: translateY(-1px);
+}
+.request__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.request__asdriver {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+
+  padding: 10px;
+
+  border: 1px solid var(--overlay-bg-color);
+  border-radius: var(--input-border-radius, 3px);
+
+  span {
+    margin-right: 10px;
+  }
 }

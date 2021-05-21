@@ -1,11 +1,11 @@
-<li class="request__item">
-  <div class="group">
+<li class="request__item" [@order]>
+  <div class="group request__up">
     <div class="request__adress">
-      <div class="request__street group">
+      <div class="request__street">
         <span>From:</span> <span>{{ request.destinationLocation }}</span>
       </div>
 
-      <div class="request__street group">
+      <div class="request__street">
         <span>To:</span> <span>{{ request.passangerLocation }}</span>
       </div>
     </div>
@@ -13,13 +13,20 @@
     <div class="request__data">
       <ul class="request__info list group">
         <li>
-          <app-icon name="{{ request.carType }}" size="30px"></app-icon>
+          <app-icon
+            isActive="{{ true }}"
+            [name]="request.carType"
+            size="30px"
+            className="request__car"
+          ></app-icon>
+          <span> {{ request.carType }} </span>
         </li>
-        <li>
+        <!-- <li>
           <app-icon name="star" size="20px"></app-icon>
           <span *ngIf="info">{{ info.rating }}</span>
-        </li>
+        </li> -->
         <li>
+          <span>price: </span>
           <span>{{ request.price }}</span>
         </li>
         <!-- <li>
@@ -32,16 +39,19 @@
           *ngIf="page === 'active'"
           (click)="cancelRequest(request.id)"
           text="Cancel order"
+          className="request__btn cancel"
         ></app-button>
         <app-button
           *ngIf="isDriver && page === 'active'"
           (click)="finishRequest(request.id)"
           text="Finish order"
+          className="request__btn finish"
         ></app-button>
         <app-button
           *ngIf="isDriver && page === 'all'"
           (click)="takeRequest(request.id)"
           text="Take order"
+          className="request__btn take"
         ></app-button>
       </div>
     </div>

@@ -4,6 +4,21 @@ import { Router } from '@angular/router';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+const isUserInfoChanged = (controls) => {
+  const names = ['name', 'email', 'phone'];
+  return names.some((controlName) => {
+    return controls[controlName].touched;
+  });
+};
+
+const isDriverInfoChanged = (controls) => {
+  const names = ['carColor', 'carModel', 'carNumber', 'carType'];
+
+  return names.some((controlName) => {
+    return controls[controlName].touched;
+  });
+};
+
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -46,9 +61,9 @@ export class UserInfoComponent implements OnInit {
       carType: new FormControl('', []),
     });
 
-    this.profileForm.valueChanges.subscribe(() => {
-      console.log(this.profileForm);
-    });
+    // this.profileForm.valueChanges.subscribe(() => {
+    //   console.log(this.profileForm);
+    // });
   }
 
   setUser() {
@@ -78,15 +93,28 @@ export class UserInfoComponent implements OnInit {
   }
 
   updateUser() {
-    this.profileForm.markAsPristine();
-    this.authService.updateUser({
-      id: this.user.id,
-      name: this.profileForm.value.name || '',
-      phone: this.profileForm.value.phone || '',
-      email: this.profileForm.value.email || '',
-    });
+    console.log('form ', this.profileForm);
 
-    if (this.isDriver) {
+    const shouldUserInfoUpdate = isUserInfoChanged(this.profileForm.controls);
+    const shouldDriverInfoUpdate = isDriverInfoChanged(
+      this.profileForm.controls
+    );
+
+    this.profileForm.markAsPristine();
+    this.profileForm.markAsUntouched();
+
+    if (shouldUserInfoUpdate) {
+      console.log('update user');
+
+      this.authService.updateUser({
+        id: this.user.id,
+        name: this.profileForm.value.name || '',
+        phone: this.profileForm.value.phone || '',
+        email: this.profileForm.value.email || '',
+      });
+    }
+
+    if (this.isDriver && shouldDriverInfoUpdate) {
       this.updateDriver();
     }
 

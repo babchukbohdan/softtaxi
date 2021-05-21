@@ -14,6 +14,7 @@ import {
   createUserInDB,
   generateVerifyCode,
 } from './utils'
+import { sendSMS } from '../notification/mobizon'
 
 const secret: Secret = process.env.SECRET_KEY!
 
@@ -118,14 +119,15 @@ class UserController extends CrudController {
 
   login = async (req: Request, res: Response) => {
     const { phone, password } = req.body
-    console.log('body in login', req.body)
 
     const query = getQueryWithFilter({ phone_number: phone }, 'users')
     const response = await db.query(query)
     let user = response.rows[0]
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' })
+      return res
+        .status(404)
+        .json({ message: 'User not found', status: 'NOT_REGISTERED' })
     }
 
     const isVerified = user.verify_code === 'null'
@@ -145,7 +147,6 @@ class UserController extends CrudController {
     }
 
     const driver = await getDriverByFilter({ user_id: user.id })
-    console.log('isDriver', driver)
 
     user = { ...user }
 
@@ -213,6 +214,7 @@ class UserController extends CrudController {
             const token = generateJwt(userInDB.id, phone)
             const user = { ...response.rows[0] }
             delete user.password
+            delete user.verify_code
             const driver = await createDriverInDB({
               car_type: carType,
               car_color: carColor,
@@ -228,6 +230,11 @@ class UserController extends CrudController {
             return res.status(400).json({ message: 'Wrong verify code' })
           }
         }
+
+        sendSMS(
+          userInDB.phone_number,
+          `Softtaxi: your verify code ${userInDB.verify_code}`
+        )
         return res.status(401).json({
           message: 'You should verify your account',
           status: 'NOT_VERIFIED',
