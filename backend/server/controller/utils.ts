@@ -92,7 +92,7 @@ export const generateVerifyCode = (): number => {
 export const getUserFromDbByPhone = async (phone: string) => {
   const query = getQueryWithFilter({ phone_number: phone }, 'users')
   const userInDB = await db.query(query)
-  const candidate: UserFromDb = userInDB.rows[0]
+  const candidate = userInDB.rows[0]
   return candidate
 }
 

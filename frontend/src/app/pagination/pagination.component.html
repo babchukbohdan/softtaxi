@@ -1,9 +1,50 @@
 <div class="pagination">
   <app-button
-    *ngFor="let i of _count"
-    text="{{ i }}"
-    (click)="clickHandler(i)"
-    [isActive]="currentPage === i"
+    [disabled]="currentPage === 1"
+    text="Prev"
+    (click)="clickHandler(currentPage - 1)"
+  >
+  </app-button>
+
+  <app-button
+    *ngIf="count > 12"
+    [disabled]="currentPage === 1"
+    text="1"
+    (click)="clickHandler(1)"
+  >
+  </app-button>
+
+  <ng-container *ngIf="count < 12">
+    <app-button
+      *ngFor="let i of _count"
+      text="{{ i }}"
+      (click)="clickHandler(i)"
+      [isActive]="currentPage === i"
+    >
+    </app-button>
+  </ng-container>
+
+  <input
+    class="input pagination__input"
+    *ngIf="count > 12"
+    type="number"
+    value="{{ currentPage }}"
+    min="1"
+    [max]="count"
+    (change)="changeHandler($event)"
+  />
+
+  <app-button
+    *ngIf="count > 12"
+    [disabled]="currentPage === count"
+    [text]="count"
+    (click)="clickHandler(count)"
+  >
+  </app-button>
+  <app-button
+    [disabled]="currentPage === count"
+    text="Next"
+    (click)="clickHandler(currentPage + 1)"
   >
   </app-button>
 </div>

@@ -31,3 +31,11 @@ label {
     margin-right: 10px;
   }
 }
+
+.requests__validation {
+  padding: 10px;
+  display: inline-block;
+
+  border: 1px solid var(--overlay-bg-color);
+  border-radius: var(--input-border-radius, 3px);
+}

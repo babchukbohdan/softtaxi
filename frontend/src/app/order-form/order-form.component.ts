@@ -157,7 +157,7 @@ export class OrderFormComponent implements OnInit {
       // this.onAdd.emit(order);
       const newOrder = await this.sendOrder(order);
 
-      this.router.navigate(['requests']);
+      // this.router.navigate(['requests']);
       return newOrder;
     }
   }

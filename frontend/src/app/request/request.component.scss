@@ -90,10 +90,10 @@
     margin: 0;
   }
   &__label {
-    text-transform: uppercase;
+    text-transform: capitalize;
   }
 
   &__value {
-    text-transform: lowercase;
+    color: var(--accent-color);
   }
 }

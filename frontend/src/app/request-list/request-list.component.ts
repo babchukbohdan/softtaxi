@@ -95,7 +95,7 @@ export class RequestListComponent implements OnInit {
   // "active" | "all"
   currentTab = 'active';
   isDriver: boolean;
-
+  isAuthenticated: boolean;
   showAsDriver: boolean;
 
   limit = 5;
@@ -108,7 +108,10 @@ export class RequestListComponent implements OnInit {
 
   async ngOnInit() {
     const user = this.authService.getCurrentUser();
+    console.log(user, 'user');
+
     this.user = user;
+    this.isAuthenticated = this.authService.isAuthenticated();
     console.log(user, 'user in request list');
 
     this.isDriver = this.authService.isDriver();
@@ -118,6 +121,10 @@ export class RequestListComponent implements OnInit {
 
   showForDriver() {
     this.showAsDriver = !this.showAsDriver;
+    this.limit = 5;
+    this.currentPage = 1;
+    this.offset = 0;
+    this.getCountOfRequestsForDriver(this.user.id);
     this.getRequests();
   }
 
@@ -195,7 +202,9 @@ export class RequestListComponent implements OnInit {
   }
 
   setAllRequests(requests) {
-    this.allRequests = requests;
+    if (this.isAuthenticated) {
+      this.allRequests = requests;
+    }
     // console.log('all req ', requests);
   }
   setActiveRequests(requests) {

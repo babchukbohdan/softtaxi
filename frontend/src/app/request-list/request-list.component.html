@@ -22,7 +22,7 @@
   </div>
 
   <div *ngIf="currentTab === 'all'">
-    <ul class="requests__list list">
+    <ul class="requests__list list" *ngIf="isAuthenticated">
       <app-request
         (takeOrder)="moveRequestToActiveTab($event)"
         *ngFor="let r of allRequests"
@@ -31,14 +31,21 @@
         [page]="currentTab"
       ></app-request>
       <li *ngIf="allRequests.length === 0 && !isDriver">
-        You haven't finished orders
+        <span class="requests__validation">You haven't finished orders</span>
       </li>
       <li *ngIf="allRequests.length === 0 && isDriver">
-        No active requests yet
+        <span class="requests__validation">No active requests yet</span>
       </li>
     </ul>
+
+    <div *ngIf="!isAuthenticated">
+      <span class="requests__validation"
+        >You should authenticate to watch all orders.</span
+      >
+      <a routerLink="/user/login" class="link">Login</a>
+    </div>
     <app-pagination
-      *ngIf="countOfAllRequests > 1"
+      *ngIf="countOfAllRequests > 1 && isAuthenticated"
       [count]="countOfAllRequests"
       [clickHandler]="changePage"
       [currentPage]="currentPage"
@@ -56,7 +63,10 @@
       >
         <!-- <app-button (click)="cancelRequest()" text="Cancel order"></app-button> -->
       </app-request>
-      <li *ngIf="activeRequests.length === 0">You haven't active orders</li>
+      <li *ngIf="activeRequests.length === 0">
+        <span class="requests__validation">You haven't active orders</span>
+        <a routerLink="" class="link">Make order</a>
+      </li>
     </ul>
     <app-pagination
       *ngIf="countOfActiveRequests > 1"

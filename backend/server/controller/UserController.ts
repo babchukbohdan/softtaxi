@@ -180,6 +180,15 @@ class UserController extends CrudController {
             message: 'User with this phone number already registred as driver',
           })
         } else {
+          const comparePassword = await bcrypt.compare(
+            password,
+            userInDB.password
+          )
+          // TOFO check this
+          if (!comparePassword) {
+            return res.status(400).json({ message: 'Wrong password or phone' })
+          }
+
           const driver = await createDriverInDB({
             car_type: carType,
             car_color: carColor,

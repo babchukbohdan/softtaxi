@@ -26,8 +26,8 @@
           <span *ngIf="info">{{ info.rating }}</span>
         </li> -->
         <li>
-          <span>price: </span>
-          <span>{{ request.price }}</span>
+          <span class="info__label">price: </span>
+          <span class="info__value">{{ request.price }}</span>
         </li>
         <!-- <li>
           <span>{{ request.id }}</span>
@@ -69,9 +69,16 @@
       </p>
     </div>
     <div class="info" *ngIf="isDriver && info">
-      <p class="info__label">Phone</p>
-      <p class="info__value">{{ info.phone_number }}</p>
+      <p class="info__label">Description:</p>
+      <p class="info__value">{{ request.description }}</p>
     </div>
+    <div class="info" *ngIf="isDriver && info">
+      <p class="info__label">Phone:</p>
+      <a class="info__value" [href]="'tel:+' + info.phone_number">
+        {{ info.phone_number }}</a
+      >
+    </div>
+
     <div class="info" *ngIf="!isDriver && info">
       <p class="info__label">Car model:</p>
       <p class="info__value">{{ info.car_model }}</p>

@@ -20,6 +20,15 @@ export class RequestComponent implements OnInit {
   public info = null;
   constructor(private authService: AuthService) {}
 
+  ngOnInit(): void {
+    if (status.includes(this.request.status)) {
+      this.getInfoForAcceptedRequest().then((res) => {
+        this.info = res;
+        console.log(this.info, 'info');
+      });
+    }
+  }
+
   async cancelRequest() {
     const res = await fetch(`${environment.apiUrl}requests`, {
       method: 'PUT',
@@ -96,14 +105,6 @@ export class RequestComponent implements OnInit {
       const info = await this.authService.getUser(id);
 
       return info;
-    }
-  }
-
-  ngOnInit(): void {
-    if (status.includes(this.request.status)) {
-      this.getInfoForAcceptedRequest().then((res) => {
-        this.info = res;
-      });
     }
   }
 }

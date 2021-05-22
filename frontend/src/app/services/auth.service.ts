@@ -6,7 +6,13 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   private user;
   // private token: string;
+  constructor() {
+    const userFromLS = this.getUserFromLS();
 
+    if (userFromLS) {
+      this.setCurrentUser(userFromLS);
+    }
+  }
   isAuthenticated() {
     return Boolean(this.user?.token);
   }
@@ -20,7 +26,17 @@ export class AuthService {
 
   setCurrentUser(user) {
     this.user = user;
+
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
     console.log('%cSet user in service', 'color: #2ECC71', user);
+  }
+
+  getUserFromLS() {
+    const userFromLS = localStorage.getItem('user');
+
+    return JSON.parse(userFromLS);
   }
 
   async getDriver(id: string) {
@@ -134,7 +150,6 @@ export class AuthService {
 
       if (response.user) {
         this.setCurrentUser(response.user);
-        localStorage.setItem('token', response.user.token);
       }
       // console.log('%cresponse', 'color: #2ECC71', response);
       return response;
@@ -160,7 +175,6 @@ export class AuthService {
       }
       // console.log('sestUser', user);
       this.setCurrentUser({ ...user, token });
-      localStorage.setItem('token', token);
       console.log('%cuser', 'color: #2ECC71', user);
 
       return response;
@@ -188,7 +202,6 @@ export class AuthService {
       // const { user, token } = response;
       // console.log('user', user);
       this.setCurrentUser(user);
-      localStorage.setItem('token', user.token);
       // console.log('%cuser', 'color: #2ECC71', user);
 
       return response;
@@ -262,6 +275,6 @@ export class AuthService {
 
   logout() {
     this.setCurrentUser(undefined);
-    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 }

@@ -17,13 +17,38 @@
         </a>
       </li>
       <li class="nav__item">
-        <a routerLink="/user/login" class="nav__link" routerLinkActive="active">
+        <a
+          [ngClass]="{
+            active:
+              infoActive.isActive ||
+              registrationActive.isActive ||
+              loginActive.isActive
+          }"
+          routerLink="/user/login"
+          class="nav__link"
+        >
           <app-icon className="nav__img" size="40px" name="user"></app-icon>
         </a>
+
+        <a
+          routerLink="/user/login"
+          routerLinkActive
+          #loginActive="routerLinkActive"
+          style="display: none"
+        ></a>
+        <a
+          routerLink="/user/info"
+          routerLinkActive
+          #infoActive="routerLinkActive"
+          style="display: none"
+        ></a>
+        <a
+          routerLink="/user/registration"
+          routerLinkActive
+          #registrationActive="routerLinkActive"
+          style="display: none"
+        ></a>
       </li>
-      <!-- <button (click)="clickHandler('order-list')" class="nav__link">< routerLinkActive="active"/button>
-      <button (click)="clickHandler('make-order')" class="nav__btn"></button>
-      <button (click)="clickHandler('login')" class="nav__btn"></button> -->
     </ul>
   </nav>
 </footer>

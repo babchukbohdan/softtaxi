@@ -28,6 +28,8 @@ export class RegistrationFormComponent implements OnInit {
     const user = this.authService.getCurrentUser();
 
     if (!this.authService.isAuthenticated && user) {
+      console.log('set phone in register');
+
       this.registrationForm.patchValue({
         phone: user.phone_number,
       });
@@ -38,20 +40,20 @@ export class RegistrationFormComponent implements OnInit {
 
   initForm() {
     this.registrationForm = new FormGroup({
-      name: new FormControl(`Zdzislav Beksinsky`, []),
-      email: new FormControl(`zdislav@gmail.com`, [Validators.email]),
-      phone: new FormControl('380954061246', [
+      name: new FormControl(``, []),
+      email: new FormControl(``, [Validators.email]),
+      phone: new FormControl('', [
         Validators.required,
         Validators.pattern('380[0-9]{9}'),
       ]),
-      password: new FormControl(`test`, [Validators.required]),
-      password2: new FormControl(`test`, [Validators.required]),
+      password: new FormControl(``, [Validators.required]),
+      password2: new FormControl(``, [Validators.required]),
       isDriver: new FormControl(true),
-      carColor: new FormControl('black', [Validators.required]),
+      carColor: new FormControl('', [Validators.required]),
       verifyCode: new FormControl('', []),
 
-      carModel: new FormControl('BMW', [Validators.required]),
-      carNumber: new FormControl('CE1111AA', [Validators.required]),
+      carModel: new FormControl('', [Validators.required]),
+      carNumber: new FormControl('', [Validators.required]),
       carType: new FormControl('basic', [Validators.required]),
     });
 
@@ -62,6 +64,7 @@ export class RegistrationFormComponent implements OnInit {
     // same valuer for passwords
     this.registrationForm.get('password2').valueChanges.subscribe(() => {
       this.comparePasswords();
+      console.log(this.registrationForm.get('password2'));
     });
     this.registrationForm.get('password').valueChanges.subscribe(() => {
       this.comparePasswords();
@@ -76,14 +79,26 @@ export class RegistrationFormComponent implements OnInit {
     const pas1Value = this.registrationForm.get('password');
     const pas2Value = this.registrationForm.get('password2');
 
+    console.log(pas1Value, 'b pass 1');
+    console.log(pas2Value, 'b pass 2');
+
     if (pas1Value.dirty && pas2Value.dirty) {
-      const isEquel = pas1Value.value === pas2Value.value;
+      const isEquel =
+        pas1Value.value === pas2Value.value &&
+        pas1Value.value.trim() !== '' &&
+        pas2Value.value.trim() !== '';
       if (!isEquel) {
         pas1Value.setErrors({ ...pas1Value.errors, isEquel: true });
         pas2Value.setErrors({ ...pas2Value.errors, isEquel: true });
       } else {
-        pas2Value.setErrors({ ...pas2Value.errors });
-        pas1Value.setErrors({ ...pas2Value.errors });
+        const errors1 = pas1Value.errors;
+        const errors2 = pas2Value.errors;
+
+        console.log(errors1, 'errors 1');
+        console.log(errors2, 'errors 2');
+
+        pas2Value.setErrors(null);
+        pas1Value.setErrors(null);
       }
     }
   };
