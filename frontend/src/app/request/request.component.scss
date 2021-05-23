@@ -78,6 +78,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   border: 1px solid var(--overlay-bg-color);
   border-radius: var(--input-border-radius, 3px);
@@ -91,9 +92,18 @@
   }
   &__label {
     text-transform: capitalize;
+    font-size: 0.75rem;
   }
 
   &__value {
     color: var(--accent-color);
+    // width: min-content;
+    font-size: 0.9rem;
+
+    text-align: center;
+
+    &.date {
+      width: max-content;
+    }
   }
 }

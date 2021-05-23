@@ -15,6 +15,7 @@ export class RequestComponent implements OnInit {
   @Input() request: Request;
   @Input() isDriver: boolean;
   @Input() page: string;
+  @Input() countOfActiveRequests: number;
   @Output() deleteOrder = new EventEmitter();
   @Output() takeOrder = new EventEmitter();
   public info = null;
@@ -24,8 +25,11 @@ export class RequestComponent implements OnInit {
     if (status.includes(this.request.status)) {
       this.getInfoForAcceptedRequest().then((res) => {
         this.info = res;
-        console.log(this.info, 'info');
       });
+    }
+    console.log('countOfActiveRequests', this.countOfActiveRequests);
+
+    if (this.isDriver && this.page === 'all') {
     }
   }
 

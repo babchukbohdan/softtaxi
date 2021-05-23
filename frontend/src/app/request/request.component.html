@@ -40,18 +40,26 @@
           (click)="cancelRequest(request.id)"
           text="Cancel order"
           className="request__btn cancel"
+          title="Cancel order"
         ></app-button>
         <app-button
           *ngIf="isDriver && page === 'active'"
           (click)="finishRequest(request.id)"
           text="Finish order"
           className="request__btn finish"
+          title="Finish order"
         ></app-button>
         <app-button
           *ngIf="isDriver && page === 'all'"
           (click)="takeRequest(request.id)"
           text="Take order"
           className="request__btn take"
+          [disabled]="countOfActiveRequests > 0"
+          [title]="
+            countOfActiveRequests > 0
+              ? 'You should finish current order!'
+              : 'Take order.'
+          "
         ></app-button>
       </div>
     </div>
@@ -64,11 +72,11 @@
     <!-- *ngIf="!isDriver && request.status === 'canceled'"" -->
     <div class="info">
       <p class="info__label">Date:</p>
-      <p class="info__value">
-        {{ request.lastUpdate | date: "MMM d, 'at' HH:mm" }}
+      <p class="info__value date">
+        {{ request.lastUpdate | date: "MMM d, HH:mm" }}
       </p>
     </div>
-    <div class="info" *ngIf="isDriver && info">
+    <div class="info">
       <p class="info__label">Description:</p>
       <p class="info__value">{{ request.description }}</p>
     </div>

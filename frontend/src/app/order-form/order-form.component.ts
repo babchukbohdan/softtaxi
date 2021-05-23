@@ -80,7 +80,9 @@ export class OrderFormComponent implements OnInit {
         Validators.required,
       ]),
       carType: new FormControl('basic', [Validators.required]),
-      description: new FormControl('With air conditioning'),
+      description: new FormControl('With air conditioning', [
+        Validators.maxLength(21),
+      ]),
     });
   }
 
@@ -157,7 +159,7 @@ export class OrderFormComponent implements OnInit {
       // this.onAdd.emit(order);
       const newOrder = await this.sendOrder(order);
 
-      // this.router.navigate(['requests']);
+      this.router.navigate(['requests']);
       return newOrder;
     }
   }

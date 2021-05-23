@@ -13,7 +13,7 @@
     <section class="data">
       <ul class="form__list list">
         <li class="form__item">
-          <label for="">Phone number</label
+          <label>Phone number</label
           ><input
             name="phoneNumber"
             class="data__input input"
@@ -46,7 +46,7 @@
           </div>
         </li>
         <li class="form__item">
-          <label for="">From</label>
+          <label>From</label>
           <input
             class="data__input input"
             type="text"
@@ -62,7 +62,7 @@
           </div>
         </li>
         <li class="form__item">
-          <label for="">To</label
+          <label>To</label
           ><input
             class="data__input input"
             type="text"
@@ -78,11 +78,10 @@
           </div>
         </li>
         <li class="form__item">
-          <label for="">Car type</label>
+          <label>Car type</label>
           <select
             class="data__input input"
             name="carType"
-            id=""
             formControlName="carType"
             (change)="calculatePrice()"
           >
@@ -92,13 +91,22 @@
           </select>
         </li>
         <li class="form__item">
-          <label for=""
+          <label
             >Description
             <textarea
               class="data__input input"
               name="description"
               formControlName="description"
             ></textarea>
+            <div
+              *ngIf="
+                form.get('description').invalid &&
+                form.get('description').touched
+              "
+              class="form__validation"
+            >
+              <small>Description should be 21 characters.</small>
+            </div>
           </label>
         </li>
       </ul>

@@ -29,6 +29,7 @@
         [request]="r"
         [isDriver]="showAsDriver"
         [page]="currentTab"
+        [countOfActiveRequests]="activeRequests.length"
       ></app-request>
       <li *ngIf="allRequests.length === 0 && !isDriver">
         <span class="requests__validation">You haven't finished orders</span>

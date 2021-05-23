@@ -80,6 +80,8 @@ const getRequestsWithFilter = async (
   return transformRequests(requests);
 };
 
+type RequestTabs = 'active' | 'all';
+
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
@@ -89,11 +91,10 @@ export class RequestListComponent implements OnInit {
   allRequests: Request[] = [];
   activeRequests: Request[] = [];
 
-  countOfAllRequests: number;
-  countOfActiveRequests: number;
+  countOfPagesForAllRequests: number;
+  countOfPagesForActiveRequests: number;
 
-  // "active" | "all"
-  currentTab = 'active';
+  currentTab: RequestTabs = 'active';
   isDriver: boolean;
   isAuthenticated: boolean;
   showAsDriver: boolean;
@@ -121,20 +122,18 @@ export class RequestListComponent implements OnInit {
 
   showForDriver() {
     this.showAsDriver = !this.showAsDriver;
-    this.limit = 5;
-    this.currentPage = 1;
-    this.offset = 0;
-    this.getCountOfRequestsForDriver(this.user.id);
+    this.resetPagination();
+    // this.getCountOfRequestsForDriver(this.user.id);
     this.getRequests();
   }
 
   getRequests() {
-    if (this.user?.driverInfo && this.showAsDriver) {
+    if (this.isDriver && this.showAsDriver) {
       console.log('show for driver if driver');
 
       this.getRequestsForDriver(this.user, this.limit, this.offset);
       this.getCountOfRequestsForDriver(this.user.id);
-    } else if (this.user?.driverInfo && !this.showAsDriver) {
+    } else if (this.isDriver && !this.showAsDriver) {
       console.log('show for user if driver');
       this.getRequestsForUser(this.user, this.limit, this.offset);
       this.getCountOfRequestsForCustomer(this.user.id);
@@ -181,24 +180,28 @@ export class RequestListComponent implements OnInit {
     const countOfAllReq = await this.getCountOfRequestsWithFilter(
       getDriverFilterForAllTab()
     );
-    this.countOfAllRequests = Math.ceil(countOfAllReq / this.limit);
+    this.countOfPagesForAllRequests = Math.ceil(countOfAllReq / this.limit);
 
     const countOfActiveReq = await this.getCountOfRequestsWithFilter(
       getDriverFilterForActiveTab(id)
     );
-    this.countOfActiveRequests = Math.ceil(countOfActiveReq / this.limit);
+    this.countOfPagesForActiveRequests = Math.ceil(
+      countOfActiveReq / this.limit
+    );
   }
 
   async getCountOfRequestsForCustomer(id) {
     const countOfAllReq = await this.getCountOfRequestsWithFilter(
       getUserFilterForAllTab(id)
     );
-    this.countOfAllRequests = Math.ceil(countOfAllReq / this.limit);
+    this.countOfPagesForAllRequests = Math.ceil(countOfAllReq / this.limit);
 
     const countOfActiveReq = await this.getCountOfRequestsWithFilter(
       getUserFilterForActiveTab(id)
     );
-    this.countOfActiveRequests = Math.ceil(countOfActiveReq / this.limit);
+    this.countOfPagesForActiveRequests = Math.ceil(
+      countOfActiveReq / this.limit
+    );
   }
 
   setAllRequests(requests) {
@@ -228,6 +231,7 @@ export class RequestListComponent implements OnInit {
       offset,
       sorted
     );
+    console.log('all tab driver', allRequests);
 
     this.setAllRequests(allRequests);
   }
@@ -249,6 +253,7 @@ export class RequestListComponent implements OnInit {
       offset,
       sorted
     );
+    console.log('active tab driver', activeReq);
 
     this.setActiveRequests(activeReq);
   }
@@ -288,7 +293,13 @@ export class RequestListComponent implements OnInit {
     this.changeTab('active');
   }
 
-  changeTab(tab: string): void {
+  changeTab(tab: RequestTabs): void {
     this.currentTab = tab;
+  }
+
+  resetPagination() {
+    this.limit = 5;
+    this.offset = 0;
+    this.currentPage = 1;
   }
 }
