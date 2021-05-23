@@ -1,5 +1,13 @@
+:host {
+  display: contents;
+}
+
 .request__wrap {
-  min-height: calc(100vh - 61px);
+  // min-height: calc(100vh - 61px);
+  // overflow-y: scroll;
+  height: calc(100% - var(--nav-height) - var(--padding));
+  // max-height: 100%;
+  margin-bottom: auto;
 }
 
 label {
@@ -10,12 +18,22 @@ label {
   user-select: none;
 }
 .requests__list {
-  transform: translateY(-1px);
+  // transform: translateY(-1px);
+
+  &-wrap {
+    max-height: calc(100% - 43px - 44px - 5px);
+    overflow-y: auto;
+  }
 }
 .request__nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.request__btns {
+  display: flex;
+}
+.request__update {
 }
 .request__asdriver {
   align-self: stretch;

@@ -7,8 +7,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./toggle.component.scss'],
 })
 export class ToggleComponent implements OnInit {
-  theme = 'dark';
   @Input() isActive;
+  @Input() name;
+  @Input() parentForm = null;
+  @Input() controlName = null;
   @Output() changeHandler = new EventEmitter();
   constructor() {}
 

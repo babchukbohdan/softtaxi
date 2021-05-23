@@ -1,4 +1,4 @@
-<div class="request__wrap">
+<main class="request__wrap">
   <div class="request__nav">
     <div class="request__tab">
       <app-button
@@ -12,16 +12,25 @@
         text="Active orders"
       ></app-button>
     </div>
-    <div class="request__asdriver" *ngIf="isDriver">
-      <span>Watch as driver</span>
-      <app-toggle
-        [isActive]="showAsDriver"
-        (changeHandler)="showForDriver()"
-      ></app-toggle>
+    <div class="request__btns">
+      <div class="request__update">
+        <app-button
+          text="Update"
+          type="button"
+          (click)="getRequests()"
+        ></app-button>
+      </div>
+      <div class="request__asdriver" *ngIf="isDriver">
+        <span>Watch as driver</span>
+        <app-toggle
+          [isActive]="showAsDriver"
+          (changeHandler)="showForDriver()"
+        ></app-toggle>
+      </div>
     </div>
   </div>
 
-  <div *ngIf="currentTab === 'all'">
+  <div class="requests__list-wrap" *ngIf="currentTab === 'all'">
     <ul class="requests__list list" *ngIf="isAuthenticated">
       <app-request
         (takeOrder)="moveRequestToActiveTab($event)"
@@ -45,15 +54,9 @@
       >
       <a routerLink="/user/login" class="link">Login</a>
     </div>
-    <app-pagination
-      *ngIf="countOfAllRequests > 1 && isAuthenticated"
-      [count]="countOfAllRequests"
-      [clickHandler]="changePage"
-      [currentPage]="currentPage"
-    ></app-pagination>
   </div>
 
-  <div *ngIf="currentTab === 'active'">
+  <div class="requests__list-wrap" *ngIf="currentTab === 'active'">
     <ul class="list requests__list">
       <app-request
         (deleteOrder)="removeRequestFromActiveTab($event)"
@@ -64,16 +67,24 @@
       >
         <!-- <app-button (click)="cancelRequest()" text="Cancel order"></app-button> -->
       </app-request>
-      <li *ngIf="activeRequests.length === 0">
-        <span class="requests__validation">You haven't active orders</span>
-        <a routerLink="" class="link">Make order</a>
-      </li>
     </ul>
-    <app-pagination
-      *ngIf="countOfActiveRequests > 1"
-      [count]="countOfActiveRequests"
-      [clickHandler]="changePage"
-      [currentPage]="currentPage"
-    ></app-pagination>
+    <div *ngIf="activeRequests.length === 0">
+      <span class="requests__validation">You haven't active orders</span>
+      <a routerLink="" class="link">Make order</a>
+    </div>
   </div>
-</div>
+  <app-pagination
+    *ngIf="
+      countOfPagesForAllRequests > 1 && isAuthenticated && currentTab === 'all'
+    "
+    [count]="countOfPagesForAllRequests"
+    [clickHandler]="changePage"
+    [currentPage]="currentPage"
+  ></app-pagination>
+  <app-pagination
+    *ngIf="countOfPagesForActiveRequests > 1 && currentTab === 'active'"
+    [count]="countOfPagesForActiveRequests"
+    [clickHandler]="changePage"
+    [currentPage]="currentPage"
+  ></app-pagination>
+</main>

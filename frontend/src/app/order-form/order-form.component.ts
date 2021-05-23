@@ -63,10 +63,6 @@ export class OrderFormComponent implements OnInit {
     }
   }
 
-  toggleTheme() {
-    this.theme.toggleTheme();
-  }
-
   initForm() {
     this.form = new FormGroup({
       phoneNumber: new FormControl('380954061246', [

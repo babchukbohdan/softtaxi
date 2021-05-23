@@ -23,6 +23,8 @@ import { RegistrationFormComponent } from './registration-form/registration-form
 import { NotificationComponent } from './notification/notification.component';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
 import { ToggleComponent } from './toggle/toggle.component';
+import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { ToggleComponent } from './toggle/toggle.component';
     NotificationComponent,
     NotificationItemComponent,
     ToggleComponent,
+    ThemeToggleComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserAnimationsModule,

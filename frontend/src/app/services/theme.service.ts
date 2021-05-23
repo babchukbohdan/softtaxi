@@ -14,7 +14,7 @@ export class ThemeService {
   }
   toggleTheme() {
     this._theme.value === 'dark'
-      ? this._theme.next('light')
-      : this._theme.next('dark');
+      ? this.changeTheme('light')
+      : this.changeTheme('dark');
   }
 }

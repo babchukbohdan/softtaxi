@@ -1,3 +1,6 @@
+:host {
+  display: contents;
+}
 select.login__input {
   option {
     color: var(--text--color);
@@ -29,4 +32,11 @@ select.login__input {
   width: 100%;
 
   margin-top: 5px;
+}
+
+.login__as-driver {
+  display: inline-block;
+
+  margin-bottom: 10px;
+  padding: var(--padding);
 }

@@ -1,0 +1,7 @@
+<div class="toggle__theme">
+  <span>Change to {{ currentTheme === "dark" ? "light" : "dark" }} theme</span>
+  <app-toggle
+    [isActive]="currentTheme === 'dark'"
+    (changeHandler)="toggleTheme()"
+  ></app-toggle>
+</div>

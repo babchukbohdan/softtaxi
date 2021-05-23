@@ -13,86 +13,98 @@
     <section class="data">
       <ul class="form__list list">
         <li class="form__item">
-          <label>Phone number</label
-          ><input
-            name="phoneNumber"
-            class="data__input input"
-            type="tel"
-            inputmode="tel"
-            required
-            formControlName="phoneNumber"
-          />
-          <div
-            *ngIf="
-              form.get('phoneNumber').invalid &&
-              form.get('phoneNumber').touched &&
-              form.get('phoneNumber').errors.required
-            "
-            class="form__validation"
-          >
-            <small>Phone number is required.</small>
-          </div>
-          <div
-            *ngIf="
-              form.get('phoneNumber').invalid &&
-              form.get('phoneNumber').touched &&
-              form.get('phoneNumber').errors.pattern
-            "
-            class="form__validation"
-          >
-            <small
-              >Phone number must start with 380 and have 9 digits after.</small
-            >
-          </div>
-        </li>
-        <li class="form__item">
-          <label>From</label>
-          <input
-            class="data__input input"
-            type="text"
-            name="from"
-            formControlName="from"
-            (input)="calculatePrice()"
-          />
-          <div
-            *ngIf="form.get('from').invalid && form.get('from').touched"
-            class="form__validation"
-          >
-            <small>Your location is required.</small>
-          </div>
-        </li>
-        <li class="form__item">
-          <label>To</label
-          ><input
-            class="data__input input"
-            type="text"
-            name="to"
-            formControlName="to"
-            (input)="calculatePrice()"
-          />
-          <div
-            *ngIf="form.get('to').invalid && form.get('to').touched"
-            class="form__validation"
-          >
-            <small>Destination address is required.</small>
-          </div>
-        </li>
-        <li class="form__item">
-          <label>Car type</label>
-          <select
-            class="data__input input"
-            name="carType"
-            formControlName="carType"
-            (change)="calculatePrice()"
-          >
-            <option *ngFor="let carType of carTypes" [value]="carType.value">
-              {{ carType.value | uppercase }}
-            </option>
-          </select>
-        </li>
-        <li class="form__item">
           <label
-            >Description
+            ><span class="form__title">Phone number:</span>
+            <input
+              name="phoneNumber"
+              class="data__input input"
+              type="tel"
+              inputmode="tel"
+              required
+              formControlName="phoneNumber"
+            />
+            <div
+              *ngIf="
+                form.get('phoneNumber').invalid &&
+                form.get('phoneNumber').touched &&
+                form.get('phoneNumber').errors.required
+              "
+              class="form__validation"
+            >
+              <small>Phone number is required.</small>
+            </div>
+            <div
+              *ngIf="
+                form.get('phoneNumber').invalid &&
+                form.get('phoneNumber').touched &&
+                form.get('phoneNumber').errors.pattern
+              "
+              class="form__validation"
+            >
+              <small
+                >Phone number must start with 380 and have 9 digits
+                after.</small
+              >
+            </div>
+          </label>
+        </li>
+        <li class="form__item">
+          <label>
+            <span class="form__title">From:</span>
+            <input
+              class="data__input input"
+              type="text"
+              name="from"
+              formControlName="from"
+              (input)="calculatePrice()"
+            />
+            <div
+              *ngIf="form.get('from').invalid && form.get('from').touched"
+              class="form__validation"
+            >
+              <small>Your location is required.</small>
+            </div>
+          </label>
+        </li>
+        <li class="form__item">
+          <label>
+            <span class="form__title">To:</span>
+            <input
+              class="data__input input"
+              type="text"
+              name="to"
+              formControlName="to"
+              (input)="calculatePrice()"
+            />
+
+            <div
+              *ngIf="form.get('to').invalid && form.get('to').touched"
+              class="form__validation"
+            >
+              <small>Destination address is required.</small>
+            </div>
+          </label>
+        </li>
+        <li class="form__item">
+          <label>
+            <span class="form__title">Car type:</span>
+
+            <select
+              class="data__input input"
+              name="carType"
+              formControlName="carType"
+              (change)="calculatePrice()"
+            >
+              <option *ngFor="let carType of carTypes" [value]="carType.value">
+                {{ carType.value | uppercase }}
+              </option>
+            </select>
+          </label>
+        </li>
+        <li class="form__item">
+          <label>
+            <span class="form__title">Description:</span>
+
             <textarea
               class="data__input input"
               name="description"
@@ -117,11 +129,6 @@
         [disabled]="form.invalid"
         type="submit"
         text="Make order"
-      ></app-button>
-      <app-button
-        (click)="toggleTheme()"
-        type="button"
-        text="Change theme"
       ></app-button>
     </section>
   </form>

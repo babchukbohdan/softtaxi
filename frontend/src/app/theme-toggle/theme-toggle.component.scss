@@ -1,0 +1,14 @@
+.toggle__theme {
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+
+  padding: 10px;
+
+  // border: 1px solid var(--overlay-bg-color);
+  // border-radius: var(--input-border-radius, 3px);
+
+  span {
+    margin-right: 10px;
+  }
+}

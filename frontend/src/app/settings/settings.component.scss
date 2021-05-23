@@ -1,0 +1,15 @@
+.settings {
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  border: 1px solid var(--overlay-bg-color);
+  border-radius: var(--input-border-radius, 3px);
+  &__title {
+    margin: 10px 0;
+    text-align: center;
+
+    font-size: 1.5rem;
+    font-variant-caps: small-caps;
+    letter-spacing: 5px;
+  }
+}

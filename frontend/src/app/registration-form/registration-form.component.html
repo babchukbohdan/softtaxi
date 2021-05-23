@@ -216,13 +216,21 @@
       </li>
 
       <li>
-        <label
-          >Register as driver<input
+        <label class="input login__as-driver">
+          Register as driver
+          <!-- <input
             type="checkbox"
             name="isDriver"
             formControlName="isDriver"
             class="login__isDriver"
-        /></label>
+          /> -->
+
+          <app-toggle
+            name="isDriver"
+            [parentForm]="registrationForm"
+            controlName="isDriver"
+          ></app-toggle>
+        </label>
       </li>
 
       <li>
@@ -237,4 +245,6 @@
     </ul>
     <div *ngIf="errorMessage">{{ errorMessage }}</div>
   </form>
+
+  <app-settings></app-settings>
 </main>

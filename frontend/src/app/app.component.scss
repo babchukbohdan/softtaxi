@@ -1,5 +1,5 @@
 .theme {
-  min-height: 100%;
+  height: 100vh;
 }
 .wrap {
   display: flex;
@@ -8,7 +8,7 @@
 
   position: relative;
 
-  min-height: 100vh;
+  height: 100vh;
   max-width: 560px;
 
   margin: 0 auto;
@@ -16,3 +16,4 @@
 
   background-color: var(--section-bg-color);
 }
+// overflow-y: scroll;

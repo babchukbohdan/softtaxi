@@ -1,4 +1,15 @@
-<label class="switch group-value">
+<label *ngIf="parentForm" class="switch group-value" [formGroup]="parentForm">
+  <input
+    [formControlName]="controlName"
+    type="checkbox"
+    [checked]="isActive"
+    (change)="onChange()"
+    name="name"
+  />
+  <span class="slider round"></span>
+</label>
+
+<label *ngIf="!parentForm" class="switch group-value">
   <input type="checkbox" [checked]="isActive" (change)="onChange()" />
   <span class="slider round"></span>
 </label>

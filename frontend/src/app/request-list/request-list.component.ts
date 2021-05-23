@@ -124,6 +124,8 @@ export class RequestListComponent implements OnInit {
     this.showAsDriver = !this.showAsDriver;
     this.resetPagination();
     // this.getCountOfRequestsForDriver(this.user.id);
+    this.countOfPagesForActiveRequests = 0;
+    this.countOfPagesForAllRequests = 0;
     this.getRequests();
   }
 
@@ -131,16 +133,16 @@ export class RequestListComponent implements OnInit {
     if (this.isDriver && this.showAsDriver) {
       console.log('show for driver if driver');
 
-      this.getRequestsForDriver(this.user, this.limit, this.offset);
       this.getCountOfRequestsForDriver(this.user.id);
+      this.getRequestsForDriver(this.user, this.limit, this.offset);
     } else if (this.isDriver && !this.showAsDriver) {
       console.log('show for user if driver');
-      this.getRequestsForUser(this.user, this.limit, this.offset);
       this.getCountOfRequestsForCustomer(this.user.id);
+      this.getRequestsForUser(this.user, this.limit, this.offset);
     } else if (this.user) {
       console.log('show for user');
-      this.getRequestsForUser(this.user, this.limit, this.offset);
       this.getCountOfRequestsForCustomer(this.user.id);
+      this.getRequestsForUser(this.user, this.limit, this.offset);
     }
   }
 
@@ -217,11 +219,10 @@ export class RequestListComponent implements OnInit {
 
   async getRequestsForAllTab(user, limit, offset) {
     let filter,
-      sorted = false;
+      sorted = true;
     if (this.showAsDriver) {
       filter = getDriverFilterForAllTab();
     } else {
-      sorted = true;
       filter = getUserFilterForAllTab(user.id);
     }
 

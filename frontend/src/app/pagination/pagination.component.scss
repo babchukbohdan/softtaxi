@@ -1,4 +1,5 @@
 .pagination__input {
-  padding: 10px;
+  padding: var(--padding);
   color: var(--accent-color);
+  text-align: center;
 }

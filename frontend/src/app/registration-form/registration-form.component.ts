@@ -42,18 +42,18 @@ export class RegistrationFormComponent implements OnInit {
     this.registrationForm = new FormGroup({
       name: new FormControl(``, []),
       email: new FormControl(``, [Validators.email]),
-      phone: new FormControl('', [
+      phone: new FormControl('380954061246', [
         Validators.required,
         Validators.pattern('380[0-9]{9}'),
       ]),
-      password: new FormControl(``, [Validators.required]),
-      password2: new FormControl(``, [Validators.required]),
+      password: new FormControl(`test`, [Validators.required]),
+      password2: new FormControl(`test`, [Validators.required]),
       isDriver: new FormControl(true),
-      carColor: new FormControl('', [Validators.required]),
+      carColor: new FormControl('white', [Validators.required]),
       verifyCode: new FormControl('', []),
 
-      carModel: new FormControl('', [Validators.required]),
-      carNumber: new FormControl('', [Validators.required]),
+      carModel: new FormControl('audi', [Validators.required]),
+      carNumber: new FormControl('ce3333aa', [Validators.required]),
       carType: new FormControl('basic', [Validators.required]),
     });
 
