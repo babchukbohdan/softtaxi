@@ -1,7 +1,38 @@
+// .dark {
+//   --accent-color: #ffc107;
+//   --wrap-bg-color: #111;
+//   --section-bg-color: #181818;
+//   --navbar-bg-color: #212121;
+//   --danger-color: red;
+
+//   --hover-bg-color: #383838;
+//   --border-color: #181818;
+//   --overlay-bg-color: rgba(255, 255, 255, 0.1);
+
+//   --text-color: rgb(242, 242, 242);
+//   --text-color-disabled: #444;
+//   --text-link-color: #909090;
+//   --text-link-active-color: rgb(255, 255, 255);
+
+//   --svg-color: #909090;
+//   --invalid-color: red;
+//   --valid-color: var(--accent-color);
+
+//   --cartesian-grid-line-color: rgba(255, 255, 255, 0.1);
+
+//   background-color: var(--wrap-bg-color);
+//   color: var(--text-color);
+// }
 .dark {
-  --accent-color: #ffc107;
-  --wrap-bg-color: #111;
-  --section-bg-color: #181818;
+  --yellow: #ffb703;
+  --orange: #fb8500;
+  --dark-blue: #023047;
+  --blue: #219ebc;
+  --light-blue: #8ecae6;
+
+  --accent-color: #fbc800;
+  --wrap-bg-color: #000814;
+  --section-bg-color: #222424;
   --navbar-bg-color: #212121;
   --danger-color: red;
 
@@ -9,12 +40,12 @@
   --border-color: #181818;
   --overlay-bg-color: rgba(255, 255, 255, 0.1);
 
-  --text-color: rgb(242, 242, 242);
+  --text-color: #e5e5e5;
   --text-color-disabled: #444;
   --text-link-color: #909090;
   --text-link-active-color: rgb(255, 255, 255);
 
-  --svg-color: #909090;
+  --svg-color: #fff;
   --invalid-color: red;
   --valid-color: var(--accent-color);
 
@@ -51,3 +82,23 @@
 
   color: var(--text-color);
 }
+// .light {
+//   --accent-color: #ffbf00;
+//   --wrap-bg-color: #626262;
+//   --section-bg-color: #8c8c8c;
+//   --navbar-bg-color: lemonchiffon;
+//   --danger-color: red;
+//   --hover-bg-color: #7e7e7e;
+//   --border-color: #181818;
+//   --overlay-bg-color: rgba(0, 0, 0, 0.2);
+//   --text-color: rgba(0, 0, 0, 1);
+//   --text-color-disabled: #727070;
+//   --text-link-color: rgb(83, 83, 95);
+//   --text-link-active-color: rgb(0, 0, 0);
+//   --svg-color: #53524e;
+//   --invalid-color: red;
+//   --valid-color: var(--accent-color);
+//   --cartesian-grid-line-color: #ccc;
+//   background-color: var(--wrap-bg-color);
+//   color: var(--text-color);
+// }
