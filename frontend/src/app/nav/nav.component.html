@@ -1,12 +1,12 @@
 <footer>
   <nav class="nav">
     <ul class="nav__list list">
-      <li class="nav__item">
+      <li class="nav__item" title="Orders list">
         <a routerLink="/requests" class="nav__link" routerLinkActive="active">
           <app-icon className="nav__img" size="40px" name="list"></app-icon>
         </a>
       </li>
-      <li class="nav__item">
+      <li class="nav__item" title="Make order">
         <a
           routerLink=""
           class="nav__link"
@@ -16,7 +16,7 @@
           <app-icon className="nav__img" size="40px" name="add"></app-icon>
         </a>
       </li>
-      <li class="nav__item">
+      <li class="nav__item" title="User">
         <a
           [ngClass]="{
             active:

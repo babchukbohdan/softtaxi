@@ -27,7 +27,6 @@ export class RequestComponent implements OnInit {
         this.info = res;
       });
     }
-    console.log('countOfActiveRequests', this.countOfActiveRequests);
 
     if (this.isDriver && this.page === 'all') {
     }

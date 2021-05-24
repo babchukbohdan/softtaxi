@@ -5,6 +5,41 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { NotificationService } from '../services/notification.service';
 
+const checkPasswordStrength = (pass: string): boolean => {
+  const regEx = new RegExp(
+    '^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$',
+    'g'
+  );
+
+  const res = regEx.test(pass);
+  return res;
+};
+
+export class MyValidators {
+  static strongPassword(control: FormControl): { [key: string]: boolean } {
+    const isStrong = checkPasswordStrength(control.value);
+    console.log('isStrong', isStrong);
+
+    if (!isStrong) {
+      return {
+        weakPassword: true,
+      };
+    }
+
+    const length = Object.keys(control.errors).length;
+    const errors = { ...control.errors };
+    delete errors['weakPassword'];
+
+    console.log('errors', Object.keys(control.errors));
+    console.log('errors', typeof length);
+
+    console.log('returned errors', errors);
+    console.log('returned bool', length === 1 ? null : errors);
+
+    return length === 1 ? null : errors;
+  }
+}
+
 @Component({
   selector: 'app-registration-form',
   templateUrl: './registration-form.component.html',
@@ -46,8 +81,28 @@ export class RegistrationFormComponent implements OnInit {
         Validators.required,
         Validators.pattern('380[0-9]{9}'),
       ]),
-      password: new FormControl(`test`, [Validators.required]),
-      password2: new FormControl(`test`, [Validators.required]),
+      password: new FormControl(`test`, [
+        Validators.required,
+        // MyValidators.strongPassword,
+        Validators.pattern(
+          new RegExp(
+            '^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$',
+            'g'
+          )
+        ),
+        Validators.minLength(14),
+      ]),
+      password2: new FormControl(`test`, [
+        Validators.required,
+        Validators.pattern(
+          new RegExp(
+            '^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$',
+            'g'
+          )
+        ),
+        Validators.minLength(14),
+        // MyValidators.strongPassword,
+      ]),
       isDriver: new FormControl(true),
       carColor: new FormControl('white', [Validators.required]),
       verifyCode: new FormControl('', []),
@@ -67,6 +122,8 @@ export class RegistrationFormComponent implements OnInit {
       console.log(this.registrationForm.get('password2'));
     });
     this.registrationForm.get('password').valueChanges.subscribe(() => {
+      console.log(this.registrationForm.get('password'));
+
       this.comparePasswords();
     });
 
@@ -91,14 +148,26 @@ export class RegistrationFormComponent implements OnInit {
         pas1Value.setErrors({ ...pas1Value.errors, isEquel: true });
         pas2Value.setErrors({ ...pas2Value.errors, isEquel: true });
       } else {
-        const errors1 = pas1Value.errors;
-        const errors2 = pas2Value.errors;
-
+        let errors1 = pas1Value.errors;
+        let errors2 = pas2Value.errors;
+        let length1 = 1,
+          length2 = 1;
         console.log(errors1, 'errors 1');
         console.log(errors2, 'errors 2');
 
-        pas2Value.setErrors(null);
-        pas1Value.setErrors(null);
+        if (errors1) {
+          length1 = Object.keys(errors1).length;
+          errors1 = { ...errors1 };
+          delete errors1['isEquel'];
+        }
+        if (errors2) {
+          length2 = Object.keys(errors2).length;
+          errors2 = { ...errors2 };
+          delete errors2['isEquel'];
+        }
+
+        pas1Value.setErrors(length1 === 1 ? null : errors1);
+        pas2Value.setErrors(length2 === 1 ? null : errors2);
       }
     }
   };
@@ -146,13 +215,13 @@ export class RegistrationFormComponent implements OnInit {
         // console.log(this.registrationForm);
 
         const verifyCode = resp.verifyCode;
-        const fakeLatency = randomInteger(2000, 3500);
-        setTimeout(() => {
-          this.notification.addNotification({
-            message: verifyCode,
-            title: `Your verify code:`,
-          });
-        }, fakeLatency);
+        // const fakeLatency = randomInteger(2000, 3500);
+        // setTimeout(() => {
+        //   this.notification.addNotification({
+        //     message: verifyCode,
+        //     title: `Your verify code:`,
+        //   });
+        // }, fakeLatency);
 
         this.showVerifyCodeInput = true;
       }
@@ -190,13 +259,13 @@ export class RegistrationFormComponent implements OnInit {
         });
 
         const verifyCode = resp.verifyCode;
-        const fakeLatency = randomInteger(2000, 3500);
-        setTimeout(() => {
-          this.notification.addNotification({
-            message: verifyCode,
-            title: `Your verify code:`,
-          });
-        }, fakeLatency);
+        // const fakeLatency = randomInteger(2000, 3500);
+        // setTimeout(() => {
+        //   this.notification.addNotification({
+        //     message: verifyCode,
+        //     title: `Your verify code:`,
+        //   });
+        // }, fakeLatency);
       }
     }
   }

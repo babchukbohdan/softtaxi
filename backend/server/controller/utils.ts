@@ -1,15 +1,18 @@
+import jwt, { Secret } from 'jsonwebtoken'
 import db from '../db'
+const secret: Secret = process.env.SECRET_KEY!
 
-interface UserFromDb {
-  id: string
-  name: null | string
-  email: null | string
-  password?: null | string
-  phone_number: string
-  rating: null | string
-  verify_code: null | string
+export const generateJwt = (id: string, phone: string) => {
+  return jwt.sign({ id, phone }, secret, { expiresIn: '24h' })
 }
 
+export const removePropsFromUser = (user: User) => {
+  const props: Array<keyof User> = ['password', 'verify_code']
+  props.forEach((prop) => {
+    delete user[prop]
+  })
+  return user
+}
 export function randomInteger(min: number, max: number): number {
   const rand = min - 0.5 + Math.random() * (max - min + 1)
   return Math.round(rand)
@@ -89,10 +92,10 @@ export const generateVerifyCode = (): number => {
   return randomInteger(1000, 9999)
 }
 
-export const getUserFromDbByPhone = async (phone: string) => {
+export const getUserFromDbByPhone = async (phone: string): Promise<User> => {
   const query = getQueryWithFilter({ phone_number: phone }, 'users')
   const userInDB = await db.query(query)
-  const candidate = userInDB.rows[0]
+  const candidate: User = userInDB.rows[0]
   return candidate
 }
 
@@ -124,7 +127,30 @@ export const createUserInDB = async (body: any) => {
 export const createDriverInDB = async (body: any) => {
   const query = getQueryForCreate(body, 'drivers')
   const res = await db.query(query)
-  const newDriver = res.rows[0]
+  const newDriver: DriverInfo = res.rows[0]
 
   return newDriver
+}
+
+export interface DriverInfo {
+  id: string
+  user_id: string
+  car_color: string
+  car_model: string
+  car_number: string
+  is_avaliable: string
+  request_id: string | null
+  rating: string | null
+  car_type: string
+}
+
+export interface User {
+  id: string
+  name: string | null
+  email: string | null
+  password: string
+  phone_number: string
+  rating: string
+  verify_code?: string
+  driverInfo?: DriverInfo
 }

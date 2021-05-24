@@ -1,5 +1,12 @@
-.pagination__input {
-  padding: var(--padding);
-  color: var(--accent-color);
-  text-align: center;
+:host {
+  display: contents;
+}
+
+.pagination {
+  transform: translateY(var(--padding));
+  &__input {
+    padding: var(--padding);
+    color: var(--accent-color);
+    text-align: center;
+  }
 }

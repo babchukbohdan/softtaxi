@@ -1,4 +1,9 @@
-<main class="request__wrap">
+<main
+  [class.with-filter]="
+    !showAsDriver && currentTab === 'all' && countOfPagesForAllRequests
+  "
+  class="request__wrap"
+>
   <div class="request__nav">
     <div class="request__tab">
       <app-button
@@ -15,9 +20,12 @@
     <div class="request__btns">
       <div class="request__update">
         <app-button
-          text="Update"
+          *ngIf="activeRequests.length || allRequests.length"
+          title="Press to refresh your orders."
+          text="Refresh"
           type="button"
           (click)="getRequests()"
+          [disabled]="!canRefresh"
         ></app-button>
       </div>
       <div class="request__asdriver" *ngIf="isDriver">
@@ -27,6 +35,20 @@
           (changeHandler)="showForDriver()"
         ></app-toggle>
       </div>
+    </div>
+    <div
+      class="request__filter"
+      *ngIf="!showAsDriver && currentTab === 'all' && isAuthenticated"
+    >
+      <label
+        >Date:
+        <input
+          (change)="changeDate($event)"
+          class="input"
+          type="date"
+          name="date"
+        />
+      </label>
     </div>
   </div>
 
@@ -43,7 +65,7 @@
       <li *ngIf="allRequests.length === 0 && !isDriver">
         <span class="requests__validation">You haven't finished orders</span>
       </li>
-      <li *ngIf="allRequests.length === 0 && isDriver">
+      <li *ngIf="allRequests.length === 0 && isDriver && showAsDriver">
         <span class="requests__validation">No active requests yet</span>
       </li>
     </ul>

@@ -75,7 +75,7 @@
         <label class="login__label"
           >Password:
           <input
-            type="password"
+            type="text"
             class="login__input input"
             formControlName="password"
             name="password"
@@ -92,12 +92,35 @@
         >
           <small>Password is required.</small>
         </div>
+        <div
+          *ngIf="
+            registrationForm.get('password').invalid &&
+            registrationForm.get('password').touched &&
+            registrationForm.get('password').errors.minLength
+          "
+          class="form__validation"
+        >
+          <small>Password should have 14 characters.</small>
+        </div>
+        <div
+          *ngIf="
+            registrationForm.get('password').invalid &&
+            registrationForm.get('password').touched &&
+            registrationForm.get('password').errors.pattern
+          "
+          class="form__validation"
+        >
+          <small
+            >Password should include number, special symbol, capital and small
+            letters.</small
+          >
+        </div>
       </li>
       <li>
         <label class="login__label"
           >Repeat password:
           <input
-            type="password"
+            type="text"
             class="login__input input"
             formControlName="password2"
             name="password2"
@@ -118,11 +141,34 @@
           *ngIf="
             registrationForm.get('password2').invalid &&
             registrationForm.get('password2').touched &&
+            registrationForm.get('password2').errors.minLength
+          "
+          class="form__validation"
+        >
+          <small>Password should have 14 characters.</small>
+        </div>
+        <div
+          *ngIf="
+            registrationForm.get('password2').invalid &&
+            registrationForm.get('password2').touched &&
             registrationForm.get('password2').errors.isEquel
           "
           class="form__validation"
         >
           <small>Passwords should be same.</small>
+        </div>
+        <div
+          *ngIf="
+            registrationForm.get('password2').invalid &&
+            registrationForm.get('password2').touched &&
+            registrationForm.get('password2').errors.pattern
+          "
+          class="form__validation"
+        >
+          <small
+            >Password should include number, special symbol, capital and small
+            letters.</small
+          >
         </div>
       </li>
 

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import db from '../db'
 import bcrypt from 'bcrypt'
-import jwt, { Secret } from 'jsonwebtoken'
-
+import db from '../db'
+import { MobizonResponse, sendSMS } from './../notification/mobizon'
 import CrudController from './CrudController'
+
 import {
   getQueryWithFilter,
   getQueryForCreate,
@@ -13,14 +13,11 @@ import {
   createDriverInDB,
   createUserInDB,
   generateVerifyCode,
+  User,
+  DriverInfo,
+  removePropsFromUser,
+  generateJwt,
 } from './utils'
-import { sendSMS } from '../notification/mobizon'
-
-const secret: Secret = process.env.SECRET_KEY!
-
-const generateJwt = (id: string, phone: string) => {
-  return jwt.sign({ id, phone }, secret, { expiresIn: '24h' })
-}
 
 class UserController extends CrudController {
   constructor(tableName: string) {
@@ -29,11 +26,11 @@ class UserController extends CrudController {
   registration = async (req: Request, res: Response) => {
     const { phone, password, verifyCode } = req.body
 
-    const candidate = await getUserFromDbByPhone(phone)
+    const candidate: User = await getUserFromDbByPhone(phone)
 
     if (candidate) {
       // BUG: equel to string 'null' because i wrap all values in single quotes
-      const isVerified = candidate.verify_code === 'null'
+      const isVerified: boolean = candidate.verify_code === 'null'
       if (isVerified) {
         console.log('User exist in DB and verified')
         return res.json({
@@ -43,7 +40,7 @@ class UserController extends CrudController {
         // Not verified user
         if (verifyCode) {
           const codeForVerify = candidate.verify_code
-          const isCodesEquel = codeForVerify === verifyCode
+          const isCodesEquel: boolean = codeForVerify === verifyCode
 
           if (isCodesEquel) {
             const hashPassword = await bcrypt.hash(password, 2)
@@ -56,63 +53,51 @@ class UserController extends CrudController {
 
             const token = generateJwt(candidate.id, phone)
 
-            const user = { ...candidate }
-            delete user.password
-
+            const user = removePropsFromUser({ ...candidate })
             return res.status(200).json({ token, user })
           } else {
-            return res.status(400).json({ message: 'Wrong verify code' })
+            return res.status(400).json({ message: 'Wrong verify code.' })
           }
         }
         console.log('User exist in DB but not verified')
 
+        const noteServiceRes: MobizonResponse = await sendSMS(
+          candidate.phone_number,
+          `Softtaxi: your verify code ${candidate.verify_code}`
+        )
+        console.log('noteServiceRes', noteServiceRes)
         return res.status(401).json({
           message: 'You should verify your account',
           status: 'NOT_VERIFIED',
-          verifyCode: candidate.verify_code,
+          verifyCode: noteServiceRes,
         })
-
-        // const hashPassword = await bcrypt.hash(password, 2)
-        // await db.query(
-        //   getQueryForUpdate(
-        //     { id: candidate.id, password: hashPassword },
-        //     'users'
-        //   )
-        // )
-
-        // const token = generateJwt(candidate.id, phone)
-
-        // const user = { ...candidate }
-        // delete user.password
-
-        // return res.json({ token, user })
       }
     } else {
       console.log("User don't exist in DB")
 
-      // const hashPassword = await bcrypt.hash(password, 2)
       const verifyCode = generateVerifyCode()
 
-      const response = await db.query(
+      await db.query(
         getQueryForCreate(
           {
             phone_number: phone,
-            // password: hashPassword,
             verify_code: verifyCode,
           },
           'users'
         )
       )
-      // const user = { ...response.rows[0] }
 
-      // const token = generateJwt(user.id, phone)
-      // delete user.password
-      // return res.json({ user: { token, ...user } })
+      const noteServiceRes: MobizonResponse = await sendSMS(
+        phone,
+        `Softtaxi: your verify code ${verifyCode}`
+      )
+
+      console.log('noteServiceRes', noteServiceRes)
 
       return res.status(401).json({
         message: 'You should verify your account',
         status: 'NOT_VERIFIED',
-        verifyCode,
+        verifyCode: noteServiceRes,
       })
     }
   }
@@ -122,7 +107,7 @@ class UserController extends CrudController {
 
     const query = getQueryWithFilter({ phone_number: phone }, 'users')
     const response = await db.query(query)
-    let user = response.rows[0]
+    let user: User = response.rows[0]
 
     if (!user) {
       return res
@@ -130,14 +115,13 @@ class UserController extends CrudController {
         .json({ message: 'User not found', status: 'NOT_REGISTERED' })
     }
 
-    const isVerified = user.verify_code === 'null'
+    const isVerified: boolean = user.verify_code === 'null'
 
     if (user && !isVerified) {
       return res.status(401).json({
         message: 'You should register in app first',
         status: 'NOT_VERIFIED',
       })
-      // return code for registration
     }
 
     const comparePassword = await bcrypt.compare(password, user.password)
@@ -146,11 +130,9 @@ class UserController extends CrudController {
       return res.status(400).json({ message: 'Wrong password or phone' })
     }
 
-    const driver = await getDriverByFilter({ user_id: user.id })
+    const driver: DriverInfo = await getDriverByFilter({ user_id: user.id })
 
-    user = { ...user }
-
-    delete user.password
+    user = removePropsFromUser({ ...user })
 
     if (driver) {
       user.driverInfo = driver
@@ -165,15 +147,17 @@ class UserController extends CrudController {
     const { carType, carColor, carNumber, carModel } = driverInfo
     const { phone, password, email, name, verifyCode } = userInfo
 
-    const userInDB = await getUserFromDbByPhone(phone)
+    const userInDB: User = await getUserFromDbByPhone(phone)
 
     if (userInDB) {
-      const isVerified = userInDB.verify_code === 'null'
+      const isVerified: boolean = userInDB.verify_code === 'null'
 
       if (isVerified) {
         console.log('User exist in DB and verified')
 
-        const driver = await getDriverByFilter({ user_id: userInDB.id })
+        const driver: DriverInfo = await getDriverByFilter({
+          user_id: userInDB.id,
+        })
 
         if (driver) {
           return res.json({
@@ -184,7 +168,6 @@ class UserController extends CrudController {
             password,
             userInDB.password
           )
-          // TOFO check this
           if (!comparePassword) {
             return res.status(400).json({ message: 'Wrong password or phone' })
           }
@@ -197,8 +180,8 @@ class UserController extends CrudController {
             user_id: userInDB.id,
             is_avaliable: false,
           })
-          const user = { ...userInDB }
-          delete user.password
+          const user = removePropsFromUser({ ...userInDB })
+
           return res.json({
             user: { ...user, driverInfo: { ...driver } },
           })
@@ -208,7 +191,7 @@ class UserController extends CrudController {
 
         if (verifyCode) {
           const codeForVerify = userInDB.verify_code
-          const isCodesEquel = codeForVerify === verifyCode
+          const isCodesEquel: boolean = codeForVerify === verifyCode
 
           if (isCodesEquel) {
             const hashPassword = await bcrypt.hash(password, 2)
@@ -221,10 +204,8 @@ class UserController extends CrudController {
             )
 
             const token = generateJwt(userInDB.id, phone)
-            const user = { ...response.rows[0] }
-            delete user.password
-            delete user.verify_code
-            const driver = await createDriverInDB({
+            const user = removePropsFromUser({ ...response.rows[0] })
+            const driver: DriverInfo = await createDriverInDB({
               car_type: carType,
               car_color: carColor,
               car_number: carNumber,
@@ -240,41 +221,40 @@ class UserController extends CrudController {
           }
         }
 
-        sendSMS(
+        const noteServiceRes: MobizonResponse = await sendSMS(
           userInDB.phone_number,
           `Softtaxi: your verify code ${userInDB.verify_code}`
         )
+        console.log('noteServiceRes', noteServiceRes)
+
         return res.status(401).json({
           message: 'You should verify your account',
           status: 'NOT_VERIFIED',
-          verifyCode: userInDB.verify_code,
+          verifyCode: noteServiceRes,
         })
       }
     } else {
       // const hashPassword = await bcrypt.hash(password, 2)
       const verifyCode = generateVerifyCode()
 
-      const user = await createUserInDB({
+      await createUserInDB({
         phone_number: phone,
         name,
         email,
         verify_code: verifyCode,
       })
-      // const driver = await createDriverInDB({
-      //   car_type: carType,
-      //   car_color: carColor,
-      //   car_number: carNumber,
-      //   car_model: carModel,
-      //   user_id: user.id,
-      //   is_avaliable: false,
-      // })
 
-      // return res.json({ user: { ...user, driverInfo: { ...driver } } })
+      const noteServiceRes: MobizonResponse = await sendSMS(
+        phone,
+        `Softtaxi: your verify code ${verifyCode}`
+      )
+
+      console.log('noteServiceRes', noteServiceRes)
 
       return res.status(401).json({
         message: 'You should verify your account',
         status: 'NOT_VERIFIED',
-        verifyCode,
+        verifyCode: noteServiceRes,
       })
     }
   }

@@ -74,7 +74,7 @@ export default class CrudController {
     return res.json(values.rows)
   }
 
-  getOne = async (req: Request, res: Response) => {
+  getOne = async (req: Request, res: Response): Promise<any> => {
     try {
       const id = req.params.id
       const query = req.query
@@ -87,12 +87,12 @@ export default class CrudController {
       res.json(error)
     }
   }
-  update = async (req: Request, res: Response) => {
+  update = async (req: Request, res: Response): Promise<any> => {
     const value = await db.query(getQueryForUpdate(req.body, this.tableName))
 
     res.json(value.rows[0])
   }
-  delete = async (req: express.Request, res: Response) => {
+  delete = async (req: express.Request, res: Response): Promise<any> => {
     const id = req.params.id
 
     const value = await db.query(
