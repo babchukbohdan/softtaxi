@@ -5,7 +5,6 @@ import { environment } from 'src/environments/environment';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private user;
-  // private token: string;
   constructor() {
     const userFromLS = this.getUserFromLS();
 
@@ -30,7 +29,6 @@ export class AuthService {
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
     }
-    console.log('%cSet user in service', 'color: #2ECC71', user);
   }
 
   getUserFromLS() {
@@ -134,8 +132,6 @@ export class AuthService {
   }
 
   async login(body) {
-    console.log('%clogin', 'color: #2E86C1');
-
     try {
       const res = await fetch(`${environment.apiUrl}user/login`, {
         method: 'POST',
@@ -146,17 +142,14 @@ export class AuthService {
       });
 
       const response = await res.json();
-      // console.log('response in login service', response);
 
       if (response.user) {
         this.setCurrentUser(response.user);
       }
-      // console.log('%cresponse', 'color: #2ECC71', response);
       return response;
     } catch (error) {}
   }
   async register(body) {
-    console.log('register');
     try {
       const res = await fetch(`${environment.apiUrl}user/registration`, {
         method: 'POST',
@@ -168,14 +161,11 @@ export class AuthService {
 
       const response = await res.json();
       const { user, message, status, verifyCode, token } = response;
-      console.log('response', response);
 
       if (message) {
         return { message, status, verifyCode };
       }
-      // console.log('sestUser', user);
       this.setCurrentUser({ ...user, token });
-      console.log('%cuser', 'color: #2ECC71', user);
 
       return response;
     } catch (error) {
@@ -183,7 +173,6 @@ export class AuthService {
     }
   }
   async registerDriver(body) {
-    console.log('register Driver');
     try {
       const res = await fetch(`${environment.apiUrl}user/registration/driver`, {
         method: 'POST',
@@ -193,31 +182,18 @@ export class AuthService {
         body: JSON.stringify(body),
       });
       const response = await res.json();
-      console.log('response in register DRiver', response);
 
       const { user, message, status, verifyCode } = response;
       if (message) {
         return { message, status, verifyCode };
       }
-      // const { user, token } = response;
-      // console.log('user', user);
       this.setCurrentUser(user);
-      // console.log('%cuser', 'color: #2ECC71', user);
 
       return response;
     } catch (error) {
       console.log(error);
     }
   }
-
-  // TODO
-  // async resisterAsDriver(userBody, driverBody) {
-  //   const { user } = await this.register(userBody);
-  //   const driver = await this.createDriver(driverBody);
-  //   this.setCurrentUser(user);
-  //   console.log('user in resisterAsDriver', user);
-  //   console.log('driver in resisterAsDriver', driver);
-  // }
 
   async updateUser({ id, name, phone, email }) {
     const body = {
@@ -240,7 +216,6 @@ export class AuthService {
       ...currentUser,
       ...user,
     });
-    console.log('updated user', user);
 
     return user;
   }
@@ -261,8 +236,6 @@ export class AuthService {
       body: JSON.stringify(body),
     });
     const driverInfo = await res.json();
-
-    console.log('driver res in update', driverInfo);
 
     this.setCurrentUser({
       ...this.user,

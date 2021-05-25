@@ -11,9 +11,5 @@ export class CarTypeComponent implements OnInit {
   @Input() onClickHandler;
   constructor() {}
 
-  ngOnInit(): void {
-    // console.log(this.carType, ' car type');
-    // console.log(this.onClickHandler, ' onClickHandler');
-    // console.log(this.isActive, ' isActive');
-  }
+  ngOnInit(): void {}
 }

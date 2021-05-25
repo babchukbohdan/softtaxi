@@ -2,7 +2,7 @@ import { NotificationService } from './../services/notification.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from './../services/auth.service';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 const isUserInfoChanged = (controls) => {
   const names = ['name', 'email', 'phone'];
@@ -60,14 +60,9 @@ export class UserInfoComponent implements OnInit {
       carNumber: new FormControl('', []),
       carType: new FormControl('', []),
     });
-
-    // this.profileForm.valueChanges.subscribe(() => {
-    //   console.log(this.profileForm);
-    // });
   }
 
   setUser() {
-    // console.log(this.user, 'user in user info');
     if (this.authService.isAuthenticated()) {
       this.profileForm.patchValue({
         name: this.user.name,
@@ -93,8 +88,6 @@ export class UserInfoComponent implements OnInit {
   }
 
   updateUser() {
-    console.log('form ', this.profileForm);
-
     const shouldUserInfoUpdate = isUserInfoChanged(this.profileForm.controls);
     const shouldDriverInfoUpdate = isDriverInfoChanged(
       this.profileForm.controls
@@ -104,8 +97,6 @@ export class UserInfoComponent implements OnInit {
     this.profileForm.markAsUntouched();
 
     if (shouldUserInfoUpdate) {
-      console.log('update user');
-
       this.authService.updateUser({
         id: this.user.id,
         name: this.profileForm.value.name || '',
@@ -126,8 +117,6 @@ export class UserInfoComponent implements OnInit {
   }
 
   updateDriver() {
-    console.log('update driver');
-
     const body = {
       id: this.user.driverInfo.id,
       carColor: this.profileForm.value.carColor,
@@ -135,7 +124,6 @@ export class UserInfoComponent implements OnInit {
       carNumber: this.profileForm.value.carNumber,
       carType: this.profileForm.value.carType,
     };
-    console.log(body);
 
     this.authService.updateDriver(body);
   }

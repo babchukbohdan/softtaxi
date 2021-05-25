@@ -1,4 +1,3 @@
-import { trigger, transition, style, animate } from '@angular/animations';
 import { AuthService } from './../services/auth.service';
 import { environment } from './../../environments/environment';
 import { Request, StatusType } from './../../assets/types/types';
@@ -45,8 +44,7 @@ export class RequestComponent implements OnInit {
       }),
     });
 
-    const resp = await res.json();
-    console.log('canceled req', resp);
+    await res.json();
     this.deleteOrder.emit(this.request.id);
   }
 
@@ -63,8 +61,7 @@ export class RequestComponent implements OnInit {
       }),
     });
 
-    const resp = await res.json();
-    console.log('finished req', resp);
+    await res.json();
     this.deleteOrder.emit(this.request.id);
   }
 
@@ -85,7 +82,6 @@ export class RequestComponent implements OnInit {
     });
 
     const resp = await res.json();
-    console.log('taken req', resp);
     this.takeOrder.emit(resp);
   }
 

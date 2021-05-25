@@ -1,12 +1,6 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, Input } from '@angular/core';
-import { NotificationService } from '../services/notification.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-notification',
@@ -33,7 +27,6 @@ import { NotificationService } from '../services/notification.service';
             transform: 'translateY(-100%)',
           })
         ),
-        // animate('200ms'),
       ]),
     ]),
   ],

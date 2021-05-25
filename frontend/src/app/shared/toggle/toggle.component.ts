@@ -1,4 +1,3 @@
-import { ThemeService } from './../services/theme.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({

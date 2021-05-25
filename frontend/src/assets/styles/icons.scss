@@ -13,18 +13,14 @@
 
 [class^="icon-"],
 [class*=" icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
   font-family: "icomoon" !important;
-  // speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
   line-height: 1;
 
-  /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
-  // -moz-osx-font-smoothing: grayscale;
 }
 
 .icon-sedan-car-model:before {
@@ -40,7 +36,6 @@
   content: "\e903";
 }
 .icon-eco:before {
-  // content: "\e904";
   content: "\e900";
 }
 .icon-flash:before {

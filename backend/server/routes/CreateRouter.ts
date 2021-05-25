@@ -1,6 +1,5 @@
 /* eslint-disable */
 const Router = require('express')
-// import { Router } from 'express'
 
 export default function createRouter(controller: any) {
   const router = new Router()

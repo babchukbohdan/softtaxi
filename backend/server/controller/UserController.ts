@@ -29,15 +29,12 @@ class UserController extends CrudController {
     const candidate: User = await getUserFromDbByPhone(phone)
 
     if (candidate) {
-      // BUG: equel to string 'null' because i wrap all values in single quotes
       const isVerified: boolean = candidate.verify_code === 'null'
       if (isVerified) {
-        console.log('User exist in DB and verified')
         return res.json({
           message: 'User with this phone number already exist',
         })
       } else {
-        // Not verified user
         if (verifyCode) {
           const codeForVerify = candidate.verify_code
           const isCodesEquel: boolean = codeForVerify === verifyCode
@@ -59,13 +56,11 @@ class UserController extends CrudController {
             return res.status(400).json({ message: 'Wrong verify code.' })
           }
         }
-        console.log('User exist in DB but not verified')
 
         const noteServiceRes: MobizonResponse = await sendSMS(
           candidate.phone_number,
           `Softtaxi: your verify code ${candidate.verify_code}`
         )
-        console.log('noteServiceRes', noteServiceRes)
         return res.status(401).json({
           message: 'You should verify your account',
           status: 'NOT_VERIFIED',
@@ -73,8 +68,6 @@ class UserController extends CrudController {
         })
       }
     } else {
-      console.log("User don't exist in DB")
-
       const verifyCode = generateVerifyCode()
 
       await db.query(
@@ -91,8 +84,6 @@ class UserController extends CrudController {
         phone,
         `Softtaxi: your verify code ${verifyCode}`
       )
-
-      console.log('noteServiceRes', noteServiceRes)
 
       return res.status(401).json({
         message: 'You should verify your account',
@@ -153,8 +144,6 @@ class UserController extends CrudController {
       const isVerified: boolean = userInDB.verify_code === 'null'
 
       if (isVerified) {
-        console.log('User exist in DB and verified')
-
         const driver: DriverInfo = await getDriverByFilter({
           user_id: userInDB.id,
         })
@@ -187,8 +176,6 @@ class UserController extends CrudController {
           })
         }
       } else {
-        // NOT VERIFIED
-
         if (verifyCode) {
           const codeForVerify = userInDB.verify_code
           const isCodesEquel: boolean = codeForVerify === verifyCode
@@ -225,7 +212,6 @@ class UserController extends CrudController {
           userInDB.phone_number,
           `Softtaxi: your verify code ${userInDB.verify_code}`
         )
-        console.log('noteServiceRes', noteServiceRes)
 
         return res.status(401).json({
           message: 'You should verify your account',
@@ -248,8 +234,6 @@ class UserController extends CrudController {
         phone,
         `Softtaxi: your verify code ${verifyCode}`
       )
-
-      console.log('noteServiceRes', noteServiceRes)
 
       return res.status(401).json({
         message: 'You should verify your account',

@@ -7,6 +7,8 @@
   display: flex;
   justify-content: stretch;
   flex-wrap: wrap;
+
+  background-color: var(--item-bg-color);
 }
 
 .group {
@@ -31,8 +33,6 @@
 }
 
 .request__adress {
-  // border: 1px solid var(--overlay-bg-color);
-  // border-radius: var(--input-border-radius, 3px);
   div span:first-child {
     margin-right: 5px;
   }
@@ -47,14 +47,9 @@
   align-items: center;
 }
 .request__data {
-  // display: flex;
   justify-content: space-evenly;
-
-  // border: 1px solid var(--overlay-bg-color);
-  // border-radius: var(--input-border-radius, 3px);
 }
 .request__info {
-  // display: flex;
   justify-content: space-between;
   align-items: center;
 
@@ -96,14 +91,16 @@
 
     font-weight: bold;
     letter-spacing: 1px;
+
+    color: var(--text-color);
   }
 
   &__value {
     color: var(--accent-color);
-    // width: min-content;
     font-size: 0.9rem;
 
     text-align: center;
+    font-weight: 500;
 
     &.date {
       width: max-content;

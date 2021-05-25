@@ -23,17 +23,11 @@
           ></app-icon>
           <span> {{ request.carType }} </span>
         </li>
-        <!-- <li>
-          <app-icon name="star" size="20px"></app-icon>
-          <span *ngIf="info">{{ info.rating }}</span>
-        </li> -->
+
         <li>
           <span class="info__label">price: </span>
           <span class="info__value">{{ request.price }}</span>
         </li>
-        <!-- <li>
-          <span>{{ request.id }}</span>
-        </li> -->
       </ul>
       <div class="group">
         <!-- <ng-content></ng-content> -->
@@ -71,14 +65,13 @@
       <p class="info__label">Status:</p>
       <p class="info__value">{{ request.status }}</p>
     </div>
-    <!-- *ngIf="!isDriver && request.status === 'canceled'"" -->
     <div class="info">
       <p class="info__label">Date:</p>
       <p class="info__value date">
         {{ request.lastUpdate | date: "MMM d, HH:mm" }}
       </p>
     </div>
-    <div class="info">
+    <div class="info" *ngIf="request.description">
       <p class="info__label">Description:</p>
       <p class="info__value">{{ request.description }}</p>
     </div>

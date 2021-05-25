@@ -1,8 +1,5 @@
 import { ThemeService } from './../services/theme.service';
-import {
-  NotificationService,
-  Notification,
-} from './../services/notification.service';
+import { NotificationService } from './../services/notification.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -65,20 +62,14 @@ export class OrderFormComponent implements OnInit {
 
   initForm() {
     this.form = new FormGroup({
-      phoneNumber: new FormControl('380954061246', [
+      phoneNumber: new FormControl('', [
         Validators.required,
         Validators.pattern('380[0-9]{9}'),
       ]),
-      from: new FormControl(`Головна, ${randomInteger(1, 260)}`, [
-        Validators.required,
-      ]),
-      to: new FormControl(`Комарова, ${randomInteger(1, 55)}`, [
-        Validators.required,
-      ]),
+      from: new FormControl(``, [Validators.required]),
+      to: new FormControl(``, [Validators.required]),
       carType: new FormControl('basic', [Validators.required]),
-      description: new FormControl('With air conditioning', [
-        Validators.maxLength(21),
-      ]),
+      description: new FormControl('', [Validators.maxLength(21)]),
     });
   }
 
@@ -101,18 +92,12 @@ export class OrderFormComponent implements OnInit {
   }
 
   async checkUser() {
-    console.log(
-      `%cchecking user in DB by phone: ${this.form.get('phoneNumber').value}`,
-      'color: #2E86C1'
-    );
-
     return await this.authService.getUserByPhoneNumber(
       this.form.get('phoneNumber').value
     );
   }
 
   async sendOrder(order: Order) {
-    console.log('%csending new order', 'color: #2E86C1');
     try {
       const res = await fetch(`${environment.apiUrl}requests`, {
         method: 'POST',
@@ -122,27 +107,20 @@ export class OrderFormComponent implements OnInit {
         body: JSON.stringify(order),
       });
       const response = await res.json();
-      console.log(`%ccreated order in DB`, 'color: #2ECC71', response);
       return response;
     } catch (error) {}
   }
 
   async makeOrder() {
     const formData = { ...this.form.value };
-    // console.log('formData', formData);
 
     const userInService = this.authService.getCurrentUser();
 
     if (!userInService) {
       const user = await this.checkUser();
 
-      if (user) {
-        console.log('%cuser is already exist in DB', 'color: #2ECC71', user);
-      } else {
-        console.log('%cuser not found in DB', 'color: red');
-        console.log('%ccreate user in DB', 'color: #2E86C1');
-        const newUser = await this.authService.createUser(formData.phoneNumber);
-        console.log('%cnew user', 'color: yellow', newUser);
+      if (!user) {
+        await this.authService.createUser(formData.phoneNumber);
       }
     }
 
@@ -152,7 +130,6 @@ export class OrderFormComponent implements OnInit {
         price: '$ ' + this.price,
         ...this.form.value,
       });
-      // this.onAdd.emit(order);
       const newOrder = await this.sendOrder(order);
 
       this.router.navigate(['requests']);

@@ -53,8 +53,6 @@ export class RequestListComponent implements OnInit {
   }
 
   changeDate({ target }) {
-    console.log(target.value, 'date');
-    console.log(target.valueAsDate, 'date');
     this.userAllTabDate = target.valueAsDate;
     this.resetPagination();
     this.getRequestsForAllTab(this.user, this.limit, this.offset);
@@ -77,24 +75,18 @@ export class RequestListComponent implements OnInit {
   getRequests() {
     this.disableRefresh();
     if (this.isDriver && this.showAsDriver) {
-      console.log('show for driver if driver');
-
       this.getCountOfRequestsForDriver(this.user.id);
       this.getRequestsForDriver(this.user, this.limit, this.offset);
     } else if (this.isDriver && !this.showAsDriver) {
-      console.log('show for user if driver');
       this.getCountOfRequestsForCustomer(this.user.id);
       this.getRequestsForUser(this.user, this.limit, this.offset);
     } else if (this.user) {
-      console.log('show for user');
       this.getCountOfRequestsForCustomer(this.user.id);
       this.getRequestsForUser(this.user, this.limit, this.offset);
     }
   }
 
   changePage = (page) => {
-    console.log('change page');
-
     this.setOffset(page);
     this.currentPage = page;
 
@@ -164,8 +156,6 @@ export class RequestListComponent implements OnInit {
   }
 
   async getRequestsForAllTab(user, limit, offset) {
-    console.log('getRequestsForAllTab');
-
     let filter,
       sorted = true;
     if (this.showAsDriver) {
@@ -221,16 +211,12 @@ export class RequestListComponent implements OnInit {
     });
     const request = this.activeRequests.splice(idx, 1);
 
-    console.log('removed', request);
-
     if (!this.showAsDriver) {
       this.moveRequestToAllTab(request[0]);
     }
   }
 
   moveRequestToAllTab(request) {
-    console.log('move to all tab');
-
     this.allRequests.unshift(request);
   }
 

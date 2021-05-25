@@ -1,4 +1,4 @@
-import { NotificationService } from './../services/notification.service';
+import { NotificationService } from '../../services/notification.service';
 import { transition, trigger, style, animate } from '@angular/animations';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 

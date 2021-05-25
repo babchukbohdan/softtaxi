@@ -37,28 +37,13 @@ export class LoginFormComponent implements OnInit {
 
   initForm() {
     this.loginForm = new FormGroup({
-      phone: new FormControl('380954061246', [
+      phone: new FormControl('', [
         Validators.required,
         Validators.pattern('380[0-9]{9}'),
       ]),
-      password: new FormControl(`test`, [Validators.required]),
+      password: new FormControl(``, [Validators.required]),
     });
   }
-
-  // async loginAsDriver() {
-  //   const body = {
-  //     phone: this.loginForm.value.phone,
-  //     password: this.loginForm.value.password,
-  //   };
-  //   const driver = await this.authService.getFullDriver(body);
-  //   // console.log('driver', driver);
-  //   if (driver?.message) {
-  //     this.errorMessage = driver.message;
-  //   }
-  //   if (driver?.driverInfo) {
-  //     this.logedIn(driver);
-  //   }
-  // }
 
   async login() {
     const data = {
@@ -68,11 +53,20 @@ export class LoginFormComponent implements OnInit {
     const response = await this.authService.login(data);
 
     if (response?.message) {
-      this.errorMessage = response.message;
+      this.notification.addNotification({
+        message: response.message,
+        title: '',
+        timer: 5000,
+      });
     }
     if (response?.user) {
       this.logedIn(response.user);
       this.router.navigate(['/user/info']);
+      this.notification.addNotification({
+        message: 'You successfully logged in.',
+        title: '',
+        timer: 5000,
+      });
     }
 
     if (
@@ -83,28 +77,8 @@ export class LoginFormComponent implements OnInit {
       this.notification.addNotification({
         message: 'You should register in app first',
         title: '',
+        timer: 5000,
       });
     }
   }
-
-  // async register() {
-  //   this.errorMessage = '';
-  //   const data = {
-  //     phone: this.phone,
-  //     password: this.password,
-  //   };
-
-  //   console.log('data for register', data);
-
-  //   try {
-  //     const res = await this.authService.register(data);
-  //     if (res.message) {
-  //       this.errorMessage = res.message;
-  //     }
-
-  //     return res;
-  //   } catch (error) {
-  //     this.errorMessage = error;
-  //   }
-  // }
 }

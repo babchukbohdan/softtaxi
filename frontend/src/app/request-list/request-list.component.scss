@@ -3,29 +3,18 @@
 }
 
 .request__wrap {
-  // min-height: calc(100vh - 61px);
-  // overflow-y: scroll;
   height: calc(100% - var(--nav-height) - var(--padding));
-  // max-height: 100%;
   margin-bottom: auto;
 }
 .with-filter {
   height: calc(100% - 42px - var(--nav-height) - var(--padding));
   min-height: unset;
 }
-// label {
-//   padding: 10px;
-
-//   display: inline-block;
-
-//   user-select: none;
-// }
 .requests__list {
-  // transform: translateY(-1px);
-
   &-wrap {
     max-height: calc(100% - 43px - 44px - 5px);
     overflow-y: auto;
+    height: 100%;
   }
 }
 .request__nav {
@@ -37,8 +26,6 @@
 .request__btns {
   display: flex;
 }
-// .request__update {
-// }
 .request__asdriver {
   align-self: stretch;
   display: flex;
@@ -67,11 +54,8 @@
       cursor: pointer;
       border-radius: 4px;
       margin: 0;
+      background-image: url('data:image/svg+xml;charset=utf8,%3Csvg fill="%23000" fill-opacity=".54" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/%3E%3Cpath d="M0 0h24v24H0z" fill="none"/%3E%3C/svg%3E');
     }
-    // ::-webkit-calendar-picker-indicator:hover {
-    //   -webkit-box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04);
-    //   box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04);
-    // }
   }
 
   label {

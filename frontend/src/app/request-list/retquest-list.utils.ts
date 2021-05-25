@@ -53,8 +53,6 @@ export const getUserFilterForActiveTab = (id) => ({
   customer_id: [id],
 });
 export const getUserFilterForAllTab = (id, date?: Date) => {
-  console.log('date in filter', typeof date);
-
   const filter: any = {
     status: ['done', 'canceled'],
     customer_id: [id],

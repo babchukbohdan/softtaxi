@@ -36,8 +36,6 @@ export default class CrudController {
     }
   }
   get = async (req: Request, res: Response): Promise<any> => {
-    // const selectCount = `SELECT COUNT (*) FROM ${this.tableName}`
-    // const selectAll = `SELECT * FROM ${this.tableName}`
     let queryString, onlyCount
     const { filter, offset, limit, count, sort } = req.query
     if (count) {
@@ -77,7 +75,6 @@ export default class CrudController {
   getOne = async (req: Request, res: Response): Promise<any> => {
     try {
       const id = req.params.id
-      const query = req.query
       const value = await db.query(
         `SELECT * FROM ${this.tableName} where id = $1`,
         [id]

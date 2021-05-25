@@ -36,9 +36,6 @@ export const getQueryWithSort = (query: string, prop: any): string => {
   return query + ` ORDER BY ${prop} DESC`
 }
 
-// add sort func
-// add logger and linter
-
 export const getQueryWithFilter = (
   filter: any,
   tableName: string,
@@ -84,10 +81,6 @@ export const getQueryForUpdate = (body: any, tableName: string): string => {
   return `UPDATE ${tableName} set ${newValues} WHERE id = ${id} RETURNING *`
 }
 
-// export const getVerifyCodeFromDB = async (id: string) => {
-//   const code = await getQueryWithFilter()
-// }
-
 export const generateVerifyCode = (): number => {
   return randomInteger(1000, 9999)
 }
@@ -98,16 +91,6 @@ export const getUserFromDbByPhone = async (phone: string): Promise<User> => {
   const candidate: User = userInDB.rows[0]
   return candidate
 }
-
-// export const getDriverByUserID = async (id: string) => {
-//   const query = getQueryWithFilter({ user_id: id }, 'drivers')
-
-//   const res = await db.query(query)
-
-//   const driver = res.rows[0]
-
-//   return driver
-// }
 
 export const getDriverByFilter = async (filter: any) => {
   const query = getQueryWithFilter(filter, 'drivers')

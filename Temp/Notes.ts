@@ -8,7 +8,6 @@ x = ['hello', 1]
 let other: [any, any] = [1, 'hi']
 let other2: Array<any> = [1, 'h1', 2]
 
-//ENUM
 enum CarTypes {
   Basic = 7,
   Comfort,
@@ -18,7 +17,6 @@ enum CarTypes {
 
 let basic = CarTypes.Basic // 7
 let comfort = CarTypes[8] // "Comfort"
-console.log(basic, comfort)
 
 const enum StatuTypes {
   Active = 'active',
@@ -30,15 +28,12 @@ const enum StatuTypes {
 
 const myStatus: any = StatuTypes.Active
 
-// NEVER
 const nevvar = (): never => {
   throw new Error('never or infinite')
 }
 
 let oneAnother: object | null = { a: 1 }
 
-// FUNCTIONS
-// age? age optional arg
 const createPass = (name: string = 'V', age?: number | string) =>
   `${name}${age}`
 

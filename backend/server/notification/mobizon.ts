@@ -34,8 +34,3 @@ export async function sendSMS(
     return { message: 'Failed to send notification message.' }
   }
 }
-// const responseFromMobizon = {
-//   code: 0,
-//   data: { campaignId: '47794994', messageId: '98371726', status: 1 },
-//   message: '',
-// }

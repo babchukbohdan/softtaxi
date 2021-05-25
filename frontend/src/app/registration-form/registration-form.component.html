@@ -75,7 +75,7 @@
         <label class="login__label"
           >Password:
           <input
-            type="text"
+            type="password"
             class="login__input input"
             formControlName="password"
             name="password"
@@ -96,7 +96,7 @@
           *ngIf="
             registrationForm.get('password').invalid &&
             registrationForm.get('password').touched &&
-            registrationForm.get('password').errors.minLength
+            registrationForm.get('password').errors.minlength
           "
           class="form__validation"
         >
@@ -120,7 +120,7 @@
         <label class="login__label"
           >Repeat password:
           <input
-            type="text"
+            type="password"
             class="login__input input"
             formControlName="password2"
             name="password2"
@@ -141,7 +141,7 @@
           *ngIf="
             registrationForm.get('password2').invalid &&
             registrationForm.get('password2').touched &&
-            registrationForm.get('password2').errors.minLength
+            registrationForm.get('password2').errors.minlength
           "
           class="form__validation"
         >
@@ -264,13 +264,6 @@
       <li>
         <label class="input login__as-driver">
           Register as driver
-          <!-- <input
-            type="checkbox"
-            name="isDriver"
-            formControlName="isDriver"
-            class="login__isDriver"
-          /> -->
-
           <app-toggle
             name="isDriver"
             [parentForm]="registrationForm"
@@ -289,7 +282,6 @@
         <a class="link" [routerLink]="['/user/login']">back to Login</a>
       </li>
     </ul>
-    <div *ngIf="errorMessage">{{ errorMessage }}</div>
   </form>
 
   <app-settings></app-settings>

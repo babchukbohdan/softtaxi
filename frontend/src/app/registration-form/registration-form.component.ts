@@ -2,43 +2,8 @@ import { randomInteger } from 'src/assets/utils';
 import { Router } from '@angular/router';
 import { AuthService } from './../services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../services/notification.service';
-
-const checkPasswordStrength = (pass: string): boolean => {
-  const regEx = new RegExp(
-    '^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$',
-    'g'
-  );
-
-  const res = regEx.test(pass);
-  return res;
-};
-
-export class MyValidators {
-  static strongPassword(control: FormControl): { [key: string]: boolean } {
-    const isStrong = checkPasswordStrength(control.value);
-    console.log('isStrong', isStrong);
-
-    if (!isStrong) {
-      return {
-        weakPassword: true,
-      };
-    }
-
-    const length = Object.keys(control.errors).length;
-    const errors = { ...control.errors };
-    delete errors['weakPassword'];
-
-    console.log('errors', Object.keys(control.errors));
-    console.log('errors', typeof length);
-
-    console.log('returned errors', errors);
-    console.log('returned bool', length === 1 ? null : errors);
-
-    return length === 1 ? null : errors;
-  }
-}
 
 @Component({
   selector: 'app-registration-form',
@@ -46,7 +11,6 @@ export class MyValidators {
   styleUrls: ['./registration-form.component.scss'],
 })
 export class RegistrationFormComponent implements OnInit {
-  public errorMessage = '';
   public showVerifyCodeInput = false;
 
   registrationForm: FormGroup;
@@ -63,8 +27,6 @@ export class RegistrationFormComponent implements OnInit {
     const user = this.authService.getCurrentUser();
 
     if (!this.authService.isAuthenticated && user) {
-      console.log('set phone in register');
-
       this.registrationForm.patchValue({
         phone: user.phone_number,
       });
@@ -77,67 +39,44 @@ export class RegistrationFormComponent implements OnInit {
     this.registrationForm = new FormGroup({
       name: new FormControl(``, []),
       email: new FormControl(``, [Validators.email]),
-      phone: new FormControl('380954061246', [
+      phone: new FormControl('', [
         Validators.required,
         Validators.pattern('380[0-9]{9}'),
       ]),
-      password: new FormControl(`test`, [
+      password: new FormControl(``, [
         Validators.required,
-        // MyValidators.strongPassword,
-        Validators.pattern(
-          new RegExp(
-            '^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$',
-            'g'
-          )
-        ),
         Validators.minLength(14),
+        Validators.pattern(
+          new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$', 'g')
+        ),
       ]),
-      password2: new FormControl(`test`, [
+      password2: new FormControl(``, [
         Validators.required,
-        Validators.pattern(
-          new RegExp(
-            '^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$',
-            'g'
-          )
-        ),
         Validators.minLength(14),
-        // MyValidators.strongPassword,
+        Validators.pattern(
+          new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$', 'g')
+        ),
       ]),
       isDriver: new FormControl(true),
-      carColor: new FormControl('white', [Validators.required]),
+      carColor: new FormControl('', [Validators.required]),
       verifyCode: new FormControl('', []),
 
-      carModel: new FormControl('audi', [Validators.required]),
-      carNumber: new FormControl('ce3333aa', [Validators.required]),
+      carModel: new FormControl('', [Validators.required]),
+      carNumber: new FormControl('', [Validators.required]),
       carType: new FormControl('basic', [Validators.required]),
     });
 
-    // this.registrationForm.valueChanges.subscribe(() => {
-    //   console.log(this.registrationForm, 'form');
-    // });
-
-    // same valuer for passwords
     this.registrationForm.get('password2').valueChanges.subscribe(() => {
       this.comparePasswords();
-      console.log(this.registrationForm.get('password2'));
     });
     this.registrationForm.get('password').valueChanges.subscribe(() => {
-      console.log(this.registrationForm.get('password'));
-
       this.comparePasswords();
     });
-
-    // this.registrationForm
-    //     .get('verifyCode')
-    //     .setValidators([Validators.required]);
   }
 
   comparePasswords = () => {
     const pas1Value = this.registrationForm.get('password');
     const pas2Value = this.registrationForm.get('password2');
-
-    console.log(pas1Value, 'b pass 1');
-    console.log(pas2Value, 'b pass 2');
 
     if (pas1Value.dirty && pas2Value.dirty) {
       const isEquel =
@@ -152,8 +91,6 @@ export class RegistrationFormComponent implements OnInit {
         let errors2 = pas2Value.errors;
         let length1 = 1,
           length2 = 1;
-        console.log(errors1, 'errors 1');
-        console.log(errors2, 'errors 2');
 
         if (errors1) {
           length1 = Object.keys(errors1).length;
@@ -196,32 +133,23 @@ export class RegistrationFormComponent implements OnInit {
         this.notification.addNotification({
           message: 'You successfully registered in app.',
           title: '',
+          timer: 5000,
         });
       }
 
       if (resp?.message) {
-        this.errorMessage = resp.message;
         this.notification.addNotification({
           message: resp.message,
           title: 'Error: ',
+          timer: 5000,
         });
       }
       if (resp?.status === 'NOT_VERIFIED') {
         this.notification.addNotification({
           message: this.registrationForm.value.phone,
           title: 'We sent you verify code on this phone number ',
+          timer: 5000,
         });
-
-        // console.log(this.registrationForm);
-
-        const verifyCode = resp.verifyCode;
-        // const fakeLatency = randomInteger(2000, 3500);
-        // setTimeout(() => {
-        //   this.notification.addNotification({
-        //     message: verifyCode,
-        //     title: `Your verify code:`,
-        //   });
-        // }, fakeLatency);
 
         this.showVerifyCodeInput = true;
       }
@@ -232,18 +160,17 @@ export class RegistrationFormComponent implements OnInit {
         verifyCode: this.registrationForm.value.verifyCode,
       };
       const resp = await this.authService.register(body);
-      console.log(resp, 'response in reg form');
 
       if (resp.user) {
         this.router.navigate(['/user/info']);
       }
 
       if (resp?.message) {
-        this.errorMessage = resp.message;
-        // this.notification.addNotification({
-        //   message: resp.message,
-        //   title: 'Error: ',
-        // });
+        this.notification.addNotification({
+          message: resp.message,
+          title: 'Error: ',
+          timer: 7000,
+        });
       }
       if (resp?.status === 'NOT_VERIFIED') {
         this.showVerifyCodeInput = true;
@@ -256,16 +183,18 @@ export class RegistrationFormComponent implements OnInit {
         this.notification.addNotification({
           message: this.registrationForm.value.phone,
           title: 'We sent you verify code on this phone number ',
+          timer: 5000,
         });
 
         const verifyCode = resp.verifyCode;
-        // const fakeLatency = randomInteger(2000, 3500);
-        // setTimeout(() => {
-        //   this.notification.addNotification({
-        //     message: verifyCode,
-        //     title: `Your verify code:`,
-        //   });
-        // }, fakeLatency);
+
+        if (verifyCode.code !== 0) {
+          this.notification.addNotification({
+            message: '',
+            title: 'SMS notification service not avaliable.',
+            timer: 5000,
+          });
+        }
       }
     }
   }

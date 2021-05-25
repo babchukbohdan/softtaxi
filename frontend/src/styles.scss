@@ -80,8 +80,6 @@ main {
 input,
 select,
 textarea {
-  // display: block;
-  // width: 100%;
   padding: 0.4rem;
   font-size: 1.2rem;
   border: 1px solid #ccc;
@@ -90,8 +88,6 @@ textarea {
 }
 
 .input {
-  // margin: 0 5px 5px 5px;
-
   border: 1px solid var(--overlay-bg-color);
 
   background-color: transparent;

@@ -22,6 +22,7 @@
               inputmode="tel"
               required
               formControlName="phoneNumber"
+              placeholder="380123456789"
             />
             <div
               *ngIf="
@@ -56,6 +57,7 @@
               type="text"
               name="from"
               formControlName="from"
+              placeholder="Комарова, 2-А"
               (input)="calculatePrice()"
             />
             <div
@@ -74,6 +76,7 @@
               type="text"
               name="to"
               formControlName="to"
+              placeholder="Головна, 212-А"
               (input)="calculatePrice()"
             />
 
