@@ -52,13 +52,13 @@ export class LoginFormComponent implements OnInit {
     };
     const response = await this.authService.login(data);
 
-    if (response?.message) {
-      this.notification.addNotification({
-        message: response.message,
-        title: '',
-        timer: 5000,
-      });
-    }
+    // if (response?.message) {
+    //   this.notification.addNotification({
+    //     message: response.message,
+    //     title: '',
+    //     timer: 5000,
+    //   });
+    // }
     if (response?.user) {
       this.logedIn(response.user);
       this.router.navigate(['/user/info']);

@@ -106,6 +106,16 @@
           *ngIf="
             registrationForm.get('password').invalid &&
             registrationForm.get('password').touched &&
+            registrationForm.get('password').errors.isEquel
+          "
+          class="form__validation"
+        >
+          <small>Passwords should be same.</small>
+        </div>
+        <div
+          *ngIf="
+            registrationForm.get('password').invalid &&
+            registrationForm.get('password').touched &&
             registrationForm.get('password').errors.pattern
           "
           class="form__validation"

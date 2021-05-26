@@ -26,14 +26,12 @@ export class RegistrationFormComponent implements OnInit {
 
     const user = this.authService.getCurrentUser();
 
-    if (!this.authService.isAuthenticated && user) {
+    if (user) {
       this.registrationForm.patchValue({
         phone: user.phone_number,
       });
     }
   }
-
-  ngDoCheck(): void {}
 
   initForm() {
     this.registrationForm = new FormGroup({
@@ -46,16 +44,16 @@ export class RegistrationFormComponent implements OnInit {
       password: new FormControl(``, [
         Validators.required,
         Validators.minLength(14),
-        Validators.pattern(
-          new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$', 'g')
-        ),
+        // Validators.pattern(
+        //   new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$', 'g')
+        // ),
       ]),
       password2: new FormControl(``, [
         Validators.required,
         Validators.minLength(14),
-        Validators.pattern(
-          new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$', 'g')
-        ),
+        // Validators.pattern(
+        //   new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$', 'g')
+        // ),
       ]),
       isDriver: new FormControl(true),
       carColor: new FormControl('', [Validators.required]),

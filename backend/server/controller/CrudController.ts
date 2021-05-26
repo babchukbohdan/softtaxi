@@ -9,7 +9,6 @@ import {
   getQueryWithSort,
 } from './utils'
 
-// change name
 export default class CrudController {
   tableName: string
 
