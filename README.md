@@ -1,4 +1,5 @@
-# Softtaxi - is an application that allows you to order a taxi and / or work as a driver.
+# Softtaxi  
+_Softtaxi is an application that allows you to order a taxi and / or work as a driver._
 ## Before start app you should
 ### Install:
 * [Postgresql](https://www.postgresql.org/download)
