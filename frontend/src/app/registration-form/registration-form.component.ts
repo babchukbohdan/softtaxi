@@ -56,12 +56,12 @@ export class RegistrationFormComponent implements OnInit {
         // ),
       ]),
       isDriver: new FormControl(true),
-      carColor: new FormControl('', [Validators.required]),
       verifyCode: new FormControl('', []),
 
-      carModel: new FormControl('', [Validators.required]),
-      carNumber: new FormControl('', [Validators.required]),
-      carType: new FormControl('basic', [Validators.required]),
+      carColor: new FormControl('', []),
+      carModel: new FormControl('', []),
+      carNumber: new FormControl('', []),
+      carType: new FormControl('basic', []),
     });
 
     this.registrationForm.get('password2').valueChanges.subscribe(() => {
@@ -69,6 +69,30 @@ export class RegistrationFormComponent implements OnInit {
     });
     this.registrationForm.get('password').valueChanges.subscribe(() => {
       this.comparePasswords();
+    });
+    this.registrationForm.get('isDriver').valueChanges.subscribe(() => {
+      const isDriver = this.registrationForm.get('isDriver').value;
+      console.log(isDriver, 'isDriver');
+
+      if (isDriver) {
+        this.registrationForm
+          .get('carColor')
+          .setValidators([Validators.required]);
+        this.registrationForm
+          .get('carModel')
+          .setValidators([Validators.required]);
+        this.registrationForm
+          .get('carNumber')
+          .setValidators([Validators.required]);
+        this.registrationForm
+          .get('carType')
+          .setValidators([Validators.required]);
+      } else {
+        this.registrationForm.get('carColor').clearAsyncValidators();
+        this.registrationForm.get('carModel').clearAsyncValidators();
+        this.registrationForm.get('carNumber').clearAsyncValidators();
+        this.registrationForm.get('carType').clearAsyncValidators();
+      }
     });
   }
 
