@@ -74,4 +74,4 @@ $ npm run dev
 $ npm run start
 ```
 
-If everything goes good you can see app in [http://localhost:4200](http://localhost:4200)
+If everything goes good you can see app on [http://localhost:4200](http://localhost:4200)
